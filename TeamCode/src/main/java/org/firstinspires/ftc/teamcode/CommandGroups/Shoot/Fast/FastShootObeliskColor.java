@@ -54,7 +54,7 @@ public class FastShootObeliskColor extends CommandBase {
         // we are shooting on left unless set otherwise
         boolean shotleft = true;
 
-        // get first desired desired color
+        // get first desired color
         Obelisk.ArtifactColor color1 = RobotContainer.obelisk.GetColorAtIndex(0);
 
         // if color is on left

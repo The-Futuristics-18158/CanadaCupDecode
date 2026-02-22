@@ -258,7 +258,13 @@ public class GoalTargeting extends SubsystemBase {
         double x = this.GetDistanceToGoal();
 
         // enhanced equation - Feb 14/2026, 10pm
-        return 383.29*x + 1922.3;
+        //return 383.29*x + 1922.3;
+
+        // befor turnament equation = Feb 21/2026, 9:28pm
+//        return 386.46*x + 1959.4;
+
+        // befor turnament equation = Feb 21/2026, 9:28pm
+        return 406.1*x + 1930.5;
 
         // equation from Feb 14/2026 early PM
         //return 386.46 * x + 1909.4;

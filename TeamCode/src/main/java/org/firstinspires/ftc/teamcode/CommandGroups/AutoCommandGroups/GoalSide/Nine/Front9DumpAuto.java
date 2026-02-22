@@ -70,13 +70,13 @@ public class Front9DumpAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.3, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new HuntModeAuto(2.25),
+                new HuntModeAuto(2.5),
 
                 // Move to Shot #3
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue(new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(45))))
+                        AutoFunctions.redVsBlue(new Pose2d(-0.2, -0.47, new Rotation2d(Math.toRadians(45))))
                 ),
 
                 // Shot #3

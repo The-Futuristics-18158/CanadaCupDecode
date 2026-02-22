@@ -31,6 +31,7 @@ public class WaitForSpinup extends CommandBase {
         // assume shooter takes ~4s/3,000rpm. Note: time to spin up varies with square of speed
         double x = Math.max(RobotContainer.shooter.GetFlyWheelTargetSpeed() / 3000.0, 0.0);
         maxtime = x * x * 4.0;
+        //maxtime = x * x * 50.0;
     }
 
     // This method is called periodically while command is active
