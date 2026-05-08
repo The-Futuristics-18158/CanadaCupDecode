@@ -44,19 +44,6 @@ public class TelemetrySubsystem extends SubsystemBase {
 
     /** what is displayed as part of this telemetry?
      *
-     * runs when testing telemetry
-     */
-    public void ken(){
-        if (testingTelemetry){
-            addData("LeftPresent", RobotContainer.colour.isLeftArtifactPresent());
-            addData("RightPresent", RobotContainer.colour.isRightArtifactPresent());
-            addData("LeftColour", RobotContainer.artifactCamera.getRightColour().name());
-            addData("RightColour", RobotContainer.artifactCamera.getLeftColour().name());
-        }
-    }
-
-    /** what is displayed as part of this telemetry?
-     *
      * runs when not testing telemetry
      */
     public void operatorTelemetryEmpty(){
@@ -133,25 +120,6 @@ public class TelemetrySubsystem extends SubsystemBase {
         if (testingTelemetry){
             RCTelemetry.addData("interval time(ms)", RobotContainer.intervaltime);
             RCTelemetry.addData("execute time(ms)", RobotContainer.exectimer.milliseconds());
-        }
-    }
-
-    /**shows current obelisk ID
-     *
-     * runs when testing telemetry
-     */
-    public void currentObeliskId(){
-        if (testingTelemetry){
-            if (RobotContainer.GetCurrentMode()== RobotContainer.Modes.AutoInit) {
-                if (RobotContainer.limeLight.getObeliskID()== LimeLight.tagId.TAG_GPP)
-                    RCTelemetry.addLine("See GPP Tag");
-                else if (RobotContainer.limeLight.getObeliskID()== LimeLight.tagId.TAG_PGP)
-                    RCTelemetry.addLine("See PGP Tag");
-                else if (RobotContainer.limeLight.getObeliskID()== LimeLight.tagId.TAG_PPG)
-                    RCTelemetry.addLine("See PPG Tag");
-                else
-                    RCTelemetry.addLine("No Obelisk Tag");
-            }
         }
     }
 

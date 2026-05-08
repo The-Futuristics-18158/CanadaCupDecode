@@ -38,7 +38,7 @@ public class Blinkin extends SubsystemBase {
      * Place any code here you wish to have run periodically */
     @Override
     public void periodic() {
-        Blink();
+
         Update();
     }
 
@@ -49,15 +49,9 @@ public class Blinkin extends SubsystemBase {
      */
 
     public void Update(){
-        if(Blinktimer.seconds() % 0.5 <= 0.05){
-            hasArtifact = (RobotContainer.artifactCamera.IsLeftPresent()|| RobotContainer.artifactCamera.IsRightPresent());
-            hasGreen = (RobotContainer.artifactCamera.getLeftColour().equals(ArtifactCamera.ArtifactColours.Green)||
-                    RobotContainer.artifactCamera.getRightColour().equals(ArtifactCamera.ArtifactColours.Green ));
-            hasPurple = (RobotContainer.artifactCamera.getLeftColour().equals(ArtifactCamera.ArtifactColours.Purple)||
-                    RobotContainer.artifactCamera.getRightColour().equals(ArtifactCamera.ArtifactColours.Purple));
-            hasTag = (RobotContainer.limeLight.hasGoal);
-        }
+       ShowAlliance();
     }
+
     public void ShowAlliance(){
         if (RobotContainer.isRedAlliance()){
             blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
@@ -66,39 +60,8 @@ public class Blinkin extends SubsystemBase {
         }
     }
 
-    public void ShowPurple(){
-        blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
-    }
-
-    public void ShowGreen(){
-        blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-    }
-
-
     public void ShowGoal(){
         blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-    }
-
-    public void Blink(){
-      if (Blinktimer.seconds() % 1.5 <= 0.05){
-          if (hasTag){
-              ShowGoal();
-          }else {
-              ShowAlliance();
-          }
-      }else if (Blinktimer.seconds() % 1.0 <= 0.05){
-          if (hasPurple){
-              ShowPurple();
-          }else{
-              ShowAlliance();
-          }
-      }else if (Blinktimer.seconds() % 0.5 <= 0.05){
-         if (hasGreen){
-              ShowGreen();
-          }else{
-              ShowAlliance();
-          }
-      }
     }
 
 
