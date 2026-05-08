@@ -11,12 +11,8 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootGreen;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootGreenConstantAim;
 import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootObeliskColor;
 import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootObeliskColorConstantAim;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootPurple;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootPurpleConstantAim;
 import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
@@ -66,7 +62,6 @@ import java.util.List;
  * Remove code related to colour detection and pattern matching
     * Remove Obelisk.java and references to it
     * Remove code related to artifact colour detection
-        * Remove code related to displaying artifact colours in Blinkin subsystem
         * Remove references to ColourSensor subsystem
  */
 
@@ -226,7 +221,7 @@ public class RobotContainer {
 //      -------------------------- (Driver) Shooting Controls  --------------------------
         // Shoot Green
         //driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootGreen());
-        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootGreenConstantAim());
+        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootAll());
 
         // Reset odometry to apriltag before shooting all according to obelisk pattern
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
@@ -235,7 +230,7 @@ public class RobotContainer {
 
         // Shoot Purple
         //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootPurple());
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootPurpleConstantAim());
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootAll());
 
         // Shoot All According to Obelisk Pattern
         driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new FastShootObeliskColorConstantAim());
@@ -373,9 +368,6 @@ public class RobotContainer {
 
             // report time interval on robot controller
             telemetrySubsystem.timerOdometry();
-
-            // show obelisk status - only if in auto-init mode
-            telemetrySubsystem.currentObeliskId();
 
             telemetrySubsystem.update();
         }
