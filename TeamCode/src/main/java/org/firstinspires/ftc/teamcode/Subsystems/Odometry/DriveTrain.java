@@ -22,7 +22,7 @@ public class DriveTrain extends SubsystemBase {
     final double TICKS_PER_ROTATION = (28.0);       // encoder pulses per motor revolution
     final double MAX_SPEED_TICKS_PER_SEC = MAXRPS * TICKS_PER_ROTATION;
     final double WHEEL_DIA = 0.104;                   // wheel diameter in m
-    final double GEAR_RATIO = 12.0;                 // drive gear ratio
+    final double GEAR_RATIO = 20.0;                 // drive gear ratio
     final double TICKSPS_TO_MPS = WHEEL_DIA * Math.PI / TICKS_PER_ROTATION / GEAR_RATIO;
     final double MPS_TO_TICKSPS = 1.0 / TICKSPS_TO_MPS;
     public final double MAX_SPEED = MAXRPS * Math.PI * WHEEL_DIA / GEAR_RATIO;
