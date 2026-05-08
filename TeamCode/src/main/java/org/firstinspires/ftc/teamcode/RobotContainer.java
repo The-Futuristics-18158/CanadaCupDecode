@@ -32,7 +32,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.DistanceSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
-import org.firstinspires.ftc.teamcode.Subsystems.Sensors.Obelisk;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Odometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.PinpointOdometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
@@ -96,7 +95,6 @@ public class RobotContainer {
     public static FlywheelSubsystem shooter;
     public static UptakeSubsystem uptake;
     public static HoodTiltSubsystem hoodtilt;
-    public static Obelisk obelisk;
     public static GoalTargeting targeting;
     public static ShotBlockServo shotblock;
     public static ClimbSubsystem climb;
@@ -171,7 +169,6 @@ public class RobotContainer {
         shooter = new FlywheelSubsystem();
         uptake = new UptakeSubsystem();
         hoodtilt = new HoodTiltSubsystem();
-        obelisk = new Obelisk();
         targeting = new GoalTargeting();
         shotblock = new ShotBlockServo();
         climb = new ClimbSubsystem();
@@ -321,9 +318,6 @@ public class RobotContainer {
 
         // robot is in auto mode
         CurrentRobotMode = Modes.Auto;
-
-        // perform any autonomous-specific start functions here
-        obelisk.RecordPattern();
 
         // set limelight to apriltag pipeline
         limeLight.SetPipelineMode(0);
