@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.CommandGroups.AutoCommandGroups.LoadingSide.Nine.FarShot;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
-import org.firstinspires.ftc.teamcode.CommandGroups.BackNineManualHunt;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootObeliskColor;
+import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAutoZeroAngle;
-import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
-import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeRunEndless;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
@@ -32,7 +28,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))), // + or - 20 degrees
 
 //      -------------------------- Artifact Cycle #1 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
 //              // Move to intake point
                 new MoveToPose(
@@ -50,7 +46,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))), // + or - 20 degrees
 
 //      -------------------------- Artifact Cycle #2 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 // Move to pickup
                 new MoveToPose(
@@ -68,7 +64,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))),
 
 //      -------------------------- Artifact Cycle #3 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 // Leave
                 new MoveToPose(

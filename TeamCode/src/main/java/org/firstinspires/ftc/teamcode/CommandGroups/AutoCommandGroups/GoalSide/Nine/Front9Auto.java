@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootObeliskColor;
+import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
@@ -28,7 +28,7 @@ public class Front9Auto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(45.0)))))),// + or - 20 degrees // was -0.6, -0.6
 
 //      -------------------------- Artifact Cycle #1 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 // Turn to Hunt
                 new TurnTo(AutoFunctions.redVsBlue(-90.0),false,1.5),
@@ -43,7 +43,7 @@ public class Front9Auto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(-0.6, -0.6, new Rotation2d(Math.toRadians(45.0)))))),
 
 //      -------------------------- Artifact Cycle #2 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 // Move to pickup
                 new MoveToPose(
@@ -61,7 +61,7 @@ public class Front9Auto extends SequentialCommandGroup {
                 ),
 
 //      -------------------------- Artifact Cycle #3 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 // Move off the line
                 new MoveToPose(

@@ -7,7 +7,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
 import org.firstinspires.ftc.teamcode.CommandGroups.GhostMoves;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootObeliskColor;
+import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Intake.EndWhenFull.EndWhenFull2Artifacts;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeRunEndless;
@@ -29,7 +29,7 @@ public class GhostAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))),
 
 //      -------------------------- Artifact Cycle #1 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 new ParallelRaceGroup(
                         new IntakeRunEndless(),
@@ -43,7 +43,7 @@ public class GhostAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))),
 
 //      -------------------------- Artifact Cycle #2 --------------------------
-                new FastShootObeliskColor(),
+                new FastShootAll(),
 
                 new ParallelRaceGroup(
                         new IntakeRunEndless(),
@@ -57,7 +57,7 @@ public class GhostAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))
                 ),
 //      -------------------------- Artifact Cycle #3 --------------------------
-                new FastShootObeliskColor()
+                new FastShootAll()
 
         );
     }
