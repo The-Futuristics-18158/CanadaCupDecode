@@ -39,13 +39,14 @@ public class JogBackIntakeFull extends CommandBase {
         // current robot position (in encoder ticks)
         double currentPos = RobotContainer.intake.GetMotorPostion();
 
-        if (RobotContainer.artifactCamera.IsOverloadPresent())
+        // if condition does not exist anymore
+        /**if (RobotContainer.artifactCamera.IsOverloadPresent())
             // we are overloaded - set target position at 0.4 rotations back
             // note: 28.0*5.0 factor converts to ticks
             TargetPosition = currentPos - JogBackTurns*28.0*5.0;
         else
             // set target to current pos (=zero error) - will turn off intake
-            TargetPosition = currentPos;
+            TargetPosition = currentPos;*/
 
         // position error (in motor ticks)
         double error = TargetPosition - RobotContainer.intake.GetMotorPostion();

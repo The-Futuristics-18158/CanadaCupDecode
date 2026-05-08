@@ -9,7 +9,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import org.firstinspires.ftc.teamcode.CommandGroups.GhostMoves;
 import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
-import org.firstinspires.ftc.teamcode.Commands.Intake.EndWhenFull.EndWhenFull2Artifacts;
+import org.firstinspires.ftc.teamcode.Commands.Intake.EndWhenFull.EndAfterTimeElapsed;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeRunEndless;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
@@ -34,7 +34,7 @@ public class GhostAuto extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new IntakeRunEndless(),
                         new GhostMoves(),
-                        new EndWhenFull2Artifacts()
+                        new EndAfterTimeElapsed()
                 ),
 
                 new MoveToPose(
@@ -48,7 +48,7 @@ public class GhostAuto extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new IntakeRunEndless(),
                         new GhostMoves(),
-                        new EndWhenFull2Artifacts()
+                        new EndAfterTimeElapsed()
                 ),
 
                 new MoveToPose(

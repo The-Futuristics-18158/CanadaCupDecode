@@ -36,8 +36,7 @@ public class AdvanceIntake extends CommandBase {
     // This method is called periodically while command is active
     @Override
     public void execute() {
-        if (timer.seconds()>2.5 || (RobotContainer.artifactCamera.IsLeftPresent() &&
-                RobotContainer.artifactCamera.IsRightPresent())){
+        if (timer.seconds()>2.5){ //May need to adjust timeout
             finished = true;
             RobotContainer.intake.intakeStop();
         }else {

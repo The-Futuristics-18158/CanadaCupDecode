@@ -60,9 +60,7 @@ public class HuntModeAuto extends CommandBase {
         double y_speed;
         double omega_speed;
 
-        if (timer.seconds() >= seconds || (RobotContainer.colour.isLeftArtifactPresent() &&
-                RobotContainer.colour.isRightArtifactPresent()
-                && RobotContainer.distance.isRampArtifactPresent())){
+        if (timer.seconds() >= seconds){ //May need to adjust timeout
 
             RobotContainer.intake.intakeStop();
             finishedCounter++;

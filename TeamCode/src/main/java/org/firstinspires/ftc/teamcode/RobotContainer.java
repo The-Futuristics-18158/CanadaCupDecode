@@ -200,10 +200,6 @@ public class RobotContainer {
         // set default shooter speed control
         shooter.setDefaultCommand(new DefaultShooterSpeed());
 
-        // Set default intake control
-        intake.setDefaultCommand(new JogBackIntakeFull());
-
-
 //      -------------------------- Driver Controls --------------------------
         // Reset odometry
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> odometry.setCurrentPos
@@ -325,8 +321,6 @@ public class RobotContainer {
         // set default shooter speed control
         shooter.setDefaultCommand(new DefaultShooterSpeed());
 
-        // Set default intake control
-        intake.setDefaultCommand(new JogBackIntakeFull());
     }
 
 
