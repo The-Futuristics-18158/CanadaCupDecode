@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Commands.Odomeetry.ResetOdometryXYAngle;
 import org.firstinspires.ftc.teamcode.Commands.Shoot.DefaultShooterSpeed;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.ArtifactCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
-import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
+//import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTiltSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.ColourSensor;
@@ -97,7 +97,7 @@ public class RobotContainer {
     public static HoodTiltSubsystem hoodtilt;
     public static GoalTargeting targeting;
     public static ShotBlockServo shotblock;
-    public static ClimbSubsystem climb;
+    //public static ClimbSubsystem climb;
     public static Blinkin blinkin;
     public static ArtifactCamera artifactCamera;
 
@@ -171,7 +171,7 @@ public class RobotContainer {
         hoodtilt = new HoodTiltSubsystem();
         targeting = new GoalTargeting();
         shotblock = new ShotBlockServo();
-        climb = new ClimbSubsystem();
+        //climb = new ClimbSubsystem();
         blinkin = new Blinkin();
         artifactCamera = new ArtifactCamera("CookieCam");
 
