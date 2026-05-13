@@ -11,20 +11,17 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
-import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
+//import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
-import org.firstinspires.ftc.teamcode.Commands.Intake.JogBack.JogBackIntakeFull;
 import org.firstinspires.ftc.teamcode.Commands.Odomeetry.ResetOdometryXYAngle;
 import org.firstinspires.ftc.teamcode.Commands.Shoot.DefaultShooterSpeed;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.ArtifactCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTiltSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.Sensors.ColourSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.DriveTrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.FlywheelSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Gyro;
@@ -89,7 +86,6 @@ public class RobotContainer {
     public static LimeLight limeLight;
     public static RampCamera rampCamera;
     public static Odometry odometry;
-    public static ColourSensor colour;
     public static DistanceSensor distance;
     public static IntakeSubsystem intake;
     public static FlywheelSubsystem shooter;
@@ -99,7 +95,7 @@ public class RobotContainer {
     public static ShotBlockServo shotblock;
     //public static ClimbSubsystem climb;
     public static Blinkin blinkin;
-    public static ArtifactCamera artifactCamera;
+
 
     // Angle of the robot at the start of auto
     public static double RedStartAngle = 90;
@@ -163,7 +159,6 @@ public class RobotContainer {
         drivesystem = new DriveTrain();
         limeLight = new LimeLight();
         rampCamera = new RampCamera("RampCam");
-        colour = new ColourSensor();
         distance = new DistanceSensor();
         intake = new IntakeSubsystem();
         shooter = new FlywheelSubsystem();
@@ -173,14 +168,12 @@ public class RobotContainer {
         shotblock = new ShotBlockServo();
         //climb = new ClimbSubsystem();
         blinkin = new Blinkin();
-        artifactCamera = new ArtifactCamera("CookieCam");
+        //artifactCamera = new ArtifactCamera("CookieCam");
 
         // depending on red or blue team, set which camera gets displayed
         // on driver's station in preview mode
         if (isRedAlliance())
             rampCamera.enableCameraStream();
-        else
-            artifactCamera.enableCameraStream();
 
 
     }
@@ -206,7 +199,7 @@ public class RobotContainer {
                 (AutoFunctions.redVsBlue(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(-90.0)))))));
 
         // Climb in three seconds
-        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ClimbCommand());
+        //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ClimbCommand());
 
 //      -------------------------- (Driver) Shooting Controls  --------------------------
         // Shoot Green

@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Commands.Intake.EndWhenFull.EndAfterTimeElapsed;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.Utils;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
@@ -68,10 +69,7 @@ public class HuntModeAuto extends CommandBase {
 
         }else {
             finishedCounter=0;
-            if (RobotContainer.colour.isLeftArtifactPresent() && RobotContainer.colour.isRightArtifactPresent())
-                RobotContainer.intake.intakeRunReducedSpeed();
-            else
-                RobotContainer.intake.intakeRun();
+            RobotContainer.intake.intakeRunReducedSpeed();
         }
 
         double angleError = Utils.AngleDifference(RobotContainer.gyro.getYawAngle(),targetAngle);

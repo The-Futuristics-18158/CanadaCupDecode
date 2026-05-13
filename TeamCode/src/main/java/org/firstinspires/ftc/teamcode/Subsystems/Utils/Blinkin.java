@@ -5,11 +5,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.ArtifactCamera;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
-import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
-
-import java.util.List;
 
 /**
  * Place description of subsystem here

@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.ArtifactCamera;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 import java.util.List;
 
