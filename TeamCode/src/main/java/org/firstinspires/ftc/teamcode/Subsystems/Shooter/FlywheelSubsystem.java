@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems.Shooter.FlywheelSubsystem;
+package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,10 +21,20 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     private final double TICKSPStoRPM = (1/28.0)*60.0;
 
+    // target speed
+    public static double TargetSpeed;
     public static double LeftCurrentSpeed;
     public static double RightCurrentSpeed;
 
+    // PIF Controller Gains
+    private final double FsGain = 0.0;
+    private final double FvGain = 0.00021; // was 0.0002 // unit=power/rpm   initial value=1.0/6000rpm=0.00016667
+    public final double PGain = 0.0012;// was 0.0003
+    public final double IGain = 0.0002;
 
+    // integrated error
+    private double IError;
+    private ElapsedTime timer;
 
     /** Place code here to initialize subsystem */
     public FlywheelSubsystem() {
@@ -43,6 +53,14 @@ public class FlywheelSubsystem extends SubsystemBase {
         rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
         leftShooterMotor.setDirection(DcMotor.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        // reset integrated error
+        timer = new ElapsedTime();
+        timer.reset();
+        IError=0.0;
+
+        // reset target speed (rpm)
+        TargetSpeed=0.0;
     }
 
     /** Method called periodically by the scheduler
@@ -52,25 +70,66 @@ public class FlywheelSubsystem extends SubsystemBase {
 
         LeftCurrentSpeed = leftShooterMotor.getVelocity() * TICKSPStoRPM;
         RightCurrentSpeed = rightShooterMotor.getVelocity() * TICKSPStoRPM;
+// our current speed error
+        double SpeedError = TargetSpeed - (LeftCurrentSpeed + RightCurrentSpeed) / 2;
 
+        // integrated error
+        // determine time since last iteration
+        double dt = timer.seconds();
+        timer.reset();
+        // integrate speed error
+        IError += IGain * SpeedError * 0.02;
+        // anti-windup to prevent overshoots
+        if (SpeedError < -50.0 && IError > 0.0)
+            IError *= 0.90;
+        if (SpeedError > 50.0 && IError < 0.0)
+            IError *= 0.90;
+        // integrated error limiter
+        if (IError > 0.15) IError = 0.15;
+        if (IError < -0.1) IError = -0.1;
 
-
-
-
-
-
-//        rightShooterMotor.setPower();
-//        leftShooterMotor.setPower();
-//        intakeMotor.setPower();
-//        ShooterRPM = (60 * ((DcMotorEx) leftShooterMotor).getVelocity()) / 28;
-//        IntakeRPM = (60 * ((DcMotorEx) intakeMotor).getVelocity()) / (28 * 4);
-////        telemetry.addData("ShooterPower", leftShooterMotor.getPower());
-////        telemetry.addData("ShooterRPM", ShooterRPM);
-////        telemetry.addData("IntakePower", intakeMotor.getPower());
-////        telemetry.addData("IntakeRPM", IntakeRPM);
-////        telemetry.update();
+        // PIF controller
+        double NewPower = FsGain +                    // static feedforward
+                FvGain * TargetSpeed +      // speed feedforward
+                PGain * SpeedError +        // proportional gain
+                IError;                     // integrated error
+        // only drive motor in positive direction, otherwise let it coast
+        if (SpeedError >= -50.0){
+            leftShooterMotor.setPower(NewPower);
+        rightShooterMotor.setPower(NewPower);}
+        else{
+        leftShooterMotor.setPower(0.0);
+        rightShooterMotor.setPower(0.0);
     }
 
-    // place special subsystem methods here
+        //RobotContainer.Panels.FTCTelemetry.addData("Speed", CurrentSpeed);
+        //RobotContainer.Panels.FTCTelemetry.addData("Target", TargetSpeed);
+        //RobotContainer.Panels.FTCTelemetry.update();
+    }
+
+
+    /** Sets shooter flywheel speed in rpm
+     * @param RPM a double representing the desired flywheel speed in rpm. Negative values will be treated as 0.0.
+     */
+    public void SetFlywheelSpeed(double RPM){
+        // Setting velocity using the RPMToVelocity methode
+        //TargetSpeed = RobotContainer.targeting.CalculateSpeed();
+        TargetSpeed = RPM;
+
+    }
+
+    /**gets current flywheel speed in rpm
+     * @return current flywheel speed in rpm
+     */
+    public double GetFlyWheelSpeed() {
+        return (LeftCurrentSpeed + RightCurrentSpeed)/2;
+    }
+
+    /**gets target flywheel speed in rpm
+     * @return target flywheel speed in rpm
+     */
+    public double GetFlyWheelTargetSpeed() {
+        return TargetSpeed;
+    }
 
 }
