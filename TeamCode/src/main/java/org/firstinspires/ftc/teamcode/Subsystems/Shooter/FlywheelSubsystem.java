@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
@@ -17,7 +16,6 @@ public class FlywheelSubsystem extends SubsystemBase {
     // Local objects and variables here
     private final DcMotorEx rightShooterMotor;
     private final DcMotorEx leftShooterMotor;
-    private final DcMotorEx intakeMotor;
 
     private final double TICKSPStoRPM = (1/28.0)*60.0;
 
@@ -33,31 +31,27 @@ public class FlywheelSubsystem extends SubsystemBase {
     public final double IGain = 0.0002;
 
     // integrated error
-    private double IError;
+    private double ShooterIError;
     private ElapsedTime timer;
 
     /** Place code here to initialize subsystem */
     public FlywheelSubsystem() {
         rightShooterMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
         leftShooterMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
-        intakeMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
         rightShooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftShooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         rightShooterMotor.setPower(0.0);
         leftShooterMotor.setPower(0.0);
-        intakeMotor.setPower(0.0);
 
         rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
         leftShooterMotor.setDirection(DcMotor.Direction.REVERSE);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // reset integrated error
         timer = new ElapsedTime();
         timer.reset();
-        IError=0.0;
+        ShooterIError =0.0;
 
         // reset target speed (rpm)
         TargetSpeed=0.0;
@@ -78,21 +72,21 @@ public class FlywheelSubsystem extends SubsystemBase {
         double dt = timer.seconds();
         timer.reset();
         // integrate speed error
-        IError += IGain * SpeedError * 0.02;
+        ShooterIError += IGain * SpeedError * 0.02;
         // anti-windup to prevent overshoots
-        if (SpeedError < -50.0 && IError > 0.0)
-            IError *= 0.90;
-        if (SpeedError > 50.0 && IError < 0.0)
-            IError *= 0.90;
+        if (SpeedError < -50.0 && ShooterIError > 0.0)
+            ShooterIError *= 0.90;
+        if (SpeedError > 50.0 && ShooterIError < 0.0)
+            ShooterIError *= 0.90;
         // integrated error limiter
-        if (IError > 0.15) IError = 0.15;
-        if (IError < -0.1) IError = -0.1;
+        if (ShooterIError > 0.15) ShooterIError = 0.15;
+        if (ShooterIError < -0.1) ShooterIError = -0.1;
 
         // PIF controller
         double NewPower = FsGain +                    // static feedforward
                 FvGain * TargetSpeed +      // speed feedforward
                 PGain * SpeedError +        // proportional gain
-                IError;                     // integrated error
+                ShooterIError;                     // integrated error
         // only drive motor in positive direction, otherwise let it coast
         if (SpeedError >= -50.0){
             leftShooterMotor.setPower(NewPower);

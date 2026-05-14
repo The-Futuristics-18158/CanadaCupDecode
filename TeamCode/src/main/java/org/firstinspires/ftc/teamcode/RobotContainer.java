@@ -223,7 +223,7 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootAll());
 
         // Shoot All According to Obelisk Pattern
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new FastShootAll());
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new InstantCommand(()-> shooter.SetFlywheelSpeed(3000)));
 
 //      ------------------ (Driver) Shooter Characterization Controls  ------------------
 
