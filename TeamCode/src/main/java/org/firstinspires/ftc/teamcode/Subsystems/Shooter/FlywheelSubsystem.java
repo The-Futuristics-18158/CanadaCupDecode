@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
+package org.firstinspires.ftc.teamcode.Subsystems.Shooter.FlywheelSubsystem;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,51 +10,39 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 /**
  * Place description of subsystem here
  *
- * @author superzokabear
+ * @author Blackthrush
  */
-//@Configurable
 public class FlywheelSubsystem extends SubsystemBase {
 
     // Local objects and variables here
-    private final DcMotorEx flywheelMotor;
+    private final DcMotorEx rightShooterMotor;
+    private final DcMotorEx leftShooterMotor;
+    private final DcMotorEx intakeMotor;
 
-    // constants
-    private final double MAXRPM = 6000.0;
     private final double TICKSPStoRPM = (1/28.0)*60.0;
 
-    // target speed
-    public static double TargetSpeed;  // When disabling dashboard/panels turn back to privet. Make static when not using pannels
-    public static double CurrentSpeed; // When disabling dashboard/panels turn back to privet. Make static when not using pannels
-    // PIF Controller Gains
-    private final double FsGain = 0.0;
-    private final double FvGain = 0.00021; // was 0.0002 // unit=power/rpm   initial value=1.0/6000rpm=0.00016667
-    public final double PGain = 0.0012;// was 0.0003
-    public final double IGain = 0.0002;
+    public static double LeftCurrentSpeed;
+    public static double RightCurrentSpeed;
 
-    // integrated error
-    private double IError;
-    private ElapsedTime timer;
 
 
     /** Place code here to initialize subsystem */
     public FlywheelSubsystem() {
-        // create motor
-        flywheelMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "shooterMotor");
+        rightShooterMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
+        leftShooterMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
+        intakeMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
-        flywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightShooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftShooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        // important! - set motor to coast mode - only works for 0 power
-        flywheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        // motor is initially off
-        flywheelMotor.setPower(0.0);
+        rightShooterMotor.setPower(0.0);
+        leftShooterMotor.setPower(0.0);
+        intakeMotor.setPower(0.0);
 
-        // reset integrated error
-        timer = new ElapsedTime();
-        timer.reset();
-        IError=0.0;
-
-        // reset target speed (rpm)
-        TargetSpeed=0.0;
+        rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftShooterMotor.setDirection(DcMotor.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     /** Method called periodically by the scheduler
@@ -62,67 +50,27 @@ public class FlywheelSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // our current speed
-        CurrentSpeed = flywheelMotor.getVelocity() * TICKSPStoRPM;
+        LeftCurrentSpeed = leftShooterMotor.getVelocity() * TICKSPStoRPM;
+        RightCurrentSpeed = rightShooterMotor.getVelocity() * TICKSPStoRPM;
 
-        // our current speed error
-        double SpeedError = TargetSpeed - CurrentSpeed;
 
-        // integrated error
-        // determine time since last iteration
-        double dt = timer.seconds();
-        timer.reset();
-        // integrate speed error
-        IError += IGain * SpeedError * 0.02;
-        // anti-windup to prevent overshoots
-        if (SpeedError < -50.0 && IError > 0.0)
-            IError *=0.90;
-        if (SpeedError > 50.0 && IError < 0.0)
-            IError *=0.90;
-        // integrated error limiter
-        if (IError > 0.15) IError=0.15;
-        if (IError < -0.1) IError=-0.1;
 
-        // PIF controller
-        double NewPower = FsGain +                    // static feedforward
-                FvGain * TargetSpeed +      // speed feedforward
-                PGain * SpeedError +        // proportional gain
-                IError;                     // integrated error
-        // only drive motor in positive direction, otherwise let it coast
-        if (SpeedError>=-50.0)
-            flywheelMotor.setPower(NewPower);
-        else
-            flywheelMotor.setPower(0.0);
 
-        //RobotContainer.Panels.FTCTelemetry.addData("Speed", CurrentSpeed);
-        //RobotContainer.Panels.FTCTelemetry.addData("Target", TargetSpeed);
-        //RobotContainer.Panels.FTCTelemetry.update();
+
+
+
+//        rightShooterMotor.setPower();
+//        leftShooterMotor.setPower();
+//        intakeMotor.setPower();
+//        ShooterRPM = (60 * ((DcMotorEx) leftShooterMotor).getVelocity()) / 28;
+//        IntakeRPM = (60 * ((DcMotorEx) intakeMotor).getVelocity()) / (28 * 4);
+////        telemetry.addData("ShooterPower", leftShooterMotor.getPower());
+////        telemetry.addData("ShooterRPM", ShooterRPM);
+////        telemetry.addData("IntakePower", intakeMotor.getPower());
+////        telemetry.addData("IntakeRPM", IntakeRPM);
+////        telemetry.update();
     }
 
-    // Place special subsystem methods here
-
-    /** Sets shooter flywheel speed in rpm
-     * @param RPM a double representing the desired flywheel speed in rpm. Negative values will be treated as 0.0.
-     */
-    public void SetFlywheelSpeed(double RPM){
-        // Setting velocity using the RPMToVelocity methode
-        //TargetSpeed = RobotContainer.targeting.CalculateSpeed();
-        TargetSpeed = RPM;
-
-    }
-
-    /**gets current flywheel speed in rpm
-     * @return current flywheel speed in rpm
-     */
-    public double GetFlyWheelSpeed() {
-        return CurrentSpeed;
-    }
-
-    /**gets target flywheel speed in rpm
-     * @return target flywheel speed in rpm
-     */
-    public double GetFlyWheelTargetSpeed() {
-        return TargetSpeed;
-    }
+    // place special subsystem methods here
 
 }
