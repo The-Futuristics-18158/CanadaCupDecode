@@ -19,7 +19,7 @@ public class ClimbCommand extends CommandBase {
     public ClimbCommand() {
 
         // add subsystem requirements (if any) - for example:
-        addRequirements(RobotContainer.climb);
+        // addRequirements(RobotContainer.climb);
         addRequirements(RobotContainer.drivesystem);
         addRequirements(RobotContainer.shooter);
     }
@@ -40,7 +40,7 @@ public class ClimbCommand extends CommandBase {
 //                RobotContainer.odometry.getCurrentPos().getY() < (boxPos.getY() + error)) {
 
             RobotContainer.drivesystem.RobotDrive(0.0, 0.0, 0.0);
-            RobotContainer.climb.moveClimb();
+            // RobotContainer.climb.moveClimb();
 
       //  }
 
@@ -56,7 +56,7 @@ public class ClimbCommand extends CommandBase {
     // This method is called once when command is finished.
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.climb.climbStop();
+        // RobotContainer.climb.climbStop();
     }
 
 }

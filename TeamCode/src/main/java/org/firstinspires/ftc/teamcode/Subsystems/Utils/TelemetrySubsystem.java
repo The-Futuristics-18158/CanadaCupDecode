@@ -129,7 +129,7 @@ public class TelemetrySubsystem extends SubsystemBase {
      */
     public void climbTelemetry(){
         if (testingTelemetry) {
-            RCTelemetry.addData("Climb distance", RobotContainer.climb.getClimbDistance());
+            // RCTelemetry.addData("Climb distance", RobotContainer.climb.getClimbDistance());
             RCTelemetry.addData("roll", RobotContainer.gyro.getRollAngle());
         }
     }
