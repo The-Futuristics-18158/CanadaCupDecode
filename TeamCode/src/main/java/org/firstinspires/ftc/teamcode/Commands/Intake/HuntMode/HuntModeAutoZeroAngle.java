@@ -64,10 +64,7 @@ public class HuntModeAutoZeroAngle extends CommandBase {
 
         }else {
             finishedCounter=0;
-            if (RobotContainer.colour.isLeftArtifactPresent() && RobotContainer.colour.isRightArtifactPresent())
-                RobotContainer.intake.intakeRunReducedSpeed();
-            else
-                RobotContainer.intake.intakeRun();
+            RobotContainer.intake.intakeRunReducedSpeed();
         }
 
         double angleError = Utils.AngleDifference(RobotContainer.gyro.getYawAngle(),targetAngle);
