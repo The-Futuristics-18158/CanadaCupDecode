@@ -71,7 +71,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         LeftCurrentSpeed = leftShooterMotor.getVelocity() * TICKSPStoRPM;
         RightCurrentSpeed = rightShooterMotor.getVelocity() * TICKSPStoRPM;
 
-        CurrentSpeed = (LeftCurrentSpeed + RightCurrentSpeed)/2;
+        CurrentSpeed = (LeftCurrentSpeed + RightCurrentSpeed) / 2;
 
         // our current speed error
         double SpeedError = TargetSpeed - CurrentSpeed;
@@ -84,12 +84,12 @@ public class FlywheelSubsystem extends SubsystemBase {
         IError += IGain * SpeedError * 0.02;
         // anti-windup to prevent overshoots
         if (SpeedError < -50.0 && IError > 0.0)
-            IError *=0.90;
+            IError *= 0.90;
         if (SpeedError > 50.0 && IError < 0.0)
-            IError *=0.90;
+            IError *= 0.90;
         // integrated error limiter
-        if (IError > 0.15) IError=0.15;
-        if (IError < -0.1) IError=-0.1;
+        if (IError > 0.15) IError = 0.15;
+        if (IError < -0.1) IError = -0.1;
 
         // PIF controller
         double NewPower = FsGain +                    // static feedforward
@@ -97,11 +97,10 @@ public class FlywheelSubsystem extends SubsystemBase {
                 PGain * SpeedError +        // proportional gain
                 IError;                     // integrated error
         // only drive motor in positive direction, otherwise let it coast
-        if (SpeedError>=-50.0){
+        if (SpeedError >= -50.0) {
             rightShooterMotor.setPower(NewPower);
             leftShooterMotor.setPower(NewPower);
-        }
-        else{
+        } else {
             rightShooterMotor.setPower(0.0);
             leftShooterMotor.setPower(0.0);
         }
