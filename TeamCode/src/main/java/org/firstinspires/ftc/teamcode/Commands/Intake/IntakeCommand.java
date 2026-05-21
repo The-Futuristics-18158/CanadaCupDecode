@@ -30,8 +30,7 @@ public class IntakeCommand extends CommandBase {
 
         timer.reset();
         finished = false;
-        RobotContainer.uptake.LowerLeftUptake();
-        RobotContainer.uptake.LowerRightUptake();
+
     }
 
     // This method is called periodically while command is active

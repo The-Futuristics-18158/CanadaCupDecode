@@ -16,7 +16,9 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 public class FlywheelSubsystem extends SubsystemBase {
 
     // Local objects and variables here
-    private final DcMotorEx flywheelMotor;
+    private final DcMotorEx flywheelMotorRight;
+    private final DcMotorEx flywheelMotorLeft;
+
 
     // constants
     private final double MAXRPM = 6000.0;
@@ -39,14 +41,16 @@ public class FlywheelSubsystem extends SubsystemBase {
     /** Place code here to initialize subsystem */
     public FlywheelSubsystem() {
         // create motor
-        flywheelMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "shooterMotor");
+        flywheelMotorRight = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
+        flywheelMotorLeft = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
 
-        flywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        flywheelMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // important! - set motor to coast mode - only works for 0 power
-        flywheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        flywheelMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         // motor is initially off
-        flywheelMotor.setPower(0.0);
+        flywheelMotorRight.setPower(0.0);
 
         // reset integrated error
         timer = new ElapsedTime();
@@ -63,7 +67,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     public void periodic() {
 
         // our current speed
-        CurrentSpeed = flywheelMotor.getVelocity() * TICKSPStoRPM;
+        CurrentSpeed = flywheelMotorRight.getVelocity() * TICKSPStoRPM;
 
         // our current speed error
         double SpeedError = TargetSpeed - CurrentSpeed;
@@ -90,9 +94,9 @@ public class FlywheelSubsystem extends SubsystemBase {
                 IError;                     // integrated error
         // only drive motor in positive direction, otherwise let it coast
         if (SpeedError>=-50.0)
-            flywheelMotor.setPower(NewPower);
+            flywheelMotorRight.setPower(NewPower);
         else
-            flywheelMotor.setPower(0.0);
+            flywheelMotorRight.setPower(0.0);
 
         //RobotContainer.Panels.FTCTelemetry.addData("Speed", CurrentSpeed);
         //RobotContainer.Panels.FTCTelemetry.addData("Target", TargetSpeed);

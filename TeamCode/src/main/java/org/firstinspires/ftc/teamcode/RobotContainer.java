@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Odomeetry.ResetOdometryXYAngle;
 import org.firstinspires.ftc.teamcode.Commands.Shoot.DefaultShooterSpeed;
-import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
+//import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTiltSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
@@ -34,7 +34,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.Odometry.PinpointOdometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.ShotBlockServo;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.TelemetrySubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.UptakeSubsystem;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
 import java.util.List;
@@ -89,12 +88,11 @@ public class RobotContainer {
     public static DistanceSensor distance;
     public static IntakeSubsystem intake;
     public static FlywheelSubsystem shooter;
-    public static UptakeSubsystem uptake;
     public static HoodTiltSubsystem hoodtilt;
     public static GoalTargeting targeting;
     public static ShotBlockServo shotblock;
     //public static ClimbSubsystem climb;
-    public static Blinkin blinkin;
+//    public static Blinkin blinkin;
 
 
     // Angle of the robot at the start of auto
@@ -162,12 +160,11 @@ public class RobotContainer {
         distance = new DistanceSensor();
         intake = new IntakeSubsystem();
         shooter = new FlywheelSubsystem();
-        uptake = new UptakeSubsystem();
         hoodtilt = new HoodTiltSubsystem();
         targeting = new GoalTargeting();
         shotblock = new ShotBlockServo();
         //climb = new ClimbSubsystem();
-        blinkin = new Blinkin();
+//        blinkin = new Blinkin();
         //artifactCamera = new ArtifactCamera("CookieCam");
 
         // depending on red or blue team, set which camera gets displayed
@@ -186,9 +183,6 @@ public class RobotContainer {
 
         // set drivetrain default command to manual driving mode
         drivesystem.setDefaultCommand(new ManualDrive());
-
-        uptake.LowerRightUptake();
-        uptake.LowerLeftUptake();
 
         // set default shooter speed control
         shooter.setDefaultCommand(new DefaultShooterSpeed());
