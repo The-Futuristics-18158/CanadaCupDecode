@@ -23,12 +23,9 @@ public class DefaultShooterSpeed extends CommandBase {
     // This method is called periodically while command is active
     @Override
     public void execute() {
-//        // only turn on shooter once we have at least one artifact
-        if (RobotContainer.colour.isLeftArtifactPresent() || RobotContainer.colour.isRightArtifactPresent()){
-            RobotContainer.shooter.SetFlywheelSpeed(Math.max(0.0,RobotContainer.targeting.IdleSpeed()));
-        } else{
-            RobotContainer.shooter.SetFlywheelSpeed(0);
-        }
+        // only turn on shooter once we have at least one artifact
+        RobotContainer.shooter.SetFlywheelSpeed(Math.max(0.0,RobotContainer.targeting.IdleSpeed()));
+
 
     }
 

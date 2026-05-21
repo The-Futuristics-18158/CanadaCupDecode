@@ -14,19 +14,13 @@ public class HoodTiltSubsystem extends SubsystemBase {
 
     // Local objects and variables here
     public static double hoodPosition; // set as a static when no using pannels
-    private Servo leftTilt;
-    private Servo rightTilt;
+    private Servo Tilt;
 
     /** Place code here to initialize subsystem */
     public HoodTiltSubsystem() {
-
-        leftTilt = RobotContainer.ActiveOpMode.hardwareMap.get(Servo.class, "leftHoodServo");
-        rightTilt = RobotContainer.ActiveOpMode.hardwareMap.get(Servo.class, "rightHoodServo");
-
-        leftTilt.setDirection(Servo.Direction.FORWARD);
-        rightTilt.setDirection(Servo.Direction.FORWARD);
-
-        hoodPosition = MinLeftAngle;
+        Tilt = RobotContainer.ActiveOpMode.hardwareMap.get(Servo.class, "hoodAngleServo");
+        Tilt.setDirection(Servo.Direction.FORWARD);
+        hoodPosition = minAngle;
     }
 
     /** Method called periodically by the scheduler
@@ -38,32 +32,18 @@ public class HoodTiltSubsystem extends SubsystemBase {
 
     // place special subsystem methods here
     // Raise left or right hood servo
-    public double MaxLeftAngle = 0.57; // No higher under penalty of a creative death
-    public double MaxRightAngle = 0.43; // No higher under penalty of a creative death
-    public double MinLeftAngle = 0.0;
-    public double MinRightAngle = 1.0;
-
-//    public void MaxRaiseLeftTilt(){leftTilt.setPosition(MaxLeftAngle);}
-//    public void MaxRaiseRightTIlt(){
-//        rightTilt.setPosition(MaxRightAngle);
-//    }
-//
-//    // Lower Left or right hood servo
-//    public void LowerLeftTilt(){leftTilt.setPosition(MinLeftAngle);}// No negative values possible
-//    public void LowerRightTilt(){
-//        rightTilt.setPosition(MinRightAngle);
-//    }
-
+    public double maxAngle = 1.0; // No higher under penalty of a creative death
+    public double minAngle = 0.3;
 
     /**Sets shooter hood position
-     * @param position Desired position between 0.0 and 0.57
+     * @param position Desired position between 0.3 and 1.0
+     *      Last updated for Canada Cup Robot
      */
     public void SetHoodPosition(double position){
         double pos = position;
-        if (pos < MinLeftAngle){ pos = MinLeftAngle;}
-        if (pos > MaxLeftAngle){ pos = MaxLeftAngle;}
-        leftTilt.setPosition(pos);
-        rightTilt.setPosition(1.0 - pos);
+        if (pos < minAngle){ pos = minAngle;}
+        if (pos > maxAngle){ pos = maxAngle;}
+        Tilt.setPosition(pos);
     }
 
 

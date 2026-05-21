@@ -28,8 +28,8 @@ public class DriveTrain extends SubsystemBase {
     public final double MAX_SPEED = MAXRPS * Math.PI * WHEEL_DIA / GEAR_RATIO;
 
     // Setup Drive Kinematics Object Constants
-    final double TRACK_WIDTH = 0.31;   // Width between the left and right wheels - in m.
-    final double TRACK_LENGTH = 0.29;  // Length between the front and back wheel - in m.
+    final double TRACK_WIDTH = 0.34;   // Width between the left and right wheels - in m.
+    final double TRACK_LENGTH = 0.192;  // Length between the front and back wheel - in m.
     private MecanumDriveKinematics driveKinematics;
 
     // create Mecanum drive and its motors
@@ -73,9 +73,9 @@ public class DriveTrain extends SubsystemBase {
         rightBackDrive = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "rightBackDrive");
 
         // With the shift to DcMotorEx, Inverted function shifted to setDirection.
-        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // set motor to closed-loop speed control mode

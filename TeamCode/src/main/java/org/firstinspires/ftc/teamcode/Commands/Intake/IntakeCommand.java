@@ -30,8 +30,7 @@ public class IntakeCommand extends CommandBase {
 
         timer.reset();
         finished = false;
-        RobotContainer.uptake.LowerLeftUptake();
-        RobotContainer.uptake.LowerRightUptake();
+
     }
 
     // This method is called periodically while command is active
@@ -48,10 +47,7 @@ public class IntakeCommand extends CommandBase {
             finished = true;
             RobotContainer.intake.intakeStop();
         }else {
-            if (RobotContainer.colour.isLeftArtifactPresent() && RobotContainer.colour.isRightArtifactPresent())
-                RobotContainer.intake.intakeRunReducedSpeed();
-            else
-                RobotContainer.intake.intakeRun();
+            RobotContainer.intake.intakeRunReducedSpeed();
         }
     }
 

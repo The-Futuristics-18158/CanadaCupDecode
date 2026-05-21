@@ -12,10 +12,11 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
  *
  * @author Blackthrush
  */
+//@Configurable
 public class FlywheelSubsystem extends SubsystemBase {
 
-
     // Local objects and variables here
+
     private final DcMotorEx rightShooterMotor;
     private final DcMotorEx leftShooterMotor;
 
@@ -35,6 +36,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     public final double PGain = 0.0012;// was 0.0003
     public final double IGain = 0.0002;
 
+    // integrated error
     private double IError;
     private ElapsedTime timer;
 
@@ -51,6 +53,14 @@ public class FlywheelSubsystem extends SubsystemBase {
 
         rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
         leftShooterMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        // reset integrated error
+        timer = new ElapsedTime();
+        timer.reset();
+        IError=0.0;
+
+        // reset target speed (rpm)
+        TargetSpeed=0.0;
     }
 
     /** Method called periodically by the scheduler
@@ -61,6 +71,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         LeftCurrentSpeed = leftShooterMotor.getVelocity() * TICKSPStoRPM;
         RightCurrentSpeed = rightShooterMotor.getVelocity() * TICKSPStoRPM;
 
+        CurrentSpeed = (LeftCurrentSpeed + RightCurrentSpeed)/2;
 
         // our current speed error
         double SpeedError = TargetSpeed - CurrentSpeed;
@@ -94,8 +105,17 @@ public class FlywheelSubsystem extends SubsystemBase {
             rightShooterMotor.setPower(0.0);
             leftShooterMotor.setPower(0.0);
         }
+    }
 
+    // Place special subsystem methods here
 
+    /** Sets shooter flywheel speed in rpm
+     * @param RPM a double representing the desired flywheel speed in rpm. Negative values will be treated as 0.0.
+     */
+    public void SetFlywheelSpeed(double RPM){
+        // Setting velocity using the RPMToVelocity methode
+        //TargetSpeed = RobotContainer.targeting.CalculateSpeed();
+        TargetSpeed = RPM;
 
 //        rightShooterMotor.setPower();
 //        leftShooterMotor.setPower();
@@ -109,8 +129,32 @@ public class FlywheelSubsystem extends SubsystemBase {
 ////        telemetry.update();
     }
 
-    // place special subsystem methods here
-public void SetFlywheelSpeed(double speed){
+    /**gets current flywheel speed in rpm
+     * @return current flywheel speed in rpm
+     */
+    public double GetFlyWheelSpeed() {
+        return CurrentSpeed;
+    }
 
-}
+    /**gets current speed of the left motor in rpm
+     * @return current flywheel speed in rpm
+     */
+    public double GetLeftMotorFlyWheelSpeed() {
+        return LeftCurrentSpeed;
+    }
+
+    /**gets current speed of the right motor in rpm
+     * @return current flywheel speed in rpm
+     */
+    public double GetRightMotorFlyWheelSpeed() {
+        return RightCurrentSpeed;
+    }
+
+    /**gets target flywheel speed in rpm
+     * @return target flywheel speed in rpm
+     */
+    public double GetFlyWheelTargetSpeed() {
+        return TargetSpeed;
+    }
+
 }
