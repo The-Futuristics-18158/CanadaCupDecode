@@ -28,7 +28,7 @@ public class DriveTrain extends SubsystemBase {
     public final double MAX_SPEED = MAXRPS * Math.PI * WHEEL_DIA / GEAR_RATIO;
 
     // Setup Drive Kinematics Object Constants
-    final double TRACK_WIDTH = 0.34;   // Width between the left and right wheels - in m.
+    final double TRACK_WIDTH = 0.38;   // Width between the left and right wheels - in m.
     final double TRACK_LENGTH = 0.192;  // Length between the front and back wheel - in m.
     private MecanumDriveKinematics driveKinematics;
 
@@ -58,13 +58,13 @@ public class DriveTrain extends SubsystemBase {
         // setup the Kinematics
         driveKinematics = new MecanumDriveKinematics(
                 // Front Left
-                new Translation2d(TRACK_LENGTH * 0.5, TRACK_WIDTH * 0.5),
+                new Translation2d(TRACK_LENGTH * 0.182, TRACK_WIDTH * 0.5), // length was * 0.5 but due to shorter base had to change for this bot - change back in the future.
                 // Front Right
-                new Translation2d(TRACK_LENGTH * 0.5, TRACK_WIDTH * -0.5),
+                new Translation2d(TRACK_LENGTH * 0.182, TRACK_WIDTH * -0.5), // length was * 0.5 but due to shorter base had to change for this bot - change back in the future.
                 // Back Left
-                new Translation2d(TRACK_LENGTH * -0.5, TRACK_WIDTH * 0.5),
+                new Translation2d(TRACK_LENGTH * -0.818, TRACK_WIDTH * 0.5), // length was * -0.5 but due to shorter base had to change for this bot - change back in the future.
                 // Back Right
-                new Translation2d(TRACK_LENGTH * -0.5, TRACK_WIDTH * -0.5));
+                new Translation2d(TRACK_LENGTH * -0.818, TRACK_WIDTH * -0.5)); // length was * -0.5 but due to shorter base had to change for this bot - change back in the future.
 
         // to the names assigned during the robot configuration step on the DS or RC devices.
         leftFrontDrive = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "leftFrontDrive");

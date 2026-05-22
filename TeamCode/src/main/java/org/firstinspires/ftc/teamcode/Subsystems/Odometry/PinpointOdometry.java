@@ -45,7 +45,7 @@ public class PinpointOdometry extends SubsystemBase {
         pinpointDriver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
 
         // set x and y offset from centre
-        pinpointDriver.setOffsets(-152.0,-70.0, DistanceUnit.MM);
+        pinpointDriver.setOffsets(-85.0,76.5, DistanceUnit.MM);
 
         // Reset pinpoint driver
         pinpointDriver.resetPosAndIMU();
