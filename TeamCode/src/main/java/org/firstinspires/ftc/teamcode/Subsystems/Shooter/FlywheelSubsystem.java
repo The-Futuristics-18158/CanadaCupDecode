@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
  * Place description of subsystem here
  *
  * @author Blackthrush
+ * @author Zokabear
  */
 //@Configurable
 public class FlywheelSubsystem extends SubsystemBase {
@@ -21,11 +22,13 @@ public class FlywheelSubsystem extends SubsystemBase {
     private final DcMotorEx leftShooterMotor;
 
 
-    public static double TargetSpeed;  // When disabling dashboard/panels turn back to privet. Make static when not using pannels
+    private static double TargetSpeed;  // When disabling dashboard/panels turn back to privet. Make static when not using pannels
     public static double CurrentSpeed;
 
-    private final double MAXRPM = 6000.0;
-    private final double TICKSPStoRPM = (1/28.0)*60.0;
+    private final double MAXRPM = 4400.0;
+    private final double MOTORPULSE_PER_REV = 28.0;
+    private final double GEAR_REDUCTION = 1;
+    private final double TICKSPStoRPM = GEAR_REDUCTION*(1/MOTORPULSE_PER_REV); //Converts Ticks Per Second to RPM
 
     public static double LeftCurrentSpeed;
     public static double RightCurrentSpeed;
@@ -60,7 +63,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         IError=0.0;
 
         // reset target speed (rpm)
-        TargetSpeed=0.0;
+        //TargetSpeed=0.0;
     }
 
     /** Method called periodically by the scheduler
@@ -68,13 +71,13 @@ public class FlywheelSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        LeftCurrentSpeed = leftShooterMotor.getVelocity() * TICKSPStoRPM;
+        LeftCurrentSpeed = leftShooterMotor.getVelocity() * TICKSPStoRPM;  //USING THIS ONE FOR PID
         RightCurrentSpeed = rightShooterMotor.getVelocity() * TICKSPStoRPM;
 
-        CurrentSpeed = (LeftCurrentSpeed + RightCurrentSpeed) / 2;
 
         // our current speed error
-        double SpeedError = TargetSpeed - CurrentSpeed;
+        //TargetSpeed = 1000.0;
+        double SpeedError = TargetSpeed - LeftCurrentSpeed;
 
         // integrated error
         // determine time since last iteration
@@ -97,7 +100,7 @@ public class FlywheelSubsystem extends SubsystemBase {
                 PGain * SpeedError +        // proportional gain
                 IError;                     // integrated error
         // only drive motor in positive direction, otherwise let it coast
-        if (SpeedError >= -50.0) {
+        if (SpeedError >= -50.0) { //no clue what this means, zoe may know
             rightShooterMotor.setPower(NewPower);
             leftShooterMotor.setPower(NewPower);
         } else {
@@ -128,12 +131,7 @@ public class FlywheelSubsystem extends SubsystemBase {
 ////        telemetry.update();
     }
 
-    /**gets current flywheel speed in rpm
-     * @return current flywheel speed in rpm
-     */
-    public double GetFlyWheelSpeed() {
-        return CurrentSpeed;
-    }
+
 
     /**gets current speed of the left motor in rpm
      * @return current flywheel speed in rpm
@@ -155,5 +153,17 @@ public class FlywheelSubsystem extends SubsystemBase {
     public double GetFlyWheelTargetSpeed() {
         return TargetSpeed;
     }
+
+    public void SetMotorSpeed(double speed){
+
+        leftShooterMotor.setPower(speed);
+        rightShooterMotor.setPower(speed);
+    }
+
+//    public double GetTPS(){
+//
+//        leftShooterMotor.getTPS
+//
+//    }
 
 }

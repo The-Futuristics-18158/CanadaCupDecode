@@ -199,19 +199,20 @@ public class RobotContainer {
 //      -------------------------- (Driver) Shooting Controls  --------------------------
         // Shoot Green
         //driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootGreen());
-        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootAll());
+        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new InstantCommand(()->shooter.SetFlywheelSpeed(500.0)));
+        driverOp.getGamepadButton(GamepadKeys.Button.A).whenReleased(new InstantCommand(()->shooter.SetFlywheelSpeed(0.0)));
 
         // Reset odometry to apriltag before shooting all according to obelisk pattern
-        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
-                                                                         new ResetOdometryXYAngle(),
-                                                                        new FastShootAll() ));
+       // driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
+                                                                         //new ResetOdometryXYAngle(),
+                                                                        //new FastShootAll() ));
 
         // Shoot Purple
         //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootPurple());
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootAll());
+        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootAll());
 
         // Shoot All According to Obelisk Pattern
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new FastShootAll());
+        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new FastShootAll());
 
 //      ------------------ (Driver) Shooter Characterization Controls  ------------------
 
@@ -341,6 +342,8 @@ public class RobotContainer {
 
             // report time interval on robot controller
             telemetrySubsystem.timerOdometry();
+            RobotContainer.telemetrySubsystem.addData("RPM", RobotContainer.shooter.GetLeftMotorFlyWheelSpeed());
+            RobotContainer.telemetrySubsystem.addData("Target Speed", RobotContainer.shooter.GetFlyWheelTargetSpeed());
 
             telemetrySubsystem.update();
         }
