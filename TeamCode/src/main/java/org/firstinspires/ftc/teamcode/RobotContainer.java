@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Commands.Shoot.DefaultShooterSpeed;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTiltSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.DriveTrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.FlywheelSubsystem;
@@ -91,6 +92,7 @@ public class RobotContainer {
     public static HoodTiltSubsystem hoodtilt;
     public static GoalTargeting targeting;
     public static ShotBlockServo shotblock;
+    public static TurretSubsystem turret;
     //public static ClimbSubsystem climb;
 //    public static Blinkin blinkin;
 
@@ -163,6 +165,7 @@ public class RobotContainer {
         hoodtilt = new HoodTiltSubsystem();
         targeting = new GoalTargeting();
         shotblock = new ShotBlockServo();
+        turret = new TurretSubsystem();
         //climb = new ClimbSubsystem();
 //        blinkin = new Blinkin();
         //artifactCamera = new ArtifactCamera("CookieCam");
@@ -201,16 +204,16 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootAll());
 
         // Reset odometry to apriltag before shooting all according to obelisk pattern
-        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
-                                                                         new ResetOdometryXYAngle(),
-                                                                        new FastShootAll() ));
+//        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
+//                                                                         new ResetOdometryXYAngle(),
+//                                                                        new FastShootAll() ));
 
         // Shoot Purple
         //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootPurple());
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootAll());
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()-10)));
 
         // Shoot All According to Obelisk Pattern
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new FastShootAll());
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
 
 //      ------------------ (Driver) Shooter Characterization Controls  ------------------
 
@@ -220,32 +223,32 @@ public class RobotContainer {
 
 //      -------------------------- (Driver) Intake Systems --------------------------
         // Hunt Mode
-        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new HuntModeCommand());
+        //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new HuntModeCommand());
 
 
         //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new JogBackIntakeFull());
 
         // Manual Intake
-        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new IntakeCommand());
+        //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new IntakeCommand());
 
 //      -------------------------- (Driver) Turning To Exact Angle --------------------------
-        // Turn To 0 degrees
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new TurnTo(AutoFunctions.redVsBlue(0.0), false, 5.0));
-
-        // Turn To 90 degrees
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new TurnTo(AutoFunctions.redVsBlue(-90.0), false, 5.0));
-
-        // Turn To 180 degrees
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new TurnTo(AutoFunctions.redVsBlue(180.0), false, 5.0));
-
-        // Turn To 270 degrees
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new TurnTo(AutoFunctions.redVsBlue(90.0), false, 5.0));
-
+//        // Turn To 0 degrees
+//        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new TurnTo(AutoFunctions.redVsBlue(0.0), false, 5.0));
+//
+//        // Turn To 90 degrees
+//        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new TurnTo(AutoFunctions.redVsBlue(-90.0), false, 5.0));
+//
+//        // Turn To 180 degrees
+//        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new TurnTo(AutoFunctions.redVsBlue(180.0), false, 5.0));
+//
+//        // Turn To 270 degrees
+//        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new TurnTo(AutoFunctions.redVsBlue(90.0), false, 5.0));
+//
 //      -------------------------- Operator Controls --------------------------
-        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->  operatorControls.increaseRampTotal()));
-        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->  operatorControls.decreaseRampTotal()));
-        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()-> operatorControls.resetRampTotal()));
-        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()-> telemetrySubsystem.telemetryModeToggle()));
+//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->  operatorControls.increaseRampTotal()));
+//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->  operatorControls.decreaseRampTotal()));
+//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()-> operatorControls.resetRampTotal()));
+//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()-> telemetrySubsystem.telemetryModeToggle()));
 
 //      -------------------------- Examples --------------------------
         // bind commands to buttons
@@ -340,6 +343,8 @@ public class RobotContainer {
 
             // report time interval on robot controller
             telemetrySubsystem.timerOdometry();
+            telemetrySubsystem.addData("Turret Target", turret.getTurretDegrees());
+            telemetrySubsystem.addData("Turret Ticks", turret.getTurretTicks());
 
             telemetrySubsystem.update();
         }
