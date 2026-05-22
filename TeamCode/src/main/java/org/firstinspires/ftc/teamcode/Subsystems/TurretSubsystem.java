@@ -36,6 +36,8 @@ public class TurretSubsystem extends SubsystemBase {
         // Sets the motor to PIDF values
         turret.setVelocityPIDFCoefficients(1.0, 0.1, 0.00, 1.0);//needs to be tuned for the turret
 
+        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         // Setting target to zero upon initialization
         turret.setTargetPosition(0);
 
