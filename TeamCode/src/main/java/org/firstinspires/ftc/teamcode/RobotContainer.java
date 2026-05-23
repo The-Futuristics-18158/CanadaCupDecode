@@ -208,18 +208,16 @@ public class RobotContainer {
 //                                                                         new ResetOdometryXYAngle(),
 //                                                                        new FastShootAll() ));
 
-        // Shoot Purple
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new FastShootPurple());
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()-10)));
+        //      -------------------------- (Driver) Turret System --------------------------
+        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()-10)));
 
-        // Shoot All According to Obelisk Pattern
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
+        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
 
-//      ------------------ (Driver) Shooter Characterization Controls  ------------------
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(-10.0)));
 
-//        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new CycleLeftUptake());
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(0.0)));
 
-//        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new CycleRightUptake());
+        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
 
 //      -------------------------- (Driver) Intake Systems --------------------------
         // Hunt Mode

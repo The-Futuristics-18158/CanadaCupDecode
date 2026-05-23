@@ -33,15 +33,22 @@ public class TurretSubsystem extends SubsystemBase {
         // Motor direction
         turret.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // Sets the motor to PIDF values
-        turret.setVelocityPIDFCoefficients(8.0, 0.1, 0.00, 1.0);//needs to be tuned for the turret
-
-        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         // Setting target to zero upon initialization
         turret.setTargetPosition(0);
 
-        turret.setPower(0.3);
+        // Will get moved to Turn Turret to Target
+        double turnError = Math.abs (turret.getCurrentPosition() - turret.getTargetPosition());
+        if (turnError >= 20) {
+            // Sets the motor to PIDF values for large distances
+            turret.setVelocityPIDFCoefficients(0.03, 0.0, 0.0, 40.0);// Long distance settings are (p: , i: , d: , f:40.0)
+        }else {
+            // Sets the motor to PIDF values for short distances
+            turret.setVelocityPIDFCoefficients(220.0, 10.0, 0.00, 40.0);// Short distance settings are (p:220.0, i:10.0, d:0.00, f:40.0)
+        }
+
+        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        turret.setPower(1.0);
 
     }
 
@@ -70,7 +77,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public double getTurretDegrees(){
-        return turret.getCurrentPosition() /TICKS_TO_DEGREES;
+        return turret.getCurrentPosition()/TICKS_TO_DEGREES;
     }
 
     public double getTurretTicks(){
