@@ -39,22 +39,22 @@ import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 import java.util.List;
 
 /** TODO
- * Update pinpointDriver.setOffsets() with correct values, line 48 of PinpointOdometry.java
- * Update Drive Kinematics with correct values, lines 31-32 of DriveTrain.java
- * Adjust UptakeSubsystem to use one servo instead of two, and update all commands that use it
- * Adjust FlywheelSubsystem to use two motors instead of one, and update all commands that use it
- * Remove Operator controls and references to it, or adjust to be used for something else
+ * Update pinpointDriver.setOffsets() with correct values, line 48 of PinpointOdometry.java       (completed)
+ * Update Drive Kinematics with correct values, lines 31-32 of DriveTrain.java                    (completed)
+ * Adjust UptakeSubsystem to use one servo instead of two, and update all commands that use it    (no uptake)
+ * Adjust FlywheelSubsystem to use two motors instead of one, and update all commands that use it (in progress)
+ * Remove Operator controls and references to it, or adjust to be used for something else         (completed)
  * Adjust ShotBlockServo subsystem
- * Adjust or remove HoodTiltSubsystem and references to it ?
+ * Adjust HoodTiltSubsystem
  * Adjust shooting commands to not need to decide left vs right
- * Add the turret's subsystem
+ * Add the turret's subsystem                                                                     (in progress)
  * Add constant tracking for the turret to the goal using the limelight
  * refactor ClimbSubsystem code to work with the DriveTrain
  *
- * Remove code related to colour detection and pattern matching
-    * Remove Obelisk.java and references to it
-    * Remove code related to artifact colour detection
-        * Remove references to ColourSensor subsystem
+ * Remove code related to colour detection and pattern matching (completed)
+    * Remove Obelisk.java and references to it                  (completed)
+    * Remove code related to artifact colour detection          (completed)
+        * Remove references to ColourSensor subsystem           (completed)
  */
 
 public class RobotContainer {
