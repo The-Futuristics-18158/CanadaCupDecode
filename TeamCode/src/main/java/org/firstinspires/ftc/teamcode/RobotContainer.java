@@ -214,7 +214,7 @@ public class RobotContainer {
 
         //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new TurnTurretToTarget(10.0));
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new TurnTurretToTarget());
 
         //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(0.0)));
 
@@ -342,8 +342,8 @@ public class RobotContainer {
 
             // report time interval on robot controller
             telemetrySubsystem.timerOdometry();
-            telemetrySubsystem.addData("Turret Target", turret.getTurretDegrees());
-            telemetrySubsystem.addData("Turret Ticks", turret.getTurretTicks());
+            telemetrySubsystem.addData("Turret Target (degrees): ", turret.getTurretTargetDegrees());
+            telemetrySubsystem.addData("Turret Current (degrees): ", turret.getTurretDegrees());
 
             telemetrySubsystem.update();
         }

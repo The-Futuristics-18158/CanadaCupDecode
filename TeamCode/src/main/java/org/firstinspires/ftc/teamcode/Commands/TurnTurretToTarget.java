@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.geometry.Vector2d;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.Utils;
@@ -14,50 +12,60 @@ import org.firstinspires.ftc.teamcode.Utility.Utils;
  * */
 public class TurnTurretToTarget extends CommandBase {
 
-    double m_endangle;
-    double m_timeout;
+    // our current facing angle (degrees)
+    double turretCurrentAngle;
 
-    // speed to rotate robot - determined by PID controller
-    double m_rotatespeed;
-    double m_angleerror;
+    // out tturret's target angle (degrees)
+    double turretTargetAngle;
+//    double m_timeout;
+//
+//    // speed to rotate robot - determined by PID controller
+//    double m_rotatespeed;
+    double turretRemainingError;
 
-    // PID gains for rotating robot towards ball target
-    public static double kpmax = 0.05; // was 0.11 Feb 5/2026 KN
-    public static double kpmin = 0.04; // was 0.04 Feb 5/2026 KN
-    public static double kp_deg = 90.0;
-    public static double ki = 0.2; // 0.20;
-    public static double ki_range = 0.1; // was 5.0
-    public static double ki_zerorange = 0.5;
-    public static double kd = 0.019; // 0.0035;
-    public static double kd_deg = 110.0;
+//    // PID gains for rotating robot towards ball target
+//    public static double kpmax = 0.05; // was 0.11 Feb 5/2026 KN
+//    public static double kpmin = 0.04; // was 0.04 Feb 5/2026 KN
+//    public static double kp_deg = 90.0;
+//    public static double ki = 0.2; // 0.20;
+//    public static double ki_range = 0.1; // was 5.0
+//    public static double ki_zerorange = 0.5;
+//    public static double kd = 0.019; // 0.0035;
+//    public static double kd_deg = 110.0;
+
+    // translation of target angle given robot heading now
+    double targetTranslationAngle;
+
+    // set starting robot gyro direction as turret will be aligned to this as 0 degrees
+    public double startingGyroDegrees = RobotContainer.gyro.getYawAngle();
 
     // filtered error angle
-    double filtered_error;
-    public static double LPFvalue = 0.93; // Low Pass Filter: was 0.93
+//    double filtered_error;
+//    public static double LPFvalue = 0.93; // Low Pass Filter: was 0.93
 
     // p=0.1, d=0.01
 
-    PIDController pidController = new PIDController(kpmax, ki, kd);
+//    PIDController pidController = new PIDController(kpmax, ki, kd);
 
     // on-target timer
-    ElapsedTime OnTargetTime;
-
-    // Timeout timer
-    ElapsedTime TimeOutTime;
+//    ElapsedTime OnTargetTime;
+//
+//    // Timeout timer
+//    ElapsedTime TimeOutTime;
 
 
     /** Turn to/by angle
      * Input: angle - degrees (-180<angle<180)
      * relative - true if relative to current angle, false if absolute to field
      * clockwise - true if rotate clockwise, false if counter-clockwise */
-    public TurnTurretToTarget(double timeout) {
+    public TurnTurretToTarget() {
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.turret);
 
-        m_timeout = timeout;
-        OnTargetTime = new ElapsedTime();
-        TimeOutTime = new ElapsedTime();
+//        m_timeout = timeout;
+//        OnTargetTime = new ElapsedTime();
+//        TimeOutTime = new ElapsedTime();
 
     }
 
@@ -65,80 +73,89 @@ public class TurnTurretToTarget extends CommandBase {
     @Override
     public void initialize() {
 
-        // our current facing angle
-        double ourcurrentangle = RobotContainer.turret.getTurretDegrees();
-
-        // determine target angle
+        // determine present angle of turret
+        turretCurrentAngle = RobotContainer.turret.getTurretDegrees();
 
         // get our current position and the target position
         Pose2d pose = RobotContainer.odometry.getCurrentPos();
         Translation2d targetPose = RobotContainer.targeting.GetShotTaget();
 
-        // determine target angle
+        // determine target angle from Robot field pose
         double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
-        m_endangle = Math.toDegrees(angle_rad) - 180.0; // switched as this turret shoots forward not back
+        turretTargetAngle = Math.toDegrees(angle_rad) - 180.0; // switched as this turret shoots forward not back
 
-        // reset PID controller
-        pidController.reset();
-        m_angleerror = 0.0;
+//        // reset PID controller
+//        pidController.reset();
+        turretRemainingError = Utils.AngleDifference(turretTargetAngle, turretCurrentAngle);
 
-        OnTargetTime.reset();
-        TimeOutTime.reset();
-
-        // determine initial error
-        filtered_error = Utils.AngleDifference(m_endangle, RobotContainer.turret.getTurretDegrees());
-
-
+//        OnTargetTime.reset();
+//        TimeOutTime.reset();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute()
     {
-        // determine speed to rotate robot
-        m_angleerror = Utils.AngleDifference(m_endangle, RobotContainer.turret.getTurretDegrees());
+        turretCurrentAngle = RobotContainer.turret.getTurretDegrees();
+
+        // determine remaining angle to turn turret
+        turretRemainingError = Utils.AngleDifference(turretTargetAngle, turretCurrentAngle);
 
         // apply LPF to angle error
-        filtered_error = LPFvalue*filtered_error + (1.0-LPFvalue)*m_angleerror;
+//        filtered_error = LPFvalue*filtered_error + (1.0-LPFvalue)*m_angleerror;
 
+        // get our current position and the target position
+        Pose2d pose = RobotContainer.odometry.getCurrentPos();
+        Translation2d targetPose = RobotContainer.targeting.GetShotTaget();
+
+        // determine target angle from Robot field pose
+        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
+        turretTargetAngle = Math.toDegrees(angle_rad) - 180.0; // switched as this by 180 degrees as turret shoots forward not back
+
+        // this is the right idea but maybe the wrong way...
+        // consider the robot angle (where -90 is "home" for Blue alliance) and translate the
+        // turretTargetAngle into a robot relative turretTargetAngle
+        turretTargetAngle -= Utils.AngleDifference(startingGyroDegrees, RobotContainer.gyro.getYawAngle());
 
         // set p gain
-        double pgain = kpmax - (kpmax - kpmin) * Math.abs(m_angleerror) / kp_deg;
-        pgain = Math.max(kpmin, pgain);
-        pgain = Math.min(kpmax, pgain);
+//        double pgain = kpmax - (kpmax - kpmin) * Math.abs(m_angleerror) / kp_deg;
+//        pgain = Math.max(kpmin, pgain);
+//        pgain = Math.min(kpmax, pgain);
 
-        pidController.setP(pgain);
+//        pidController.setP(pgain);
 
-        // only integrate if within 10deg
-        if (Math.abs(m_angleerror) < ki_range)
-            pidController.setI(ki);
-        else
-            pidController.setI(0.0);
-
-        // zero out the integrated error if very close to target
-        if (Math.abs(m_angleerror) < ki_zerorange)
-            pidController.reset();
+//        // only integrate if within 10deg
+//        if (Math.abs(turretRemainingError) < ki_range)
+//            pidController.setI(ki);
+//        else
+//            pidController.setI(0.0);
+//
+//        // zero out the integrated error if very close to target
+//        if (Math.abs(turretRemainingError) < ki_zerorange)
+//            pidController.reset();
 
         //if (Math.abs(m_angleerror) < 90.0)
         //    pidController.setD(kd);
         //else
         //    pidController.setD(kdmin);
 
-        double gain = Math.max(0.0, kd*(1.0-Math.abs(filtered_error)/kd_deg));
-        pidController.setD(gain);
+//        double gain = Math.max(0.0, kd*(1.0-Math.abs(filtered_error)/kd_deg));
+//        pidController.setD(gain);
 
         // execute PID controller
-        m_rotatespeed = pidController.calculate(m_angleerror);
+//        m_rotatespeed = pidController.calculate(m_angleerror);
 
         //RobotContainer.telemetrySubsystem.addData("m_angleError", m_angleerror);
         //RobotContainer.telemetrySubsystem.addData("m_endAngle", m_endangle);
 
-        // rotate robot
-        RobotContainer.turret.moveTurret(m_angleerror);
+        // rotate turret until it's within 0.5 degrees
+        if (turretRemainingError > 0.5) {
+            RobotContainer.turret.moveTurret(turretTargetAngle, turretRemainingError);
+        }
 
         // if we are within target, allow timer to count up
-        if (Math.abs(m_angleerror) >= 1.0)
-            OnTargetTime.reset();
+//        if (Math.abs(m_angleerror) >= 1.0)
+//            OnTargetTime.reset();
 
 
         // RobotContainer.Panels.FTCTelemetry.addData("TargetAngle", m_endangle);
@@ -146,18 +163,18 @@ public class TurnTurretToTarget extends CommandBase {
         // RobotContainer.Panels.FTCTelemetry.update();
     }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        // stop robot
-        RobotContainer.turret.getTurretDegrees();
-    }
+//    // Called once the command ends or is interrupted.
+//    @Override
+//    public void end(boolean interrupted) {
+//        // stop robot
+//        RobotContainer.turret.getTurretDegrees();
+//    }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        // we are finished when within tolerance of target for required duration,
-        // or have timed out
-        return (OnTargetTime.seconds()>0.25 || TimeOutTime.seconds() >=m_timeout);
-    }
+//    // Returns true when the command should end.
+//    @Override
+//    public boolean isFinished() {
+//        // we are finished when within tolerance of target for required duration,
+//        // or have timed out
+//        return (OnTargetTime.seconds()>0.25 || TimeOutTime.seconds() >=m_timeout);
+//    }
 }

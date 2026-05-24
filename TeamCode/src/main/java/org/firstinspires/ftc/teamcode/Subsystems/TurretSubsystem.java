@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.Utility.Utils;
 
 /**
  * Turret Subsystem
@@ -71,16 +72,36 @@ public class TurretSubsystem extends SubsystemBase {
     /**
      * Causes the turret to turn.
      */
-    public void moveTurret(double degrees) {
-        int targetPosition = (int)(degrees * TICKS_TO_DEGREES);
+    public void moveTurret(double turretTargetDegrees, double turretRemainingError) {
+        int targetPosition = (int)(turretTargetDegrees * TICKS_TO_DEGREES);
+
+        // adjust PIDF for large moves and small for speed and stability
+        if (Math.abs(turretRemainingError) > 25){
+            // Sets the motor to PID values for large distances
+            turret.setVelocityPIDFCoefficients(15.0, 1.5, 0.0, 0.0);// Long distance settings are (p:0.03 , i:0.0 , d:0.0 , f:40.0)
+        } else {
+            // Sets the motor to PID values for short distances
+            turret.setVelocityPIDFCoefficients(90.0, 9.0, 0.0, 0.0);// Short distance settings are (p:220.0, i:10.0, d:0.00, f:40.0)
+        }
+
+        // move the turret motor
         turret.setTargetPosition(targetPosition);
+    }
+
+    public double getTurretTargetDegrees(){
+        return turret.getTargetPosition() / TICKS_TO_DEGREES;
     }
 
     public double getTurretDegrees(){
         return turret.getCurrentPosition()/TICKS_TO_DEGREES;
     }
 
+    public int getTurretTargetTicks(){
+        return turret.getTargetPosition();
+    }
+
     public double getTurretTicks(){
         return turret.getCurrentPosition();
     }
+
 }
