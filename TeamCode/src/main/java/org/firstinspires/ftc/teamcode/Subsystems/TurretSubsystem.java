@@ -35,7 +35,7 @@ public class TurretSubsystem extends SubsystemBase {
         turret.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Setting target to zero upon initialization
-        turret.setTargetPosition(0);
+        // turret.setTargetPosition(0);
 
 //        // Will get moved to Turn Turret to Target
 //        double turnError = Math.abs (turret.getCurrentPosition() - turret.getTargetPosition());
@@ -75,14 +75,29 @@ public class TurretSubsystem extends SubsystemBase {
     public void moveTurret(double turretTargetDegrees, double turretRemainingError) {
         int targetPosition = (int)(turretTargetDegrees * TICKS_TO_DEGREES);
 
-        // adjust PIDF for large moves and small for speed and stability
-        if (Math.abs(turretRemainingError) > 25){
-            // Sets the motor to PID values for large distances
-            turret.setVelocityPIDFCoefficients(15.0, 1.5, 0.0, 0.0);// Long distance settings are (p:0.03 , i:0.0 , d:0.0 , f:40.0)
-        } else {
-            // Sets the motor to PID values for short distances
-            turret.setVelocityPIDFCoefficients(90.0, 9.0, 0.0, 0.0);// Short distance settings are (p:220.0, i:10.0, d:0.00, f:40.0)
-        }
+        // create variable PI control for remaining error and smooth operation
+        double variableP = -0.47 * turretRemainingError + 99.37; // -0.71 * x + 107.86 was a bit too aggressive
+        double variableI = -0.047 * turretRemainingError + 9.937; // -0.071 * x + 10.786 was a bit too aggressive
+
+        // enable mins
+        variableP = Math.max(15.0, variableP);
+        variableI = Math.max(1.5, variableI);
+
+        // enable maxes
+        variableP = Math.min(90.0, variableP);
+        variableI = Math.min(15.0, variableI);
+
+        // set variable PI
+        turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
+
+//        // adjust PIDF for large moves and small for speed and stability
+//        if (Math.abs(turretRemainingError) > 25){
+//            // Sets the motor to PID values for large distances
+//            turret.setVelocityPIDFCoefficients(15.0, 1.5, 0.0, 0.0);// Long distance settings are (p:15.0 , i:1.5 , d:0.0)
+//        } else {
+//            // Sets the motor to PID values for short distances
+//            turret.setVelocityPIDFCoefficients(90.0, 9.0, 0.0, 0.0);// Short distance settings are (p:90.0, i:9.0.0, d:0.0)
+//        }
 
         // move the turret motor
         turret.setTargetPosition(targetPosition);
