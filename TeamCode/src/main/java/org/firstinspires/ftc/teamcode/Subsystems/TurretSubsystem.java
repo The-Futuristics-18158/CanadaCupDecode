@@ -18,7 +18,7 @@ public class TurretSubsystem extends SubsystemBase {
     // Initialize motor
     private final DcMotorEx turret;
 
-    private final double TICKS_TO_DEGREES = 410/360;
+    private final double TICKS_TO_DEGREES = 410.0/360.0;
 
     /**
      * Place code here to initialize subsystem
@@ -36,15 +36,15 @@ public class TurretSubsystem extends SubsystemBase {
         // Setting target to zero upon initialization
         turret.setTargetPosition(0);
 
-        // Will get moved to Turn Turret to Target
-        double turnError = Math.abs (turret.getCurrentPosition() - turret.getTargetPosition());
-        if (turnError >= 20) {
-            // Sets the motor to PIDF values for large distances
-            turret.setVelocityPIDFCoefficients(0.03, 0.0, 0.0, 40.0);// Long distance settings are (p: , i: , d: , f:40.0)
-        }else {
-            // Sets the motor to PIDF values for short distances
-            turret.setVelocityPIDFCoefficients(220.0, 10.0, 0.00, 40.0);// Short distance settings are (p:220.0, i:10.0, d:0.00, f:40.0)
-        }
+//        // Will get moved to Turn Turret to Target
+//        double turnError = Math.abs (turret.getCurrentPosition() - turret.getTargetPosition());
+//        if (turnError >= 20) {
+//            // Sets the motor to PID values for large distances
+//            turret.setVelocityPIDFCoefficients(5.0, 5.0, 12.0, 10.0);// Long distance settings are (p:0.03 , i:0.0 , d:0.0 , f:40.0)
+//        }else {
+//            // Sets the motor to PID values for short distances
+//            turret.setVelocityPIDFCoefficients(5.0, 5.0, 12.0, 10.0);// Short distance settings are (p:220.0, i:10.0, d:0.00, f:40.0)
+//        }
 
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

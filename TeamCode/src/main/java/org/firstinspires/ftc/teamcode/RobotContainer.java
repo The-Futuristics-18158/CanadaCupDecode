@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.Commands.Odomeetry.ResetOdometryXYAngle;
 import org.firstinspires.ftc.teamcode.Commands.Shoot.DefaultShooterSpeed;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
+import org.firstinspires.ftc.teamcode.Commands.TurnTurretToTarget;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTiltSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
@@ -213,11 +214,11 @@ public class RobotContainer {
 
         //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(-10.0)));
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new TurnTurretToTarget(10.0));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(0.0)));
+        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(0.0)));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
+        //driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
 
 //      -------------------------- (Driver) Intake Systems --------------------------
         // Hunt Mode

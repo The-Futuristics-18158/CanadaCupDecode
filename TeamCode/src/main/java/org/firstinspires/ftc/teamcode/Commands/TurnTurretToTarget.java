@@ -22,18 +22,18 @@ public class TurnTurretToTarget extends CommandBase {
     double m_angleerror;
 
     // PID gains for rotating robot towards ball target
-    public static double kpmax = 0.11; // was 0.15 Feb 5/2026 KN
-    public static double kpmin = 0.04; // was 0.05 Feb 5/2026 KN
+    public static double kpmax = 0.05; // was 0.11 Feb 5/2026 KN
+    public static double kpmin = 0.04; // was 0.04 Feb 5/2026 KN
     public static double kp_deg = 90.0;
     public static double ki = 0.2; // 0.20;
-    public static double ki_range = 5.0;
+    public static double ki_range = 0.1; // was 5.0
     public static double ki_zerorange = 0.5;
     public static double kd = 0.019; // 0.0035;
     public static double kd_deg = 110.0;
 
     // filtered error angle
     double filtered_error;
-    public static double LPFvalue = 0.93;
+    public static double LPFvalue = 0.93; // Low Pass Filter: was 0.93
 
     // p=0.1, d=0.01
 
@@ -66,7 +66,7 @@ public class TurnTurretToTarget extends CommandBase {
     public void initialize() {
 
         // our current facing angle
-        double ourcurrentangle = RobotContainer.gyro.getYawAngle();
+        double ourcurrentangle = RobotContainer.turret.getTurretDegrees();
 
         // determine target angle
 
@@ -76,7 +76,7 @@ public class TurnTurretToTarget extends CommandBase {
 
         // determine target angle
         double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
-        m_endangle = Math.toDegrees(angle_rad);
+        m_endangle = Math.toDegrees(angle_rad) - 180.0; // switched as this turret shoots forward not back
 
         // reset PID controller
         pidController.reset();
@@ -86,7 +86,7 @@ public class TurnTurretToTarget extends CommandBase {
         TimeOutTime.reset();
 
         // determine initial error
-        filtered_error = Utils.AngleDifference(m_endangle, RobotContainer.gyro.getYawAngle());
+        filtered_error = Utils.AngleDifference(m_endangle, RobotContainer.turret.getTurretDegrees());
 
 
     }
@@ -96,7 +96,7 @@ public class TurnTurretToTarget extends CommandBase {
     public void execute()
     {
         // determine speed to rotate robot
-        m_angleerror = Utils.AngleDifference(m_endangle, RobotContainer.gyro.getYawAngle());
+        m_angleerror = Utils.AngleDifference(m_endangle, RobotContainer.turret.getTurretDegrees());
 
         // apply LPF to angle error
         filtered_error = LPFvalue*filtered_error + (1.0-LPFvalue)*m_angleerror;
@@ -130,11 +130,14 @@ public class TurnTurretToTarget extends CommandBase {
         // execute PID controller
         m_rotatespeed = pidController.calculate(m_angleerror);
 
+        //RobotContainer.telemetrySubsystem.addData("m_angleError", m_angleerror);
+        //RobotContainer.telemetrySubsystem.addData("m_endAngle", m_endangle);
+
         // rotate robot
-        RobotContainer.turret.getTurretDegrees();
+        RobotContainer.turret.moveTurret(m_angleerror);
 
         // if we are within target, allow timer to count up
-        if (Math.abs(m_angleerror) >=1.0)
+        if (Math.abs(m_angleerror) >= 1.0)
             OnTargetTime.reset();
 
 
