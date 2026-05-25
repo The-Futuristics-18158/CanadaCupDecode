@@ -35,7 +35,7 @@ public class TurretSubsystem extends SubsystemBase {
         turret.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Setting target to zero upon initialization
-        // turret.setTargetPosition(0);
+        turret.setTargetPosition(0);
 
 //        // Will get moved to Turn Turret to Target
 //        double turnError = Math.abs (turret.getCurrentPosition() - turret.getTargetPosition());
