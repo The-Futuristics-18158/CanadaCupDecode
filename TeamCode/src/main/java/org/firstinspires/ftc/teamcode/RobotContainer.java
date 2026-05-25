@@ -216,10 +216,6 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new TurnTurretToTarget());
 
-        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(0.0)));
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
-
 //      -------------------------- (Driver) Intake Systems --------------------------
         // Hunt Mode
         //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new HuntModeCommand());
@@ -228,7 +224,10 @@ public class RobotContainer {
         //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new JogBackIntakeFull());
 
         // Manual Intake
-        //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new IntakeCommand());
+       // driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new IntakeCommand());
+
+        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeRunReducedSpeed()));
+        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
 
 //      -------------------------- (Driver) Turning To Exact Angle --------------------------
 //        // Turn To 0 degrees

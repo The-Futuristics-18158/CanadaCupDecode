@@ -43,12 +43,20 @@ public class IntakeCommand extends CommandBase {
 //            RobotContainer.intake.intakeRun();
 //        }
 
+//        if (timer.seconds()>5.0){ //May need to adjust timeout
+//            finished = true;
+//            RobotContainer.intake.intakeStop();
+//        }else {
+//            RobotContainer.intake.intakeRunReducedSpeed();
+//        }
+
         if (timer.seconds()>5.0){ //May need to adjust timeout
             finished = true;
             RobotContainer.intake.intakeStop();
         }else {
-            RobotContainer.intake.intakeRunReducedSpeed();
+            RobotContainer.intake.intakeRun();
         }
+
     }
 
     // This method to return true only when command is to finish. Otherwise return false

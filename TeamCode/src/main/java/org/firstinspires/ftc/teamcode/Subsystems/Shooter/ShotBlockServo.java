@@ -22,9 +22,6 @@ public class ShotBlockServo extends SubsystemBase {
 
         shotBlockServo.setDirection(Servo.Direction.FORWARD);
 
-        // 0.95 breaks
-        // 0.85 block
-        // 0.7 shoot
         Block();
     }
 
@@ -42,12 +39,12 @@ public class ShotBlockServo extends SubsystemBase {
      * <p>
      * Never change under penalty of a creative death, the servo value to 0.25 or greater
      */
-    public void Block(){shotBlockServo.setPosition(0.17);}
+    public void Block(){shotBlockServo.setPosition(0.0);}
 
     /**Unblock the flywheel
      * <p>
      * Never change under penalty of a creative death, the servo value to 0.25 or greater
      */
-    public void Unblock(){shotBlockServo.setPosition(0.0);}
+    public void Unblock(){shotBlockServo.setPosition(0.35);}
 
 }

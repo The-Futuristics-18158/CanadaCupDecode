@@ -21,10 +21,11 @@ public class IntakeSubsystem extends SubsystemBase {
     private final DcMotorEx intakeMotor;
 
     private final double TICKS_PER_ROTATION = 28.0;
+    private final double GEAR_REDUCTION = 4.0 * 0.6667; // Motor gearbox is 4:1 and the gearing is 3:2.
     private final double INV_TICKS_PER_ROTATION = 1.0 / TICKS_PER_ROTATION;
     // f and p gain units in mtr power/(ticks/s)
-    private double fgain = 0.000357 * TICKS_PER_ROTATION;     // no load ideal = 0.000357
-    private double pgain = 0.00025 * TICKS_PER_ROTATION;
+    private double fgain = 0.000357 * TICKS_PER_ROTATION * GEAR_REDUCTION;     // no load ideal = 0.000357
+    private double pgain = 0.00025 * TICKS_PER_ROTATION * GEAR_REDUCTION;
     private double igain = 0.0;
 
     private double ierror;
@@ -36,13 +37,15 @@ public class IntakeSubsystem extends SubsystemBase {
         // Creates the motor using the hardware map
         intakeMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
         // Sets motor direction
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         // Set motor power
         intakeMotor.setPower(0.0);
         // by default, set target speed to 0
         TargetSpeed = 0.0;
         // reset PIF controller
-        ierror=0.0;
+        ierror = 0.0;
     }
 
     /** Method called periodically by the scheduler
@@ -73,21 +76,21 @@ public class IntakeSubsystem extends SubsystemBase {
     // Place special subsystem methods here
 
     /** Sets speed of intake in motor rps */
-    public void intakeSetSpeed(double speed) { TargetSpeed=speed; }
+    public void intakeSetSpeed(double speed) { TargetSpeed = speed;}
 
     /**Run the intake at set speed (rps)*/
-    public void intakeRun(){ TargetSpeed=100.0;}
+    public void intakeRun(){ TargetSpeed = 100.0;}
 
     /**Run the intake at set speed (rps)*/
-    public void intakeRunReducedSpeed() { TargetSpeed=40.0; }
+    public void intakeRunReducedSpeed() { TargetSpeed = 40.0;}
 
     /**Run the intake at set speed (rps)*/
-    public void intakeReverse(){ TargetSpeed = -15.0; }
+    public void intakeReverse(){ TargetSpeed = -15.0;}
 
     /**Stop intake*/
-    public void intakeStop(){ TargetSpeed=0.0;}
+    public void intakeStop(){ TargetSpeed = 0.0;}
 
     /** returns motor position in encoder ticks */
-    public double GetMotorPostion() { return intakeMotor.getCurrentPosition(); }
+    public double GetMotorPostion() { return intakeMotor.getCurrentPosition();}
 
 }
