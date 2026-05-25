@@ -214,7 +214,8 @@ public class RobotContainer {
 
         //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new TurnTurretToTarget());
+        // Although this would normally be a run whenHeld, as we want it to be perpertual... once on, its on.
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new TurnTurretToTarget());
 
 //      -------------------------- (Driver) Intake Systems --------------------------
         // Hunt Mode
@@ -341,8 +342,10 @@ public class RobotContainer {
 
             // report time interval on robot controller
             telemetrySubsystem.timerOdometry();
-            telemetrySubsystem.addData("Turret Target (degrees): ", turret.getTurretTargetDegrees());
-            telemetrySubsystem.addData("Turret Current (degrees): ", turret.getTurretDegrees());
+            //telemetrySubsystem.addData("Turret Target (degrees): ", turret.getTurretTargetDegrees());
+            //telemetrySubsystem.addData("Turret Current (degrees): ", turret.getTurretDegrees());
+            telemetrySubsystem.addData("Intake Power: ", intake.readIntakeSetPower());
+            telemetrySubsystem.addData("Intake Motor Speed (rps): ", intake.intakeMotorCurrentSpeed());
 
             telemetrySubsystem.update();
         }

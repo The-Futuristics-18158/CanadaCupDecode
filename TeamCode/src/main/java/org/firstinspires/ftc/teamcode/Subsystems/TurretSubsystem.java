@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Commands.TurnTurretToTarget;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.Utils;
 
@@ -36,16 +37,6 @@ public class TurretSubsystem extends SubsystemBase {
 
         // Setting target to zero upon initialization
         turret.setTargetPosition(0);
-
-//        // Will get moved to Turn Turret to Target
-//        double turnError = Math.abs (turret.getCurrentPosition() - turret.getTargetPosition());
-//        if (turnError >= 20) {
-//            // Sets the motor to PID values for large distances
-//            turret.setVelocityPIDFCoefficients(5.0, 5.0, 12.0, 10.0);// Long distance settings are (p:0.03 , i:0.0 , d:0.0 , f:40.0)
-//        }else {
-//            // Sets the motor to PID values for short distances
-//            turret.setVelocityPIDFCoefficients(5.0, 5.0, 12.0, 10.0);// Short distance settings are (p:220.0, i:10.0, d:0.00, f:40.0)
-//        }
 
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -90,6 +81,7 @@ public class TurretSubsystem extends SubsystemBase {
         // set variable PI
         turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
 
+//      // earlier non-continuous PIDF tuning for the turret
 //        // adjust PIDF for large moves and small for speed and stability
 //        if (Math.abs(turretRemainingError) > 25){
 //            // Sets the motor to PID values for large distances

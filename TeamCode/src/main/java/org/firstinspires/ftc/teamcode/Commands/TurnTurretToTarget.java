@@ -78,9 +78,9 @@ public class TurnTurretToTarget extends CommandBase {
         turretTargetAngle -= Utils.AngleDifference(startingGyroDegrees, RobotContainer.gyro.getYawAngle());
 
         // rotate turret until it's within 0.5 degrees
-        if (turretRemainingError > 0.5) {
-            RobotContainer.turret.moveTurret(turretTargetAngle, turretRemainingError);
-        }
+        //if (turretRemainingError > 0.5) {
+        RobotContainer.turret.moveTurret(turretTargetAngle, turretRemainingError);
+        //}
 
         // RobotContainer.Panels.FTCTelemetry.addData("TargetAngle", m_endangle);
         // RobotContainer.Panels.FTCTelemetry.addData("AngleError", Math.max(-10.0, Math.min(10.0, m_angleerror)));

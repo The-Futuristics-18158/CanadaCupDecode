@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
@@ -22,11 +21,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final double TICKS_PER_ROTATION = 28.0;
     private final double GEAR_REDUCTION = 4.0 * 0.6667; // Motor gearbox is 4:1 and the gearing is 3:2.
+    private final double TICKS_PER_INTAKE_ROTATION = TICKS_PER_ROTATION * GEAR_REDUCTION;
     private final double INV_TICKS_PER_ROTATION = 1.0 / TICKS_PER_ROTATION;
     // f and p gain units in mtr power/(ticks/s)
-    private double fgain = 0.000357 * TICKS_PER_ROTATION * GEAR_REDUCTION;     // no load ideal = 0.000357
-    private double pgain = 0.00025 * TICKS_PER_ROTATION * GEAR_REDUCTION;
-    private double igain = 0.0;
+    // private double fgain = 0.0000357 * TICKS_PER_INTAKE_ROTATION;     // no load ideal = 0.000357
+    private double fgain = 0.000133 * TICKS_PER_INTAKE_ROTATION;     // no load ideal = 0.000357
+    private double pgain = 0.00025 * TICKS_PER_INTAKE_ROTATION;  // was 0.00025
+    private double igain = 0.0005;
+
+    private double CurrentSpeed;
+    private double PExtra;
+    private double error;
 
     private double ierror;
     private double TargetSpeed;
@@ -54,14 +59,14 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
 
         // sets motor speed in rps (=28xticks/s)
-        double CurrentSpeed = intakeMotor.getVelocity() * INV_TICKS_PER_ROTATION;
-        double error = TargetSpeed - CurrentSpeed;
+        CurrentSpeed = intakeMotor.getVelocity() * INV_TICKS_PER_ROTATION;
+        error = TargetSpeed - CurrentSpeed;
 
         // integrated error
         ierror += igain * error;
 
         // special case - if target is -ve, then we are jogging back - use higher P
-        double PExtra = 1.0;
+        PExtra = 1.0;
         if (TargetSpeed < 0.0)
             PExtra = 1.5;
 
@@ -74,6 +79,14 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     // Place special subsystem methods here
+
+    public double readIntakeSetPower () {
+        return PExtra * pgain * error + fgain * TargetSpeed + ierror;
+    }
+
+    public double intakeMotorCurrentSpeed () {
+        return CurrentSpeed;
+    }
 
     /** Sets speed of intake in motor rps */
     public void intakeSetSpeed(double speed) { TargetSpeed = speed;}
@@ -88,7 +101,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeReverse(){ TargetSpeed = -15.0;}
 
     /**Stop intake*/
-    public void intakeStop(){ TargetSpeed = 0.0;}
+    public void intakeStop(){
+        // zero integrated error and set Target to 0
+        ierror = 0.0;
+        TargetSpeed = 0.0;
+    }
 
     /** returns motor position in encoder ticks */
     public double GetMotorPostion() { return intakeMotor.getCurrentPosition();}
