@@ -20,7 +20,7 @@ public class TurretSubsystem extends SubsystemBase {
     // Initialize motor
     private final DcMotorEx turret;
 
-    private final double TICKS_TO_DEGREES = 410.0/360.0;
+    private final double TICKS_TO_DEGREES = 462.0/360.0;
 
     /**
      * Place code here to initialize subsystem
