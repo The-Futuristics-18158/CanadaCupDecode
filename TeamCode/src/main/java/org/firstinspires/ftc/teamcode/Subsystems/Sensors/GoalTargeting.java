@@ -150,7 +150,7 @@ public class GoalTargeting extends SubsystemBase {
      */
     public void SetHoodAngleAndSpeed(){
         RobotContainer.hoodtilt.SetHoodPosition(CalculateHoodAngle());
-        RobotContainer.shooter.SetFlywheelSpeed(CalculateSpeed());
+        //RobotContainer.shooter.SetFlywheelSpeed(CalculateSpeed());
     }
 
     /**add description here

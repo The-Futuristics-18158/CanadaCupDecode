@@ -28,7 +28,7 @@ public class DriveTrain extends SubsystemBase {
     public final double MAX_SPEED = MAXRPS * Math.PI * WHEEL_DIA / GEAR_RATIO;
 
     // Setup Drive Kinematics Object Constants
-    final double TRACK_WIDTH = 0.38;   // Width between the left and right wheels - in m.
+    final double TRACK_WIDTH = 0.34;   // Width between the left and right wheels - in m.
     final double TRACK_LENGTH = 0.192;  // Length between the front and back wheel - in m.
     private MecanumDriveKinematics driveKinematics;
 

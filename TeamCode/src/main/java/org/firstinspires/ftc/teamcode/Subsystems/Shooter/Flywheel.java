@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -8,12 +10,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 /**
- * Place description of subsystem here
+ * Shooter Flywheel Subsystem
  *
  * @author superzokabear
  */
-//@Configurable
-public class FlywheelSubsystem extends SubsystemBase {
+@Configurable
+public class Flywheel extends SubsystemBase {
 
     // Local objects and variables here
     private final DcMotorEx flywheelMotorRight;
@@ -26,11 +28,12 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     // target speed
     public static double TargetSpeed;  // When disabling dashboard/panels turn back to privet. Make static when not using pannels
-    public static double CurrentSpeed; // When disabling dashboard/panels turn back to privet. Make static when not using pannels
+    private double CurrentSpeed;
+
     // PIF Controller Gains
     private final double FsGain = 0.0;
-    private final double FvGain = 0.00021; // was 0.0002 // unit=power/rpm   initial value=1.0/6000rpm=0.00016667
-    public final double PGain = 0.0012;// was 0.0003
+    private final double FvGain = 1.24*0.00016667; //initial value=1.0/6000rpm=0.00016667
+    public final double PGain = 6.0*0.00016667;
     public final double IGain = 0.0002;
 
     // integrated error
@@ -39,18 +42,23 @@ public class FlywheelSubsystem extends SubsystemBase {
 
 
     /** Place code here to initialize subsystem */
-    public FlywheelSubsystem() {
+    public Flywheel() {
         // create motor
         flywheelMotorRight = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
         flywheelMotorLeft = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
 
-
+        // one of the motors is reversed
+        flywheelMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         flywheelMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         // important! - set motor to coast mode - only works for 0 power
         flywheelMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        flywheelMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         // motor is initially off
         flywheelMotorRight.setPower(0.0);
+        flywheelMotorLeft.setPower(0.0);
 
         // reset integrated error
         timer = new ElapsedTime();
@@ -69,7 +77,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         // our current speed
         CurrentSpeed = flywheelMotorRight.getVelocity() * TICKSPStoRPM;
 
-        // our current speed error
+        // our current speed error (in RPM)
         double SpeedError = TargetSpeed - CurrentSpeed;
 
         // integrated error
@@ -92,15 +100,23 @@ public class FlywheelSubsystem extends SubsystemBase {
                 FvGain * TargetSpeed +      // speed feedforward
                 PGain * SpeedError +        // proportional gain
                 IError;                     // integrated error
-        // only drive motor in positive direction, otherwise let it coast
-        if (SpeedError>=-50.0)
-            flywheelMotorRight.setPower(NewPower);
-        else
-            flywheelMotorRight.setPower(0.0);
 
-        //RobotContainer.Panels.FTCTelemetry.addData("Speed", CurrentSpeed);
-        //RobotContainer.Panels.FTCTelemetry.addData("Target", TargetSpeed);
-        //RobotContainer.Panels.FTCTelemetry.update();
+
+        // only drive motor in positive direction, otherwise let it coast
+        if (SpeedError<-50.0)
+            NewPower = 0.0;
+
+        // limit power for now
+        //if (NewPower>0.7)  NewPower = 0.7;
+        //if (NewPower<-0.7) NewPower = -0.7;
+
+        flywheelMotorRight.setPower(NewPower);
+        flywheelMotorLeft.setPower(NewPower);
+
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelSpeed", CurrentSpeed);
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelTarget", TargetSpeed);
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelPower", NewPower);
+        //PanelsTelemetry.INSTANCE.getTelemetry().update();
     }
 
     // Place special subsystem methods here
@@ -110,7 +126,6 @@ public class FlywheelSubsystem extends SubsystemBase {
      */
     public void SetFlywheelSpeed(double RPM){
         // Setting velocity using the RPMToVelocity methode
-        //TargetSpeed = RobotContainer.targeting.CalculateSpeed();
         TargetSpeed = RPM;
 
     }

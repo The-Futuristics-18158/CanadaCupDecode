@@ -1,31 +1,36 @@
-package org.firstinspires.ftc.teamcode.Subsystems;
+package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.teamcode.Commands.TurnTurretToTarget;
 import org.firstinspires.ftc.teamcode.RobotContainer;
-import org.firstinspires.ftc.teamcode.Utility.Utils;
 
 /**
  * Turret Subsystem
  * @author superzokabear
  * @author Kw126
  */
-public class TurretSubsystem extends SubsystemBase {
+public class Turret extends SubsystemBase {
 
-    //private final TurretSubsystem turretSubsystem;
     // Initialize motor
     private final DcMotorEx turret;
 
-    private final double TICKS_TO_DEGREES = 462.0/360.0;
+    // ticks to degrees scaling factor  - ken gets 266/180 = 1.4777
+    // jeff previously measured 462/360. Testing appears to show 266/180 is closed to value needed
+    private final double DEGREES_TO_TICKS = 266.0/180.0;
+    private final double TICKS_TO_DEGREES = 1.0 / DEGREES_TO_TICKS;
+
+    // min and max turret angle limits
+    private final double MIN_ANGLE_DEG = -90.0;
+    private final double MAX_ANGLE_DEG = 90.0;
+
 
     /**
      * Place code here to initialize subsystem
      */
-    public TurretSubsystem() {
+    public Turret() {
         // Creates the motor using the hardware map
         turret = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
 
@@ -41,7 +46,6 @@ public class TurretSubsystem extends SubsystemBase {
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         turret.setPower(1.0);
-
     }
 
     /**
@@ -51,20 +55,35 @@ public class TurretSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        //RobotContainer.DBTelemetry.addData("TurretPose ", turret.getCurrentPosition());
-        //RobotContainer.DBTelemetry.update();
+        // temporary - display turret position and target on panels for graphing
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
 
     }
 
+    /** Switches off Turret */
     public void turretStop(){
         turret.setPower(0.0);
     }
 
     /**
-     * Causes the turret to turn.
+     * Moves turret to specified angle
+     * Angle bounded by MIN_ANGLE_DEG and MAX_ANGLE_DEG
+     * 0deg is pointed forwarded (in robot space)
+     * @param turretTargetDegrees target angles in degrees
      */
-    public void moveTurret(double turretTargetDegrees, double turretRemainingError) {
-        int targetPosition = (int)(turretTargetDegrees * TICKS_TO_DEGREES);
+    public void moveTurret(double turretTargetDegrees) {
+
+        // bound the angle
+        double target = turretTargetDegrees;
+        if (target<MIN_ANGLE_DEG)  target=MIN_ANGLE_DEG;
+        if (target>MAX_ANGLE_DEG)  target=MAX_ANGLE_DEG;
+
+        // determine target position in ticks
+        int targetPosition = (int)(target * DEGREES_TO_TICKS);
+
+        // determine current position error (in degrees)
+        double turretRemainingError  = target - getTurretDegrees();;
 
         // create variable PI control for remaining error and smooth operation
         double variableP = -0.47 * turretRemainingError + 99.37; // -0.71 * x + 107.86 was a bit too aggressive
@@ -95,18 +114,30 @@ public class TurretSubsystem extends SubsystemBase {
         turret.setTargetPosition(targetPosition);
     }
 
+    /** returns current turret target position
+     * @return turret position in degrees
+     */
     public double getTurretTargetDegrees(){
-        return turret.getTargetPosition() / TICKS_TO_DEGREES;
+        return turret.getTargetPosition() * TICKS_TO_DEGREES;
     }
 
+    /** returns current turret position
+     * @return turret position in degrees
+     */
     public double getTurretDegrees(){
-        return turret.getCurrentPosition()/TICKS_TO_DEGREES;
+        return turret.getCurrentPosition() * TICKS_TO_DEGREES;
     }
 
+    /** returns current turret target position
+     * @return turret position in encoder ticks
+     */
     public int getTurretTargetTicks(){
         return turret.getTargetPosition();
     }
 
+    /** returns current turret position
+     * @return turret position in encoder ticks
+     */
     public double getTurretTicks(){
         return turret.getCurrentPosition();
     }

@@ -15,12 +15,12 @@ public class IntakeCommand extends CommandBase {
     // constructor
     public IntakeCommand() {
 
-        // add subsystem requirements (if any) - for example:
-        //addRequirements(RobotContainer.drivesystem);
-        addRequirements(RobotContainer.intake);
-
-        timer = new ElapsedTime();
-        timer.reset();
+//        // add subsystem requirements (if any) - for example:
+//        //addRequirements(RobotContainer.drivesystem);
+//        addRequirements(RobotContainer.intake);
+//
+//        timer = new ElapsedTime();
+//        timer.reset();
 
     }
 
@@ -28,48 +28,49 @@ public class IntakeCommand extends CommandBase {
     @Override
     public void initialize() {
 
-        timer.reset();
-        finished = false;
+//        timer.reset();
+//        finished = false;
 
     }
 
     // This method is called periodically while command is active
     @Override
     public void execute() {
-//        if (timer.seconds()>5.0 || (RobotContainer.colour.isLeftArtifactPresent() && RobotContainer.colour.isRightArtifactPresent() && RobotContainer.colour.isRampArtifactPresent())){
+////        if (timer.seconds()>5.0 || (RobotContainer.colour.isLeftArtifactPresent() && RobotContainer.colour.isRightArtifactPresent() && RobotContainer.colour.isRampArtifactPresent())){
+////            finished = true;
+////            RobotContainer.intake.intakeStop();
+////        }else {
+////            RobotContainer.intake.intakeRun();
+////        }
+//
+////        if (timer.seconds()>5.0){ //May need to adjust timeout
+////            finished = true;
+////            RobotContainer.intake.intakeStop();
+////        }else {
+////            RobotContainer.intake.intakeRunReducedSpeed();
+////        }
+//
+//        if (timer.seconds()>5.0){ //May need to adjust timeout
 //            finished = true;
 //            RobotContainer.intake.intakeStop();
 //        }else {
 //            RobotContainer.intake.intakeRun();
 //        }
 
-//        if (timer.seconds()>5.0){ //May need to adjust timeout
-//            finished = true;
-//            RobotContainer.intake.intakeStop();
-//        }else {
-//            RobotContainer.intake.intakeRunReducedSpeed();
-//        }
-
-        if (timer.seconds()>5.0){ //May need to adjust timeout
-            finished = true;
-            RobotContainer.intake.intakeStop();
-        }else {
-            RobotContainer.intake.intakeRun();
-        }
-
     }
 
     // This method to return true only when command is to finish. Otherwise return false
     @Override
     public boolean isFinished() {
-        return finished;
+        return true;
+        //return finished;
     }
 
     // This method is called once when command is finished.
     @Override
     public void end(boolean interrupted) {
 
-        RobotContainer.intake.intakeStop();
+        //RobotContainer.intake.intakeStop();
     }
 
 }

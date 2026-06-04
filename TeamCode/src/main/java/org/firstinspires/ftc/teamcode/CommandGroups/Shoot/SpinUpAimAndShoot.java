@@ -18,7 +18,7 @@ public class SpinUpAimAndShoot extends SequentialCommandGroup {
 
         addCommands (
                 //new AimToShoot(),
-                new InstantCommand(()->RobotContainer.targeting.SetHoodAngleAndSpeed())
+                //new InstantCommand(()->RobotContainer.targeting.SetHoodAngleAndSpeed())
         );
     }
 

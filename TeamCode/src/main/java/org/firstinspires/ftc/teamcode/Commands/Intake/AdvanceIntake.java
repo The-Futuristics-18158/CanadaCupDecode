@@ -17,7 +17,7 @@ public class AdvanceIntake extends CommandBase {
 
         // add subsystem requirements (if any) - for example:
         //addRequirements(RobotContainer.drivesystem);
-        addRequirements(RobotContainer.intake);
+        //addRequirements(RobotContainer.intake);
         timer = new ElapsedTime();
         timer.reset();
 
@@ -37,9 +37,9 @@ public class AdvanceIntake extends CommandBase {
     public void execute() {
         if (timer.seconds()>2.5){ //May need to adjust timeout
             finished = true;
-            RobotContainer.intake.intakeStop();
+            //RobotContainer.intake.intakeStop();
         }else {
-            RobotContainer.intake.intakeRun();
+            //RobotContainer.intake.intakeRun();
         }
     }
 
@@ -53,7 +53,7 @@ public class AdvanceIntake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
 
-        RobotContainer.intake.intakeStop();
+        //RobotContainer.intake.intakeStop();
     }
 
 }
