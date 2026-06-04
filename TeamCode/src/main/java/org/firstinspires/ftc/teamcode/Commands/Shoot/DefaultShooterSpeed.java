@@ -11,7 +11,7 @@ public class DefaultShooterSpeed extends CommandBase {
     public DefaultShooterSpeed() {
 
         // add subsystem requirements (if any) - for example:
-        addRequirements(RobotContainer.shooter);
+        //addRequirements(RobotContainer.shooter);
     }
 
     // This method is called once when command is started
@@ -24,7 +24,7 @@ public class DefaultShooterSpeed extends CommandBase {
     @Override
     public void execute() {
         // only turn on shooter once we have at least one artifact
-        RobotContainer.shooter.SetFlywheelSpeed(Math.max(0.0,RobotContainer.targeting.IdleSpeed()));
+        //RobotContainer.shooter.SetFlywheelSpeed(Math.max(0.0,RobotContainer.targeting.IdleSpeed()));
 
 
     }

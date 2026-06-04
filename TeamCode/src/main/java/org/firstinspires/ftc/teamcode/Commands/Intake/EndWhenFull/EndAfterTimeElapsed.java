@@ -35,7 +35,7 @@ public class EndAfterTimeElapsed extends CommandBase {
     public void execute() {
         if (timer.seconds()>2.5){ //May need to adjust timeout
             finished = true;
-            RobotContainer.intake.intakeStop();
+            //RobotContainer.intake.intakeStop();
         }
     }
 

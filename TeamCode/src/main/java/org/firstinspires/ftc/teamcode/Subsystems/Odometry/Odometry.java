@@ -36,7 +36,7 @@ public class Odometry extends SubsystemBase {
         CurrentPose = RobotContainer.odometryPod.GetPose();
 
         // get limelight MT2 odometry
-        LLResult result = RobotContainer.limeLight.limeLight.getLatestResult();
+        //LLResult result = RobotContainer.limeLight.limeLight.getLatestResult();
 
         // new addition: only use apriltag when in teleop mode
         // if we have valid result and it is not stale (>100ms)

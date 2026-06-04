@@ -3,56 +3,46 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
 //import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
-import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
-import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
-import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
-import org.firstinspires.ftc.teamcode.Commands.Odomeetry.ResetOdometryXYAngle;
-import org.firstinspires.ftc.teamcode.Commands.Shoot.DefaultShooterSpeed;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
-import org.firstinspires.ftc.teamcode.Commands.TurnTurretToTarget;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTiltSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Flywheel;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTilt;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter.RampLift;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter.ShotBlock;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Turret;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.DriveTrain;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter.FlywheelSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Gyro;
-import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.Sensors.DistanceSensor;
-import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Odometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.PinpointOdometry;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter.ShotBlockServo;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.TelemetrySubsystem;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
 import java.util.List;
 
 /** TODO
- * Update pinpointDriver.setOffsets() with correct values, line 48 of PinpointOdometry.java       (completed)
- * Update Drive Kinematics with correct values, lines 31-32 of DriveTrain.java                    (completed)
  * Adjust UptakeSubsystem to use one servo instead of two, and update all commands that use it    (no uptake)
- * Adjust FlywheelSubsystem to use two motors instead of one, and update all commands that use it (in progress)
+ * Adjust Flywheel to use two motors instead of one, and update all commands that use it (in progress)
  * Remove Operator controls and references to it, or adjust to be used for something else         (completed)
- * Adjust ShotBlockServo subsystem
- * Adjust HoodTiltSubsystem
  * Adjust shooting commands to not need to decide left vs right
- * Add the turret's subsystem                                                                     (in progress)
  * Add constant tracking for the turret to the goal using the limelight
  * refactor ClimbSubsystem code to work with the DriveTrain
  *
+ *
+ * Update pinpointDriver.setOffsets() with correct values, line 48 of PinpointOdometry.java (completed)
+ * Update Drive Kinematics with correct values, lines 31-32 of DriveTrain.java (completed)
+ * Adjust ShotBlock subsystem (completed)
+ * Adjust HoodTilt (completed)
+ * Add the turret's subsystem (completed)
  * Remove code related to colour detection and pattern matching (completed)
     * Remove Obelisk.java and references to it                  (completed)
     * Remove code related to artifact colour detection          (completed)
@@ -84,18 +74,21 @@ public class RobotContainer {
     public static Gyro gyro;
     public static PinpointOdometry odometryPod;
     public static DriveTrain drivesystem;
-    public static LimeLight limeLight;
-    public static RampCamera rampCamera;
     public static Odometry odometry;
-    public static DistanceSensor distance;
-    public static IntakeSubsystem intake;
-    public static FlywheelSubsystem shooter;
-    public static HoodTiltSubsystem hoodtilt;
-    public static GoalTargeting targeting;
-    public static ShotBlockServo shotblock;
-    public static TurretSubsystem turret;
+    public static HoodTilt hoodtilt;
+    public static ShotBlock shotblock;
+    public static RampLift ramplift;
+    public static Intake intake;
+    public static Flywheel shooter;
+    public static Turret turret;
+
+    //public static LimeLight limeLight;
+    //public static RampCamera rampCamera;
+    //public static DistanceSensor distance;
+    //public static GoalTargeting targeting;
+    //public static Turret turret;
     //public static ClimbSubsystem climb;
-//    public static Blinkin blinkin;
+    //public static Blinkin blinkin;
 
 
     // Angle of the robot at the start of auto
@@ -110,8 +103,6 @@ public class RobotContainer {
     private static Modes CurrentRobotMode;
 
     public static double intervaltime;
-
-    public static int artifactsInRamp = 0;
 
     /**Robot initialization - common to both auto and teleop
      * @param mode A value from the Modes enum representing the current opmode being run, valid Modes as of 2/9/2026: Off, AutoInit, Auto, TeleOp
@@ -156,27 +147,28 @@ public class RobotContainer {
         operatorControls = new OperatorControlsSubsystem();
         gyro = new Gyro();
         odometryPod = new PinpointOdometry();
-        odometry = new Odometry();
         drivesystem = new DriveTrain();
-        limeLight = new LimeLight();
-        rampCamera = new RampCamera("RampCam");
-        distance = new DistanceSensor();
-        intake = new IntakeSubsystem();
-        shooter = new FlywheelSubsystem();
-        hoodtilt = new HoodTiltSubsystem();
-        targeting = new GoalTargeting();
-        shotblock = new ShotBlockServo();
-        turret = new TurretSubsystem();
+        odometry = new Odometry();
+        hoodtilt = new HoodTilt();
+        shotblock = new ShotBlock();
+        ramplift = new RampLift();
+        intake = new Intake();
+        shooter = new Flywheel();
+        turret = new Turret();
+
+
+        //limeLight = new LimeLight();
+        //rampCamera = new RampCamera("RampCam");
+        //distance = new DistanceSensor();
+        //targeting = new GoalTargeting();
         //climb = new ClimbSubsystem();
-//        blinkin = new Blinkin();
+        //blinkin = new Blinkin();
         //artifactCamera = new ArtifactCamera("CookieCam");
 
         // depending on red or blue team, set which camera gets displayed
         // on driver's station in preview mode
-        if (isRedAlliance())
-            rampCamera.enableCameraStream();
-
-
+        //if (isRedAlliance())
+        //    rampCamera.enableCameraStream();
     }
 
     /**Init teleop runs when you hit play*/
@@ -189,9 +181,10 @@ public class RobotContainer {
         drivesystem.setDefaultCommand(new ManualDrive());
 
         // set default shooter speed control
-        shooter.setDefaultCommand(new DefaultShooterSpeed());
+        //shooter.setDefaultCommand(new DefaultShooterSpeed());
 
-//      -------------------------- Driver Controls --------------------------
+        //      -------------------------- Driver Controls --------------------------
+
         // Reset odometry
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> odometry.setCurrentPos
                 (AutoFunctions.redVsBlue(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(-90.0)))))));
@@ -199,36 +192,71 @@ public class RobotContainer {
         // Climb in three seconds
         //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ClimbCommand());
 
-//      -------------------------- (Driver) Shooting Controls  --------------------------
+
+        //      -------------------------- (Driver) Shooting Controls  --------------------------
+
+        // Block/Unblock
+        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->shotblock.Unblock()));
+        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->shotblock.Block()));
+
+        // Hood Adjust
+        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()-0.02)));
+        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()+0.02)));
+
+        // Raise/Lower Ramp
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> ramplift.Raise()));
+        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> ramplift.Lower()));
+
+        // shooter
+        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->shooter.SetFlywheelSpeed(720.0)));
+        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenReleased(new InstantCommand(()->shooter.SetFlywheelSpeed(0.0)));
+
+
+        //      -------------------------- (Driver) Intake Systems --------------------------
+
+        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeRun()));
+        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
+
+        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeReverse()));
+        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
+
+
+        //      -------------------------- (Driver) Turret System --------------------------
+
+        //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
+        //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(-90.0)));
+
+
+
+
+
+        // ***********************************************
+        // Stuff from previous project we may/may not need
+        // ***********************************************
+
         // Shoot Green
         //driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootGreen());
-        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootAll());
+        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootAll());
 
         // Reset odometry to apriltag before shooting all according to obelisk pattern
 //        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
 //                                                                         new ResetOdometryXYAngle(),
 //                                                                        new FastShootAll() ));
 
-        //      -------------------------- (Driver) Turret System --------------------------
         //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()-10)));
 
         //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
 
         // Although this would normally be a run whenHeld, as we want it to be perpertual... once on, its on.
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new TurnTurretToTarget());
+        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new TurnTurretToTarget());
 
-//      -------------------------- (Driver) Intake Systems --------------------------
         // Hunt Mode
         //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new HuntModeCommand());
-
 
         //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new JogBackIntakeFull());
 
         // Manual Intake
        // driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new IntakeCommand());
-
-        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeRunReducedSpeed()));
-        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
 
 //      -------------------------- (Driver) Turning To Exact Angle --------------------------
 //        // Turn To 0 degrees
@@ -249,7 +277,8 @@ public class RobotContainer {
 //        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()-> operatorControls.resetRampTotal()));
 //        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()-> telemetrySubsystem.telemetryModeToggle()));
 
-//      -------------------------- Examples --------------------------
+
+        //      -------------------------- Examples --------------------------
         // bind commands to buttons
         // bind gyro reset to back button.
         // Note: since reset is very simple command, we can just use 'InstandCommand'
@@ -274,9 +303,7 @@ public class RobotContainer {
         // togglewhenPressed - turns command on and off at each button press
 
         // set limelight to apriltag pipeline
-        limeLight.SetPipelineMode(0);
-
-        artifactsInRamp = 0;
+        //limeLight.SetPipelineMode(0);
     }
 
     /**Robot initialization for auto - This runs once at initialization of auto*/
@@ -287,15 +314,11 @@ public class RobotContainer {
 
         // perform any autonomous-specific initialization here
         // set limelight to obelisk pipeline
-        if (RobotContainer.isRedAlliance == false){
-            limeLight.SetPipelineMode(1);
-        }else{
-            limeLight.SetPipelineMode(2);
-        }
-
-        artifactsInRamp = 0;
-
-        //obelisk.StartObeliskScan();
+        //if (RobotContainer.isRedAlliance == false){
+        //    limeLight.SetPipelineMode(1);
+        //}else{
+        //    limeLight.SetPipelineMode(2);
+        //}
     }
 
     /**Robot starting code for auto - This runs once at start of auto*/
@@ -305,11 +328,10 @@ public class RobotContainer {
         CurrentRobotMode = Modes.Auto;
 
         // set limelight to apriltag pipeline
-        limeLight.SetPipelineMode(0);
+        //limeLight.SetPipelineMode(0);
 
         // set default shooter speed control
-        shooter.setDefaultCommand(new DefaultShooterSpeed());
-
+        //shooter.setDefaultCommand(new DefaultShooterSpeed());
     }
 
 
@@ -322,7 +344,6 @@ public class RobotContainer {
         }
 
         // actual interval time
-
         intervaltime = timer.milliseconds();
 
         // execute robot periodic function 50 times per second (=50Hz)
@@ -344,8 +365,8 @@ public class RobotContainer {
             telemetrySubsystem.timerOdometry();
             //telemetrySubsystem.addData("Turret Target (degrees): ", turret.getTurretTargetDegrees());
             //telemetrySubsystem.addData("Turret Current (degrees): ", turret.getTurretDegrees());
-            telemetrySubsystem.addData("Intake Power: ", intake.readIntakeSetPower());
-            telemetrySubsystem.addData("Intake Motor Speed (rps): ", intake.intakeMotorCurrentSpeed());
+            //telemetrySubsystem.addData("Intake Power: ", intake.readIntakeSetPower());
+            //telemetrySubsystem.addData("Intake Motor Speed (rps): ", intake.intakeMotorCurrentSpeed());
 
             telemetrySubsystem.update();
         }

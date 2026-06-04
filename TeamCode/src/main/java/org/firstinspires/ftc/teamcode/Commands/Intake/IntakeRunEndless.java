@@ -12,13 +12,14 @@ public class IntakeRunEndless extends CommandBase {
     public IntakeRunEndless() {
 
         // add subsystem requirements (if any) - for example:
-        addRequirements(RobotContainer.intake);
+        //addRequirements(RobotContainer.intake);
     }
 
     // This method is called once when command is started
     @Override
     public void initialize() {
-        RobotContainer.intake.intakeRun();
+
+        //RobotContainer.intake.intakeRun();
     }
 
     // This method is called periodically while command is active
@@ -36,7 +37,8 @@ public class IntakeRunEndless extends CommandBase {
     // This method is called once when command is finished.
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.intake.intakeStop();
+
+        //RobotContainer.intake.intakeStop();
     }
 
 }

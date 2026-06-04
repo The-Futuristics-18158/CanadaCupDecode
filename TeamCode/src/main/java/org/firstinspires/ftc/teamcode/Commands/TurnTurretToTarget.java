@@ -32,7 +32,7 @@ public class TurnTurretToTarget extends CommandBase {
     public TurnTurretToTarget() {
 
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(RobotContainer.turret);
+        //addRequirements(RobotContainer.turret);
 
     }
 
@@ -40,18 +40,18 @@ public class TurnTurretToTarget extends CommandBase {
     @Override
     public void initialize() {
 
-        // determine present angle of turret
-        turretCurrentAngle = RobotContainer.turret.getTurretDegrees();
-
-        // get our current position and the target position
-        Pose2d pose = RobotContainer.odometry.getCurrentPos();
-        Translation2d targetPose = RobotContainer.targeting.GetShotTaget();
-
-        // determine target angle from Robot field pose
-        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
-        turretTargetAngle = Math.toDegrees(angle_rad) - 180.0; // switched as this turret shoots forward not back
-
-        turretRemainingError = Utils.AngleDifference(turretTargetAngle, turretCurrentAngle);
+//        // determine present angle of turret
+//        turretCurrentAngle = RobotContainer.turret.getTurretDegrees();
+//
+//        // get our current position and the target position
+//        Pose2d pose = RobotContainer.odometry.getCurrentPos();
+//        Translation2d targetPose = RobotContainer.targeting.GetShotTaget();
+//
+//        // determine target angle from Robot field pose
+//        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
+//        turretTargetAngle = Math.toDegrees(angle_rad) - 180.0; // switched as this turret shoots forward not back
+//
+//        turretRemainingError = Utils.AngleDifference(turretTargetAngle, turretCurrentAngle);
 
     }
 
@@ -59,39 +59,39 @@ public class TurnTurretToTarget extends CommandBase {
     @Override
     public void execute()
     {
-        turretCurrentAngle = RobotContainer.turret.getTurretDegrees();
-
-        // determine remaining angle to turn turret
-        turretRemainingError = Utils.AngleDifference(turretTargetAngle, turretCurrentAngle);
-
-        // get our current position and the target position
-        Pose2d pose = RobotContainer.odometry.getCurrentPos();
-        Translation2d targetPose = RobotContainer.targeting.GetShotTaget();
-
-        // determine target angle from Robot field pose
-        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
-        turretTargetAngle = Math.toDegrees(angle_rad) - 180.0; // switched as this by 180 degrees as turret shoots forward not back
-
-        // this is the right idea but maybe the wrong way...
-        // consider the robot angle (where -90 is "home" for Blue alliance) and translate the
-        // turretTargetAngle into a robot relative turretTargetAngle
-        turretTargetAngle -= Utils.AngleDifference(startingGyroDegrees, RobotContainer.gyro.getYawAngle());
-
-        // rotate turret until it's within 0.5 degrees
-        //if (turretRemainingError > 0.5) {
-        RobotContainer.turret.moveTurret(turretTargetAngle, turretRemainingError);
-        //}
-
-        // RobotContainer.Panels.FTCTelemetry.addData("TargetAngle", m_endangle);
-        // RobotContainer.Panels.FTCTelemetry.addData("AngleError", Math.max(-10.0, Math.min(10.0, m_angleerror)));
-        // RobotContainer.Panels.FTCTelemetry.update();
+//        turretCurrentAngle = RobotContainer.turret.getTurretDegrees();
+//
+//        // determine remaining angle to turn turret
+//        turretRemainingError = Utils.AngleDifference(turretTargetAngle, turretCurrentAngle);
+//
+//        // get our current position and the target position
+//        Pose2d pose = RobotContainer.odometry.getCurrentPos();
+//        Translation2d targetPose = RobotContainer.targeting.GetShotTaget();
+//
+//        // determine target angle from Robot field pose
+//        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
+//        turretTargetAngle = Math.toDegrees(angle_rad) - 180.0; // switched as this by 180 degrees as turret shoots forward not back
+//
+//        // this is the right idea but maybe the wrong way...
+//        // consider the robot angle (where -90 is "home" for Blue alliance) and translate the
+//        // turretTargetAngle into a robot relative turretTargetAngle
+//        turretTargetAngle -= Utils.AngleDifference(startingGyroDegrees, RobotContainer.gyro.getYawAngle());
+//
+//        // rotate turret until it's within 0.5 degrees
+//        //if (turretRemainingError > 0.5) {
+//        RobotContainer.turret.moveTurret(turretTargetAngle, turretRemainingError);
+//        //}
+//
+//        // RobotContainer.Panels.FTCTelemetry.addData("TargetAngle", m_endangle);
+//        // RobotContainer.Panels.FTCTelemetry.addData("AngleError", Math.max(-10.0, Math.min(10.0, m_angleerror)));
+//        // RobotContainer.Panels.FTCTelemetry.update();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         // stop robot
-        RobotContainer.turret.moveTurret(turretCurrentAngle, 0.0);
+        //RobotContainer.turret.moveTurret(turretCurrentAngle, 0.0);
     }
 
 }

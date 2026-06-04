@@ -2,26 +2,28 @@ package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 /**
- * Place description of subsystem here
+ * Subsystem to Operate Shot Blocker
+ * Open position = 0.35
+ * Close position = 0.0
  *
  * @author superzokabear
  */
-public class ShotBlockServo extends SubsystemBase {
+public class ShotBlock extends SubsystemBase {
 
     // Local objects and variables here
     private Servo shotBlockServo;
 
     /** Place code here to initialize subsystem */
-    public ShotBlockServo() {
+    public ShotBlock() {
 
+        // create servo and configure
         shotBlockServo = RobotContainer.ActiveOpMode.hardwareMap.get(Servo.class, "shotBlockServo");
-
         shotBlockServo.setDirection(Servo.Direction.FORWARD);
 
+        // set default blocker position
         //Block();
         Unblock();
     }
@@ -30,7 +32,6 @@ public class ShotBlockServo extends SubsystemBase {
      * Place any code here you wish to have run periodically */
     @Override
     public void periodic() {
-
     }
 
     // place special subsystem methods here
