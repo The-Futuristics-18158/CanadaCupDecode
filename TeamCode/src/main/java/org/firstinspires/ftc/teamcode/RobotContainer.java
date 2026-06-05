@@ -10,10 +10,12 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
+import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.SpinUpAimAndShoot;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTilt;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.RampLift;
@@ -85,7 +87,7 @@ public class RobotContainer {
     //public static LimeLight limeLight;
     //public static RampCamera rampCamera;
     //public static DistanceSensor distance;
-    //public static GoalTargeting targeting;
+    public static GoalTargeting targeting;
     //public static Turret turret;
     //public static ClimbSubsystem climb;
     //public static Blinkin blinkin;
@@ -160,7 +162,7 @@ public class RobotContainer {
         //limeLight = new LimeLight();
         //rampCamera = new RampCamera("RampCam");
         //distance = new DistanceSensor();
-        //targeting = new GoalTargeting();
+        targeting = new GoalTargeting();
         //climb = new ClimbSubsystem();
         //blinkin = new Blinkin();
         //artifactCamera = new ArtifactCamera("CookieCam");
@@ -200,12 +202,14 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->shotblock.Block()));
 
         // Hood Adjust
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()-0.02)));
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()+0.02)));
+        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()-0.01)));
+        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()+0.01)));
 
         // Raise/Lower Ramp
         driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> ramplift.Raise()));
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> ramplift.Lower()));
+
+        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new SpinUpAimAndShoot());
 
         // shooter
         //driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->shooter.SetFlywheelSpeed(720.0)));

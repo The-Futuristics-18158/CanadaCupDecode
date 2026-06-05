@@ -4,9 +4,12 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.arcrobotics.ftclib.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
+import org.firstinspires.ftc.teamcode.Utility.Utils;
+
 import java.util.List;
 
 /**
@@ -36,6 +39,8 @@ public class GoalTargeting extends SubsystemBase {
     Pose2d boxPos;
     double error;
 
+    public double startingGyroDegrees = RobotContainer.gyro.getYawAngle();
+
     /** Place code here to initialize subsystem */
     public GoalTargeting() {
 
@@ -49,6 +54,21 @@ public class GoalTargeting extends SubsystemBase {
     public void periodic() {
         double distance = GetDistanceToGoal();
         RobotContainer.telemetrySubsystem.addData("distance", distance, true);
+
+        SetHoodAngleAndSpeed();
+        Pose2d pose = RobotContainer.odometry.getCurrentPos();
+        Translation2d targetPose = GetShotTaget();
+
+        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
+        double turretTargetAngle = Math.toDegrees(angle_rad) - 180.0;
+
+        //turretTargetAngle -= Utils.AngleDifference(startingGyroDegrees, RobotContainer.gyro.getYawAngle());
+
+        turretTargetAngle -= (RobotContainer.gyro.getYawAngle() - startingGyroDegrees + 180.0) % 360.0 - 180.0;
+
+        //turretTargetAngle = -RobotContainer.gyro.getYawAngle() + turretTargetAngle;
+
+        RobotContainer.turret.moveTurret(turretTargetAngle);
     }
 
     /**returns list of available shooting locations*/
@@ -122,10 +142,13 @@ public class GoalTargeting extends SubsystemBase {
 //        return 386.46*x + 1959.4;
 
         // befor turnament equation = Feb 21/2026, 9:28pm
-        return 406.1*x + 1930.5;
+        //return 406.1*x + 1930.5;
 
         // equation from Feb 14/2026 early PM
         //return 386.46 * x + 1909.4;
+
+        // equation from June 04/2026 early PM 8:40pm
+        return 426.05 * x + 1606;
     }
 
     /**add description here
@@ -138,10 +161,13 @@ public class GoalTargeting extends SubsystemBase {
 
         double x = this.GetDistanceToGoal();
         // enhanced equation - Feb 14/2026, 10pm
-        return -0.0386*x*x +0.2542*x + 0.053;
+        //return -0.0386*x*x +0.2542*x + 0.053;
 
         // equation from Feb 14/2026 early PM
         // return -0.0433 * x *x + 0.2732 * x + 0.0398;
+
+        // equation from June 04/2026 early PM 8:40pm
+        return -0.0096 * x * x + 0.0839 * x - 0.0655;
     }
 
     /**add description here
@@ -150,7 +176,7 @@ public class GoalTargeting extends SubsystemBase {
      */
     public void SetHoodAngleAndSpeed(){
         RobotContainer.hoodtilt.SetHoodPosition(CalculateHoodAngle());
-        //RobotContainer.shooter.SetFlywheelSpeed(CalculateSpeed());
+        RobotContainer.shooter.SetFlywheelSpeed(CalculateSpeed());
     }
 
     /**add description here

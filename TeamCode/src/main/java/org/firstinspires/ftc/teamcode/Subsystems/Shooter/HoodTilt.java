@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 
 /**
  * Subsystem to Tilt Hood to Desired Angle
- * 0.35 <= Angle <=1.0
+ * 0.0 <= Angle <= 0.1
  *
  * @author superzokabear
  */
@@ -19,8 +19,8 @@ public class HoodTilt extends SubsystemBase {
     private Servo TiltServo;
 
     // Servo movement limits
-    public final double maxAngle = 1.0;
-    public final double minAngle = 0.4;
+    public final double maxAngle = 0.1;// max angle is 0.1
+    public final double minAngle = 0.0; // min angle is 0.0
     // note: use 0.3 to re-calibrate hood gear position
     // 0.3 is at position where hood gear just detaches from servo gear.
 
@@ -30,8 +30,8 @@ public class HoodTilt extends SubsystemBase {
         TiltServo = RobotContainer.ActiveOpMode.hardwareMap.get(Servo.class, "hoodAngleServo");
         TiltServo.setDirection(Servo.Direction.FORWARD);
 
-        // set default position to max angle
-        hoodPosition = maxAngle;
+        // set default position to min angle
+        hoodPosition = minAngle;
     }
 
     /** Method called periodically by the scheduler

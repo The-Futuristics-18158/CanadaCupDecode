@@ -23,8 +23,8 @@ public class Turret extends SubsystemBase {
     private final double TICKS_TO_DEGREES = 1.0 / DEGREES_TO_TICKS;
 
     // min and max turret angle limits
-    private final double MIN_ANGLE_DEG = -170.0;
-    private final double MAX_ANGLE_DEG = 170.0;
+    private final double MIN_ANGLE_DEG = -135.0;
+    private final double MAX_ANGLE_DEG = 135.0;
 
     // turret current target (in degrees from center position)
     private double TurretTargetDegrees;

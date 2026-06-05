@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.CommandGroups.Shoot;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
+import org.firstinspires.ftc.teamcode.Commands.Utility.Pause;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
@@ -17,11 +19,24 @@ public class SpinUpAimAndShoot extends SequentialCommandGroup {
     public SpinUpAimAndShoot() {
 
         addCommands (
-                //new AimToShoot(),
-                //new InstantCommand(()->RobotContainer.targeting.SetHoodAngleAndSpeed())
-        );
-    }
+                new InstantCommand(()->RobotContainer.shotblock.Unblock()),
 
+                new InstantCommand(()-> RobotContainer.ramplift.Raise()),
+
+                new Pause(0.25),
+
+                new InstantCommand(()-> RobotContainer.intake.intakeRun()),
+
+                new Pause(2.0)
+        );
+
+    }
+    @Override
+    public void end(boolean interrupted){
+        RobotContainer.shotblock.Block();
+        RobotContainer.ramplift.Lower();
+        RobotContainer.intake.intakeStop();
+    }
 }
 
 // Example #2: Using conditional command
