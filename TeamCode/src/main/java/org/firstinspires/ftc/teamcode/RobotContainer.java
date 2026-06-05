@@ -10,7 +10,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.SpinUpAimAndShoot;
+import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
@@ -209,7 +209,7 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> ramplift.Raise()));
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> ramplift.Lower()));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new SpinUpAimAndShoot());
+        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new ShotSequence());
 
         // shooter
         //driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->shooter.SetFlywheelSpeed(720.0)));

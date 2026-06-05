@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 // ParallelRaceGroup
 // ParallelDeadlineGroup
 
-public class SpinUpAimAndShoot extends SequentialCommandGroup {
+public class ShotSequence extends SequentialCommandGroup {
 
     // constructor
-    public SpinUpAimAndShoot() {
+    public ShotSequence() {
 
         addCommands (
                 new InstantCommand(()->RobotContainer.shotblock.Unblock()),
