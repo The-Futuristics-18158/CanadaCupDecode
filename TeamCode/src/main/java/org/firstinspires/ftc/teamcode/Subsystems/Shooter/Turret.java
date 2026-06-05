@@ -23,8 +23,11 @@ public class Turret extends SubsystemBase {
     private final double TICKS_TO_DEGREES = 1.0 / DEGREES_TO_TICKS;
 
     // min and max turret angle limits
-    private final double MIN_ANGLE_DEG = -90.0;
-    private final double MAX_ANGLE_DEG = 90.0;
+    private final double MIN_ANGLE_DEG = -170.0;
+    private final double MAX_ANGLE_DEG = 170.0;
+
+    // turret current target (in degrees from center position)
+    private double TurretTargetDegrees;
 
 
     /**
@@ -42,10 +45,12 @@ public class Turret extends SubsystemBase {
 
         // Setting target to zero upon initialization
         turret.setTargetPosition(0);
+        TurretTargetDegrees = 0.0;
 
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         turret.setPower(1.0);
+
     }
 
     /**
@@ -55,35 +60,15 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // temporary - display turret position and target on panels for graphing
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
-
-    }
-
-    /** Switches off Turret */
-    public void turretStop(){
-        turret.setPower(0.0);
-    }
-
-    /**
-     * Moves turret to specified angle
-     * Angle bounded by MIN_ANGLE_DEG and MAX_ANGLE_DEG
-     * 0deg is pointed forwarded (in robot space)
-     * @param turretTargetDegrees target angles in degrees
-     */
-    public void moveTurret(double turretTargetDegrees) {
-
         // bound the angle
-        double target = turretTargetDegrees;
-        if (target<MIN_ANGLE_DEG)  target=MIN_ANGLE_DEG;
-        if (target>MAX_ANGLE_DEG)  target=MAX_ANGLE_DEG;
+        if (TurretTargetDegrees<MIN_ANGLE_DEG)  TurretTargetDegrees=MIN_ANGLE_DEG;
+        if (TurretTargetDegrees>MAX_ANGLE_DEG)  TurretTargetDegrees=MAX_ANGLE_DEG;
 
         // determine target position in ticks
-        int targetPosition = (int)(target * DEGREES_TO_TICKS);
+        int targetPosition = (int)(TurretTargetDegrees * DEGREES_TO_TICKS);
 
         // determine current position error (in degrees)
-        double turretRemainingError  = target - getTurretDegrees();;
+        double turretRemainingError  = TurretTargetDegrees- getTurretDegrees();;
 
         // create variable PI control for remaining error and smooth operation
         double variableP = -0.47 * turretRemainingError + 99.37; // -0.71 * x + 107.86 was a bit too aggressive
@@ -96,6 +81,7 @@ public class Turret extends SubsystemBase {
         // enable maxes
         variableP = Math.min(90.0, variableP);
         variableI = Math.min(15.0, variableI);
+        //variableI = Math.min(0.0, variableI);
 
         // set variable PI
         turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
@@ -112,6 +98,25 @@ public class Turret extends SubsystemBase {
 
         // move the turret motor
         turret.setTargetPosition(targetPosition);
+
+        // temporary - display turret position and target on panels for graphing
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
+    }
+
+    /** Switches off Turret */
+    public void turretStop(){
+        turret.setPower(0.0);
+    }
+
+    /**
+     * Moves turret to specified angle
+     * Angle bounded by MIN_ANGLE_DEG and MAX_ANGLE_DEG
+     * 0deg is pointed forwarded (in robot space)
+     * @param TargetDegrees target angles in degrees
+     */
+    public void moveTurret(double TargetDegrees) {
+        TurretTargetDegrees = TargetDegrees;
     }
 
     /** returns current turret target position
