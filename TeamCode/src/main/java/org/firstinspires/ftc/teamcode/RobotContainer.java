@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -15,6 +16,8 @@ import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
+import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Flywheel;
@@ -84,11 +87,12 @@ public class RobotContainer {
     public static Intake intake;
     public static Flywheel shooter;
     public static Turret turret;
-
-    //public static LimeLight limeLight;
-    //public static RampCamera rampCamera;
-    //public static DistanceSensor distance;
+    public static RampCamera rampCamera;
+    public static LimeLight limeLight;
     public static GoalTargeting targeting;
+
+
+    //public static DistanceSensor distance;
     //public static Turret turret;
     //public static ClimbSubsystem climb;
     //public static Blinkin blinkin;
@@ -158,12 +162,12 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new Flywheel();
         turret = new Turret();
-
-
-        //limeLight = new LimeLight();
-        //rampCamera = new RampCamera("RampCam");
-        //distance = new DistanceSensor();
+        rampCamera = new RampCamera("RampCam");
+        limeLight = new LimeLight();
         targeting = new GoalTargeting();
+
+
+        //distance = new DistanceSensor();
         //climb = new ClimbSubsystem();
         //blinkin = new Blinkin();
         //artifactCamera = new ArtifactCamera("CookieCam");
@@ -287,7 +291,7 @@ public class RobotContainer {
         //      -------------------------- Examples --------------------------
         // bind commands to buttons
         // bind gyro reset to back button.
-        // Note: since reset is very simple command, we can just use 'InstandCommand'
+        // Note: since reset is very simple command, we can just use 'InstantCommand'
         // instead of creating a full command, just to run one line of java code.
 
         // example turn to command
@@ -309,7 +313,7 @@ public class RobotContainer {
         // togglewhenPressed - turns command on and off at each button press
 
         // set limelight to apriltag pipeline
-        //limeLight.SetPipelineMode(0);
+        limeLight.SetPipelineMode(0);
     }
 
     /**Robot initialization for auto - This runs once at initialization of auto*/
@@ -318,13 +322,9 @@ public class RobotContainer {
         // robot is in auto init mode
         CurrentRobotMode = Modes.AutoInit;
 
-        // perform any autonomous-specific initialization here
-        // set limelight to obelisk pipeline
-        //if (RobotContainer.isRedAlliance == false){
-        //    limeLight.SetPipelineMode(1);
-        //}else{
-        //    limeLight.SetPipelineMode(2);
-        //}
+        // set limelight pipeline
+        limeLight.SetPipelineMode(0);
+
     }
 
     /**Robot starting code for auto - This runs once at start of auto*/
@@ -334,7 +334,7 @@ public class RobotContainer {
         CurrentRobotMode = Modes.Auto;
 
         // set limelight to apriltag pipeline
-        //limeLight.SetPipelineMode(0);
+        limeLight.SetPipelineMode(0);
 
         // set default shooter speed control
         //shooter.setDefaultCommand(new DefaultShooterSpeed());

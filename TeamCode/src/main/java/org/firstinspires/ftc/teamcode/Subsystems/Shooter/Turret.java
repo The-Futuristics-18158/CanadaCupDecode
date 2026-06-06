@@ -99,6 +99,20 @@ public class Turret extends SubsystemBase {
         // move the turret motor
         turret.setTargetPosition(targetPosition);
 
+        // default positional control PID values
+        // Jun 6/2026 KN
+        // p=10.0;
+        // i=0.05
+        // d=0.0
+
+        // temporary
+        //double p = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).p;
+        //double i = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).i;
+        //double d = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).d;
+        //RobotContainer.telemetrySubsystem.addData("default P",p, true);
+        //RobotContainer.telemetrySubsystem.addData("default I",i, true);
+        //RobotContainer.telemetrySubsystem.addData("default D",d, true);
+
         // temporary - display turret position and target on panels for graphing
         PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
         PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
