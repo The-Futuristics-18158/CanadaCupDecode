@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
@@ -36,21 +37,34 @@ public class Odometry extends SubsystemBase {
         CurrentPose = RobotContainer.odometryPod.GetPose();
 
         // get limelight MT2 odometry
-        //LLResult result = RobotContainer.limeLight.limeLight.getLatestResult();
+        LLResult results = RobotContainer.limeLight.getLimeLightResults();
 
-        // new addition: only use apriltag when in teleop mode
-        // if we have valid result and it is not stale (>100ms)
-        // and we have at least one apriltag detection
-//        if (RobotContainer.GetCurrentMode()== RobotContainer.Modes.TeleOp &&
-//                result!=null && result.isValid() && result.getStaleness() < 100 &&
-//            result.getFiducialResults()!=null && !result.getFiducialResults().isEmpty())
+        boolean CameraHasValidTarget = false;
+        Position RobotPosition = new Position();
+
+        if (results!=null && results.isValid() && results.getFiducialResults()!=null &&
+                !results.getFiducialResults().isEmpty() && results.getStaleness() < 100)
+            for (int i=0;i<results.getFiducialResults().size();++i)
+                if ((RobotContainer.isRedAlliance() && results.getFiducialResults().get(i).getFiducialId()==24) ||
+                        (!RobotContainer.isRedAlliance() && results.getFiducialResults().get(i).getFiducialId()==20))
+                {
+                    // we have a hit.
+                    CameraHasValidTarget = true;
+                    RobotPosition = results.getBotpose().getPosition();
+                }
+
+
+//        // =only use apriltag when in teleop mode
+//        // if we have valid result and it is not stale (>100ms)
+//        // and we have at least one apriltag detection
+//        if (RobotContainer.GetCurrentMode()== RobotContainer.Modes.TeleOp && CameraHasValidTarget )
 //        {
 //            // we have a valid LL result and at least one tag detection
-//            double LLpose_x = result.getBotpose_MT2().getPosition().x;
-//            double LLpose_y = result.getBotpose_MT2().getPosition().y;
+//            double LLpose_x = RobotPosition.x;
+//            double LLpose_y = RobotPosition.y;
 //
-//            //RobotContainer.RCTelemetry.addData("ken_x", LLpose_x);
-//            //RobotContainer.RCTelemetry.addData("ken_y", LLpose_y);
+//            // notify driver that odometry is being adjusted
+//            RobotContainer.telemetrySubsystem.addLine("Adjusting Odom(AT)", true);
 //
 //            MecanumDriveWheelSpeeds speed = RobotContainer.drivesystem.GetWheelSpeeds();
 //

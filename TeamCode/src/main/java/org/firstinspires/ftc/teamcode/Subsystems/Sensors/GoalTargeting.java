@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Sensors;
 
+import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.geometry.Vector2d;
+import com.qualcomm.hardware.limelightvision.LLResult;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 import org.firstinspires.ftc.teamcode.Utility.Utils;
@@ -19,78 +23,81 @@ import java.util.List;
  */
 public class GoalTargeting extends SubsystemBase {
 
-    // List of all available locations to shoot from
-    // specify for blue side. RedVsBlue translates as necessary
-    private List <Translation2d> ShootingCoordinates = List.of(
-            AutoFunctions.redVsBlue(new Translation2d(0,0)),
-            AutoFunctions.redVsBlue(new Translation2d(1.0, 0)),
-            AutoFunctions.redVsBlue(new Translation2d(-1.0, -1.0))
-            // whatever
-    );
-
     Translation2d redGoalNear = new Translation2d(-1.63, 1.55);
     Translation2d blueGoalNear = new Translation2d (-1.63, -1.55);
     Translation2d redGoalFar = new Translation2d(-1.63, 1.45);
     Translation2d blueGoalFar = new Translation2d(-1.63, -1.45);
 
-
-    Pose2d currentPos = new Pose2d();
-
-    Pose2d boxPos;
-    double error;
-
     public double startingGyroDegrees = RobotContainer.gyro.getYawAngle();
 
-    /** Place code here to initialize subsystem */
-    public GoalTargeting() {
-
-        boxPos = AutoFunctions.redVsBlue( new Pose2d(new Translation2d( 0.935, 0.81), new Rotation2d(0)));
-        error = 0.40;
-    }
 
     /** Method called periodically by the scheduler
      * Place any code here you wish to have run periodically */
     @Override
     public void periodic() {
-        double distance = GetDistanceToGoal();
-        RobotContainer.telemetrySubsystem.addData("distance", distance, true);
 
-        SetHoodAngleAndSpeed();
-        Pose2d pose = RobotContainer.odometry.getCurrentPos();
-        Translation2d targetPose = GetShotTaget();
 
-        double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
-        double turretTargetAngle = Math.toDegrees(angle_rad) - 180.0;
+        // determine if we have target in camera, otherwise use odometry
+        LLResult results = RobotContainer.limeLight.getLimeLightResults();
+        // do we have valid hits in camera
+        boolean CameraHasValidTarget = false;
+        double CameraTargetXAngle = 0.0;
+        double TargetDistance = 0.0;
+        if (results!=null && results.isValid() &&results.getFiducialResults()!=null &&
+                !results.getFiducialResults().isEmpty() && results.getStaleness() < 100)
+            for (int i=0;i<results.getFiducialResults().size();++i)
+                if ((RobotContainer.isRedAlliance() && results.getFiducialResults().get(i).getFiducialId()==24) ||
+                        (!RobotContainer.isRedAlliance() && results.getFiducialResults().get(i).getFiducialId()==20))
+                {
+                    // we have a hit. Record xangle and distance to the valid target
+                    CameraHasValidTarget = true;
+                    CameraTargetXAngle = results.getFiducialResults().get(i).getTargetXDegrees();
+                    Position vector = results.getFiducialResults().get(i).getTargetPoseRobotSpace().getPosition();
+                    TargetDistance = Math.sqrt(vector.x*vector.x + vector.y*vector.y + vector.z*vector.z);
+                }
 
-        //turretTargetAngle -= Utils.AngleDifference(startingGyroDegrees, RobotContainer.gyro.getYawAngle());
+        // ---------- Hood Angle and Flywheel Speed ----------
 
-        turretTargetAngle -= (RobotContainer.gyro.getYawAngle() - startingGyroDegrees + 180.0) % 360.0 - 180.0;
+        if (!CameraHasValidTarget)
+            // camera does not have target, use odometry to set determine distance to target
+            TargetDistance = GetDistanceToGoal();
 
-        //turretTargetAngle = -RobotContainer.gyro.getYawAngle() + turretTargetAngle;
+        if (!CameraHasValidTarget)
+            RobotContainer.telemetrySubsystem.addData("distance", TargetDistance, true);
+        else
+            RobotContainer.telemetrySubsystem.addData("distance(AT)", TargetDistance, true);
 
-        RobotContainer.turret.moveTurret(turretTargetAngle);
+        RobotContainer.hoodtilt.SetHoodPosition(CalculateHoodAngle(TargetDistance));
+        RobotContainer.shooter.SetFlywheelSpeed(CalculateSpeed(TargetDistance));
+
+
+        // ---------- Turret Angle ----------
+
+        // aiming of turret depends on if we have valid target in camera sight or not
+        if (CameraHasValidTarget)
+        {
+            // we have target in camera sight - adjust turret by angle to target
+            double currentturretangle = RobotContainer.turret.getTurretDegrees();
+            RobotContainer.turret.moveTurret(currentturretangle - CameraTargetXAngle );
+        }
+        else {
+            // use odometry to set turret angle
+            Pose2d pose = RobotContainer.odometry.getCurrentPos();
+            Translation2d targetPose = GetShotTaget();
+            double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
+            double turretTargetAngle = Math.toDegrees(angle_rad) - 180.0;
+            turretTargetAngle -= (RobotContainer.gyro.getYawAngle() - startingGyroDegrees + 180.0) % 360.0 - 180.0;
+            RobotContainer.turret.moveTurret(turretTargetAngle);
+        }
+
     }
 
-    /**returns list of available shooting locations*/
-    public List<Translation2d> GetListOfSHootingPoints() {
-        return ShootingCoordinates;
-    }
 
 
     /* ---------- Left/Right Shoot Solutions ---------- */
 
     public enum ShootSide {
         LEFT, RIGHT, NONE, BOTH
-    }
-
-    // 2. The Functional Interface (must have one abstract method)
-    /** add description here
-     *
-     * @author kaitlyn
-     */
-    @FunctionalInterface
-    public interface LeftVsRight {
-        ShootSide getSide();
     }
 
 
@@ -103,7 +110,7 @@ public class GoalTargeting extends SubsystemBase {
      * @return what does this return?
      */
     public double GetDistanceToGoal (){
-        currentPos = RobotContainer.odometry.getCurrentPos();
+        Pose2d currentPos = RobotContainer.odometry.getCurrentPos();
         Translation2d goalPose;
         if(RobotContainer.isRedAlliance()){
             if (currentPos.getX() <=1.90)
@@ -120,9 +127,7 @@ public class GoalTargeting extends SubsystemBase {
         double x = goalPose.getX() - currentPos.getX();
         double y = goalPose.getY() - currentPos.getY();
 
-        double hypotenuse = Math.sqrt((x*x) + (y*y));
-        return hypotenuse;
-
+        return Math.sqrt((x*x) + (y*y));
     }
 
 
@@ -132,23 +137,10 @@ public class GoalTargeting extends SubsystemBase {
      *
      * @return Returns the speed of the flywheel
      */
-    public double CalculateSpeed(){
-        double x = this.GetDistanceToGoal();
-
-        // enhanced equation - Feb 14/2026, 10pm
-        //return 383.29*x + 1922.3;
-
-        // befor turnament equation = Feb 21/2026, 9:28pm
-//        return 386.46*x + 1959.4;
-
-        // befor turnament equation = Feb 21/2026, 9:28pm
-        //return 406.1*x + 1930.5;
-
-        // equation from Feb 14/2026 early PM
-        //return 386.46 * x + 1909.4;
+    public double CalculateSpeed(double distance){
 
         // equation from June 04/2026 early PM 8:40pm
-        return 426.05 * x + 1606;
+        return 426.05 * distance + 1606;
     }
 
     /**add description here
@@ -157,27 +149,12 @@ public class GoalTargeting extends SubsystemBase {
      *
      * @return what does this return?
      */
-    public double CalculateHoodAngle(){
-
-        double x = this.GetDistanceToGoal();
-        // enhanced equation - Feb 14/2026, 10pm
-        //return -0.0386*x*x +0.2542*x + 0.053;
-
-        // equation from Feb 14/2026 early PM
-        // return -0.0433 * x *x + 0.2732 * x + 0.0398;
+    public double CalculateHoodAngle(double distance){
 
         // equation from June 04/2026 early PM 8:40pm
-        return -0.0096 * x * x + 0.0839 * x - 0.0655;
+        return -0.0096 * distance * distance + 0.0839 * distance - 0.0655;
     }
 
-    /**add description here
-     *
-     * @author superzokabear
-     */
-    public void SetHoodAngleAndSpeed(){
-        RobotContainer.hoodtilt.SetHoodPosition(CalculateHoodAngle());
-        RobotContainer.shooter.SetFlywheelSpeed(CalculateSpeed());
-    }
 
     /**add description here
      *
@@ -193,26 +170,25 @@ public class GoalTargeting extends SubsystemBase {
 
 
 
-    /**add description here
-     *
-     * @author kaitlyn
-     *
-     * @return what does this return?
-     */
-    public double IdleSpeed(){
-        double shootSpeed = this.CalculateSpeed();
-        double distance = this.GetDistanceToGoal();
-//        if (RobotContainer.odometry.getCurrentPos().getX() > (boxPos.getX() - error) &&
-//            RobotContainer.odometry.getCurrentPos().getX() < (boxPos.getX() + error) &&
-//            RobotContainer.odometry.getCurrentPos().getY() > (boxPos.getY() - error) &&
-//            RobotContainer.odometry.getCurrentPos().getY() < (boxPos.getY() + error)) {
+//    /**add description here
+//     * @author kaitlyn
+//     *
+//     * @return what does this return?
+//     */
+//    public double IdleSpeed(){
+//        double shootSpeed = this.CalculateSpeed();
+//        double distance = this.GetDistanceToGoal();
+////        if (RobotContainer.odometry.getCurrentPos().getX() > (boxPos.getX() - error) &&
+////            RobotContainer.odometry.getCurrentPos().getX() < (boxPos.getX() + error) &&
+////            RobotContainer.odometry.getCurrentPos().getY() > (boxPos.getY() - error) &&
+////            RobotContainer.odometry.getCurrentPos().getY() < (boxPos.getY() + error)) {
+////            return 0.0;
+//        if(distance >= 2.8) {
+//            return (0.7 * shootSpeed);
+//        }else {
 //            return 0.0;
-        if(distance >= 2.8) {
-            return (0.7 * shootSpeed);
-        }else {
-            return 0.0;
-        }
-
-    }
+//        }
+//
+//    }
 
 }
