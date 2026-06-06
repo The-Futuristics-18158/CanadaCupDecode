@@ -16,7 +16,7 @@ public class IntakeSequence extends SequentialCommandGroup {
 
     // constructor
     public IntakeSequence() {
-
+        addRequirements(RobotContainer.drivesystem);
         addCommands (
                 new InstantCommand(()-> RobotContainer.ramplift.Lower()),
 
@@ -26,7 +26,7 @@ public class IntakeSequence extends SequentialCommandGroup {
 
                 new InstantCommand(()-> RobotContainer.drivesystem.RobotDrive(1.0, 0.0, 0.0)),
 
-                new Pause(2.0)
+                new Pause(3.0)
 
         );
     }

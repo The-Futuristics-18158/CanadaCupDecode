@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.ChassisSpeeds;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 public class DriveTrain extends SubsystemBase {
 
     // constants for Tetrix DC Motor
-    final double MAXRPM = 4400.0;
+    final double MAXRPM = 6000.0;
     final double MAXRPS = MAXRPM / 60.0;
     
     // motor speed ticks per revolution to m/s travel speed
@@ -137,6 +138,12 @@ public class DriveTrain extends SubsystemBase {
         rightFrontDrive.setPower(rightFrontControl.calculate(RefRightFrontRPM,CurrentRightFrontRPM));
         leftBackDrive.setPower(leftBackControl.calculate(RefLeftBackRPM,CurrentLeftBackRPM));
         rightBackDrive.setPower(rightBackControl.calculate(RefRightBackRPM, CurrentRightBackRPM));
+
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Front Drive Velocity(rpm)", CurrentLeftFrontRPM);
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Front Referance Speeds(rpm)", RefLeftFrontRPM);
+
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Back Drive Velocity(rpm)", CurrentLeftBackRPM);
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Back Referance Speeds(rpm)", RefLeftBackRPM);
     }
 
 
