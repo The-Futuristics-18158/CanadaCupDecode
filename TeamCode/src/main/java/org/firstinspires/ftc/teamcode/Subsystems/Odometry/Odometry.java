@@ -54,49 +54,49 @@ public class Odometry extends SubsystemBase {
                 }
 
 
-//        // =only use apriltag when in teleop mode
-//        // if we have valid result and it is not stale (>100ms)
-//        // and we have at least one apriltag detection
-//        if (RobotContainer.GetCurrentMode()== RobotContainer.Modes.TeleOp && CameraHasValidTarget )
-//        {
-//            // we have a valid LL result and at least one tag detection
-//            double LLpose_x = RobotPosition.x;
-//            double LLpose_y = RobotPosition.y;
-//
-//            // notify driver that odometry is being adjusted
-//            RobotContainer.telemetrySubsystem.addLine("Adjusting Odom(AT)", true);
-//
-//            MecanumDriveWheelSpeeds speed = RobotContainer.drivesystem.GetWheelSpeeds();
-//
-//            // does LL result make sense and is robot currently at low speed (<0.1m/s)?
-//            // 0.1m/s used. assume LL result off by 50ms, this would result in
-//            // 0.1m/s*0.05s = 0.005m(=1/2cm) error which is acceptable
-//            if (LLpose_x > -1.8 && LLpose_x <1.8 &&
-//                LLpose_y > -1.8 && LLpose_y <1.8 &&
-//                speed.rearRightMetersPerSecond > -0.1 &&
-//                speed.rearRightMetersPerSecond < 0.1 &&
-//                speed.rearLeftMetersPerSecond > -0.1 &&
-//                speed.rearLeftMetersPerSecond < 0.1 &&
-//                speed.frontRightMetersPerSecond > -0.1 &&
-//                speed.frontRightMetersPerSecond < 0.1 &&
-//                speed.frontLeftMetersPerSecond > -0.1 &&
-//                speed.frontLeftMetersPerSecond < 0.1)
-//            {
-//                Rotation2d gyro = new Rotation2d(Math.toRadians(RobotContainer.gyro.getYawAngle()));
-//
-//                // determine new pose - apply low pass filter for blending
-//                double newpose_x = 0.95*CurrentPose.getX() + 0.05*LLpose_x;
-//                double newpose_y = 0.95*CurrentPose.getY() + 0.05*LLpose_y;
-//
-//                // construct new pose2d
-//                CurrentPose = new Pose2d(newpose_x, newpose_y, gyro);
-//                //CurrentPose = new Pose2d(newpose_x, newpose_y, CurrentPose.getRotation());
-//
-//                // adjust robot's odometry for new value
-//                RobotContainer.odometry.setCurrentPos(CurrentPose);
-//            }
-//
-//        }
+        // =only use apriltag when in teleop mode
+        // if we have valid result and it is not stale (>100ms)
+        // and we have at least one apriltag detection
+        if (RobotContainer.GetCurrentMode()== RobotContainer.Modes.TeleOp && CameraHasValidTarget )
+        {
+            // we have a valid LL result and at least one tag detection
+            double LLpose_x = RobotPosition.x;
+            double LLpose_y = RobotPosition.y;
+
+            // notify driver that odometry is being adjusted
+            RobotContainer.telemetrySubsystem.addLine("Adjusting Odom(AT)", true);
+
+            MecanumDriveWheelSpeeds speed = RobotContainer.drivesystem.GetWheelSpeeds();
+
+            // does LL result make sense and is robot currently at low speed (<0.1m/s)?
+            // 0.1m/s used. assume LL result off by 50ms, this would result in
+            // 0.1m/s*0.05s = 0.005m(=1/2cm) error which is acceptable
+            if (LLpose_x > -1.8 && LLpose_x <1.8 &&
+                LLpose_y > -1.8 && LLpose_y <1.8 &&
+                speed.rearRightMetersPerSecond > -0.1 &&
+                speed.rearRightMetersPerSecond < 0.1 &&
+                speed.rearLeftMetersPerSecond > -0.1 &&
+                speed.rearLeftMetersPerSecond < 0.1 &&
+                speed.frontRightMetersPerSecond > -0.1 &&
+                speed.frontRightMetersPerSecond < 0.1 &&
+                speed.frontLeftMetersPerSecond > -0.1 &&
+                speed.frontLeftMetersPerSecond < 0.1)
+            {
+                Rotation2d gyro = new Rotation2d(Math.toRadians(RobotContainer.gyro.getYawAngle()));
+
+                // determine new pose - apply low pass filter for blending
+                double newpose_x = 0.96*CurrentPose.getX() + 0.04*LLpose_x;
+                double newpose_y = 0.96*CurrentPose.getY() + 0.04*LLpose_y;
+
+                // construct new pose2d
+                CurrentPose = new Pose2d(newpose_x, newpose_y, gyro);
+                //CurrentPose = new Pose2d(newpose_x, newpose_y, CurrentPose.getRotation());
+
+                // adjust robot's odometry for new value
+                RobotContainer.odometry.setCurrentPos(CurrentPose);
+            }
+
+        }
 
 
         // save position to data store, in case op mode ends

@@ -101,7 +101,7 @@ public class Intake extends SubsystemBase {
     public void intakeRun(){ TargetSpeed = 90.0;}
 
     /**Run the intake at set speed (rps)*/
-    public void intakeRunReducedSpeed() { TargetSpeed = 0.0;}
+    public void intakeRunReducedSpeed() { TargetSpeed = 45.0;}
 
     /**Run the intake at set speed (rps)*/
     public void intakeReverse(){TargetSpeed = -45.0;}

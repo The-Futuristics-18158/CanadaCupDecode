@@ -134,7 +134,7 @@ public class RampCamera extends SubsystemBase {
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
 
-        // by default disable all processors
+        // by default enable artifact detection processors
         setVisionProcessingMode(VisionProcessorMode.ARTIFACT);
 
         // show camera stream on panels dashboard

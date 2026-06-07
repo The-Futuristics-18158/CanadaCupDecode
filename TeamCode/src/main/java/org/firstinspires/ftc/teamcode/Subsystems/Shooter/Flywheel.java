@@ -33,7 +33,7 @@ public class Flywheel extends SubsystemBase {
     // PIF Controller Gains
     private final double FsGain = 0.0;
     private final double FvGain = 1.24*0.00016667; //initial value=1.0/6000rpm=0.00016667
-    public final double PGain = 6.0*0.00016667;
+    public final double PGain = 8.0*0.00016667;
     public final double IGain = 0.0002;
 
 

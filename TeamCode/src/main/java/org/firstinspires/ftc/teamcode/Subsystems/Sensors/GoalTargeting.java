@@ -86,7 +86,7 @@ public class GoalTargeting extends SubsystemBase {
             Translation2d targetPose = GetShotTaget();
             double angle_rad = (new Vector2d(pose.getX() - targetPose.getX(), pose.getY() - targetPose.getY())).angle();
             double turretTargetAngle = Math.toDegrees(angle_rad) - 180.0;
-            turretTargetAngle -= (RobotContainer.gyro.getYawAngle() - startingGyroDegrees + 180.0) % 360.0 - 180.0;
+            turretTargetAngle -= (RobotContainer.gyro.getYawAngle()- startingGyroDegrees + 180.0) % 360.0 - 180.0;
             RobotContainer.turret.moveTurret(turretTargetAngle);
         }
 

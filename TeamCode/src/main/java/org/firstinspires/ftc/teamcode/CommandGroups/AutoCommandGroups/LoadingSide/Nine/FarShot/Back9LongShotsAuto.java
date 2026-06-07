@@ -19,31 +19,31 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
 
         addCommands (
                 // Was X = 1.59 Y Was -0.39
-                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(1.60, -0.37, new Rotation2d(Math.toRadians(0.0)))))),
+                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(1.60, -0.37, new Rotation2d(Math.toRadians(180.0)))))),
 
                 // Move to shoot
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))), // + or - 20 degrees
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))), // + or - 20 degrees
 
 //      -------------------------- Artifact Cycle #1 --------------------------
                 new ShotSequence(),
 
-//              // Move to intake point
+                // Move to intake point
                 new MoveToPose(
                         1.5,
                         1.5,
                         AutoFunctions.redVsBlue((new Pose2d(0.98, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new HuntModeAuto(2.25),
+                new HuntModeAuto(1.5),
 
                 // Move to shoot
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))), // + or - 20 degrees
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))), // + or - 20 degrees
 
 //      -------------------------- Artifact Cycle #2 --------------------------
                 new ShotSequence(),
@@ -52,16 +52,16 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                 new MoveToPose(
                         1.5,
                         1.0,
-                        AutoFunctions.redVsBlue((new Pose2d(1.05, -1.62, new Rotation2d(Math.toRadians(0.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(0.38, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
 
-                new HuntModeAutoZeroAngle(2.0),
+                new HuntModeAuto(1.5),
 
                 // Move to shoot
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))),
 
 //      -------------------------- Artifact Cycle #3 --------------------------
                 new ShotSequence(),
@@ -70,7 +70,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.5, -0.9, new Rotation2d(Math.toRadians(0.0))))))
+                        AutoFunctions.redVsBlue((new Pose2d(1.5, -0.9, new Rotation2d(Math.toRadians(180.0))))))
         );
     }
 }

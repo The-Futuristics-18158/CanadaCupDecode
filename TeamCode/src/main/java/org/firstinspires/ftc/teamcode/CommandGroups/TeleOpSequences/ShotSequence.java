@@ -29,7 +29,7 @@ public class ShotSequence extends SequentialCommandGroup {
 
                 new Pause(0.25),
 
-                new InstantCommand(()-> RobotContainer.intake.intakeRun()),
+                new InstantCommand(()-> RobotContainer.intake.intakeRunReducedSpeed()),
 
                 new Pause(2.0)
         );

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
+import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
 import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.VaccuumMode;
@@ -212,6 +213,8 @@ public class RobotContainer {
         mytrigger.whileActiveOnce(new ReverseIntakeCommand());
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
+
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new HuntModeAuto());
 
 //             -------------------------- Test Buttions/Manual Controls --------------------------
 
