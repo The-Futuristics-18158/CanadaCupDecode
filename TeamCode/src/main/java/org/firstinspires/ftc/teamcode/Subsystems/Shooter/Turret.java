@@ -105,6 +105,8 @@ public class Turret extends SubsystemBase {
         // i=0.05
         // d=0.0
 
+        turret.setPositionPIDFCoefficients(15.0);
+
         // temporary
         //double p = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).p;
         //double i = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).i;

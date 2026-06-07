@@ -26,9 +26,9 @@ public class VaccuumMode extends CommandBase {
     public void execute() {
         // Calls the shotblock getter function then sets the opposite when called.
         if (RobotContainer.shotblock.ShotBlocked()){
-            RobotContainer.shotblock.Block();
-        }else {
             RobotContainer.shotblock.Unblock();
+        }else {
+            RobotContainer.shotblock.Block();
         }
 
         // Calls the Ramp getter function then sets the opposite when called.

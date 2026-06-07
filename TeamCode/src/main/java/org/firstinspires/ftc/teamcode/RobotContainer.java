@@ -209,7 +209,7 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new IntakeCommand());
 
         Trigger mytrigger = new Trigger(()-> (RobotContainer.ActiveOpMode.gamepad1.left_trigger > 0.5));
-        mytrigger.whenActive(new ReverseIntakeCommand());
+        mytrigger.whileActiveOnce(new ReverseIntakeCommand());
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
 

@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
         // Creates the motor using the hardware map
         intakeMotor = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
         // Sets motor direction
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         // Set motor power
@@ -104,7 +104,7 @@ public class Intake extends SubsystemBase {
     public void intakeRunReducedSpeed() { TargetSpeed = 0.0;}
 
     /**Run the intake at set speed (rps)*/
-    public void intakeReverse(){TargetSpeed = 45.0;}
+    public void intakeReverse(){TargetSpeed = -45.0;}
 
     /**Stop intake*/
     public void intakeStop(){

@@ -16,7 +16,7 @@ public class IntakeSequence extends SequentialCommandGroup {
 
     // constructor
     public IntakeSequence() {
-        addRequirements(RobotContainer.drivesystem);
+        //addRequirements(RobotContainer.drivesystem);
         addRequirements(RobotContainer.ramplift);
         addRequirements(RobotContainer.intake);
 
