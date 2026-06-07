@@ -18,7 +18,9 @@ public class ShotSequence extends SequentialCommandGroup {
     // constructor
     public ShotSequence() {
 
-        addRequirements(RobotContainer.);
+        addRequirements(RobotContainer.shotblock);
+        addRequirements(RobotContainer.intake);
+        addRequirements(RobotContainer.ramplift);
 
         addCommands (
                 new InstantCommand(()->RobotContainer.shotblock.Unblock()),

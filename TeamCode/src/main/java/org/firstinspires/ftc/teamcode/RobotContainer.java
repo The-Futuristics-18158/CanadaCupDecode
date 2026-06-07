@@ -19,6 +19,8 @@ import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.VaccuumMode;
+import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
+import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Flywheel;
@@ -89,11 +91,10 @@ public class RobotContainer {
     public static Flywheel shooter;
     public static Turret turret;
 
-    //public static LimeLight limeLight;
-    //public static RampCamera rampCamera;
+    public static LimeLight limeLight;
+    public static RampCamera rampCamera;
     //public static DistanceSensor distance;
     public static GoalTargeting targeting;
-    //public static Turret turret;
     //public static ClimbSubsystem climb;
     //public static Blinkin blinkin;
 
@@ -163,9 +164,8 @@ public class RobotContainer {
         shooter = new Flywheel();
         turret = new Turret();
 
-
-        //limeLight = new LimeLight();
-        //rampCamera = new RampCamera("RampCam");
+        limeLight = new LimeLight();
+        rampCamera = new RampCamera("RampCam");
         //distance = new DistanceSensor();
         targeting = new GoalTargeting();
         //climb = new ClimbSubsystem();
@@ -223,60 +223,6 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()-0.01)));
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()+0.01)));
 
-
-        //      -------------------------- Previusly Used --------------------------
-
-        // set default shooter speed control
-        //shooter.setDefaultCommand(new DefaultShooterSpeed());
-
-
-//        //Raise/Lower Ramp
-//        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> ramplift.Raise()));
-//        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> ramplift.Lower()));
-//
-//        //shooter
-//        driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->shooter.SetFlywheelSpeed(720.0)));
-//        driverOp.getGamepadButton(GamepadKeys.Button.A).whenReleased(new InstantCommand(()->shooter.SetFlywheelSpeed(0.0)));
-
-//        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeRun()));
-//        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
-//
-//        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeReverse()));
-//        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
-
-//
-//        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
-//        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(-90.0)));
-
-
-        // ***********************************************
-        // Stuff from previous project we may/may not need
-        // ***********************************************
-
-        // Shoot Green
-        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootGreen());
-        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new FastShootAll());
-
-        // Reset odometry to apriltag before shooting all according to obelisk pattern
-//        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
-//                                                                         new ResetOdometryXYAngle(),
-//                                                                        new FastShootAll() ));
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()-10)));
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> turret.moveTurret(turret.getTurretDegrees()+10)));
-
-        // Although this would normally be a run whenHeld, as we want it to be perpertual... once on, its on.
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new TurnTurretToTarget());
-
-        // Hunt Mode
-        //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new HuntModeCommand());
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new JogBackIntakeFull());
-
-        // Manual Intake
-       // driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new IntakeCommand());
-
 //      -------------------------- (Driver) Turning To Exact Angle --------------------------
 //        // Turn To 0 degrees
 //        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new TurnTo(AutoFunctions.redVsBlue(0.0), false, 5.0));
@@ -289,12 +235,6 @@ public class RobotContainer {
 //
 //        // Turn To 270 degrees
 //        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new TurnTo(AutoFunctions.redVsBlue(90.0), false, 5.0));
-//
-//      -------------------------- Operator Controls --------------------------
-//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->  operatorControls.increaseRampTotal()));
-//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->  operatorControls.decreaseRampTotal()));
-//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()-> operatorControls.resetRampTotal()));
-//        toolOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()-> telemetrySubsystem.telemetryModeToggle()));
 
 
         //      -------------------------- Examples --------------------------
@@ -322,7 +262,7 @@ public class RobotContainer {
         // togglewhenPressed - turns command on and off at each button press
 
         // set limelight to apriltag pipeline
-        //limeLight.SetPipelineMode(0);
+        limeLight.SetPipelineMode(0);
     }
 
     /**Robot initialization for auto - This runs once at initialization of auto*/
@@ -331,13 +271,8 @@ public class RobotContainer {
         // robot is in auto init mode
         CurrentRobotMode = Modes.AutoInit;
 
-        // perform any autonomous-specific initialization here
-        // set limelight to obelisk pipeline
-        //if (RobotContainer.isRedAlliance == false){
-        //    limeLight.SetPipelineMode(1);
-        //}else{
-        //    limeLight.SetPipelineMode(2);
-        //}
+        // set limelight to apriltag pipeline
+        limeLight.SetPipelineMode(0);
     }
 
     /**Robot starting code for auto - This runs once at start of auto*/
@@ -347,7 +282,7 @@ public class RobotContainer {
         CurrentRobotMode = Modes.Auto;
 
         // set limelight to apriltag pipeline
-        //limeLight.SetPipelineMode(0);
+        limeLight.SetPipelineMode(0);
 
         // set default shooter speed control
         //shooter.setDefaultCommand(new DefaultShooterSpeed());
