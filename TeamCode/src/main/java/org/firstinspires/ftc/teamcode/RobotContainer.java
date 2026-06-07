@@ -108,7 +108,7 @@ public class RobotContainer {
     static List<LynxModule> allHubs;
 
     // Robot Modes
-    public enum Modes { Off, AutoInit, Auto, TeleOp}
+    public enum Modes { Off, AutoInit, Auto, TeleOpInit, TeleOp}
     private static Modes CurrentRobotMode;
 
     public static double intervaltime;
@@ -266,6 +266,14 @@ public class RobotContainer {
 
         // set limelight to apriltag pipeline
         limeLight.SetPipelineMode(0);
+    }
+
+    /**Robot starting code for teleop - This runs once at start of teleop*/
+    public static void Start_TeleOp() {
+
+        // robot is in teleop mode
+        CurrentRobotMode = Modes.TeleOp;
+
     }
 
     /**Robot initialization for auto - This runs once at initialization of auto*/

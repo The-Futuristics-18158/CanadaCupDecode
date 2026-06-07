@@ -43,7 +43,8 @@ public class Intake extends SubsystemBase {
     // motor controller state values
     private double ierror;
 
-
+    // agitator counter
+    private int agitatorcount;
 
     /** Place code here to initialize subsystem */
     public Intake() {
@@ -59,6 +60,9 @@ public class Intake extends SubsystemBase {
         TargetSpeed = 0.0;
         // reset PIF controller
         ierror = 0.0;
+
+        agitatorcount = 0;
+
     }
 
     /** Method called periodically by the scheduler
@@ -66,14 +70,24 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
 
+        agitatorcount++;
+        if (agitatorcount > 10)
+            agitatorcount = 0;
+
+        double revisedtarget;
+        if (TargetSpeed < 90.0 && agitatorcount<2)
+            revisedtarget = 0;
+        else
+            revisedtarget = TargetSpeed;
+
         // sets motor speed in rps (=28xticks/s)
         CurrentSpeed = intakeMotor.getVelocity() * INV_TICKS_PER_ROTATION;
-        double error = TargetSpeed - CurrentSpeed;
+        double error = revisedtarget - CurrentSpeed;//TargetSpeed - CurrentSpeed;
 
         // limit P and I action for large errors
         // to reduce stress on gears
-        if (error > 20) error = 20;
-        if (error < -20) error = -20;
+        //if (error > 20) error = 20;
+        //if (error < -20) error = -20;
 
         // integrated error
         ierror += igain * error;
@@ -83,11 +97,11 @@ public class Intake extends SubsystemBase {
         if (ierror < -0.2) ierror=-0.2;
 
         // set intake motor power (PIF controller)
-        CurrentPower = fgain * TargetSpeed + pgain * error + ierror;
+        CurrentPower = fgain * revisedtarget + pgain * error + ierror;
         intakeMotor.setPower(CurrentPower);
 
         PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", TargetSpeed);
+        PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", revisedtarget);
         PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
         PanelsTelemetry.INSTANCE.getTelemetry().update();
     }
@@ -101,7 +115,7 @@ public class Intake extends SubsystemBase {
     public void intakeRun(){ TargetSpeed = 90.0;}
 
     /**Run the intake at set speed (rps)*/
-    public void intakeRunReducedSpeed() { TargetSpeed = 45.0;}
+    public void intakeRunReducedSpeed() { TargetSpeed = 35.0;}
 
     /**Run the intake at set speed (rps)*/
     public void intakeReverse(){TargetSpeed = -45.0;}
