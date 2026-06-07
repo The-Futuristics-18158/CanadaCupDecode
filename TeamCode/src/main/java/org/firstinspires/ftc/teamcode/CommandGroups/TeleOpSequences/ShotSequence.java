@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CommandGroups.Shoot;
+package org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -17,6 +17,8 @@ public class ShotSequence extends SequentialCommandGroup {
 
     // constructor
     public ShotSequence() {
+
+        addRequirements(RobotContainer.);
 
         addCommands (
                 new InstantCommand(()->RobotContainer.shotblock.Unblock()),

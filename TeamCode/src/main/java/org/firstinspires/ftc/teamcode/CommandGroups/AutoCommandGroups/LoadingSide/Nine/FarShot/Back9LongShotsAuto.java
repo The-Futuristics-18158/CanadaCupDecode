@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.Fast.FastShootAll;
+import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAutoZeroAngle;
@@ -28,7 +28,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))), // + or - 20 degrees
 
 //      -------------------------- Artifact Cycle #1 --------------------------
-                new FastShootAll(),
+                new ShotSequence(),
 
 //              // Move to intake point
                 new MoveToPose(
@@ -46,7 +46,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))), // + or - 20 degrees
 
 //      -------------------------- Artifact Cycle #2 --------------------------
-                new FastShootAll(),
+                new ShotSequence(),
 
                 // Move to pickup
                 new MoveToPose(
@@ -64,7 +64,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))),
 
 //      -------------------------- Artifact Cycle #3 --------------------------
-                new FastShootAll(),
+                new ShotSequence(),
 
                 // Leave
                 new MoveToPose(

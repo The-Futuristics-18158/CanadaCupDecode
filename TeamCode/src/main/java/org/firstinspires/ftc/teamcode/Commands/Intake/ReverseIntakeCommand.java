@@ -7,19 +7,20 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
 // command template
-public class AdvanceIntake extends CommandBase {
+public class ReverseIntakeCommand extends CommandBase {
 
     private ElapsedTime timer;
     boolean finished;
 
     // constructor
-    public AdvanceIntake() {
+    public ReverseIntakeCommand() {
 
-        // add subsystem requirements (if any) - for example:
-        //addRequirements(RobotContainer.drivesystem);
-        //addRequirements(RobotContainer.intake);
-        timer = new ElapsedTime();
-        timer.reset();
+//        // add subsystem requirements (if any) - for example:
+//        //addRequirements(RobotContainer.drivesystem);
+        addRequirements(RobotContainer.intake);
+//
+//        timer = new ElapsedTime();
+//        timer.reset();
 
     }
 
@@ -27,33 +28,33 @@ public class AdvanceIntake extends CommandBase {
     @Override
     public void initialize() {
 
-        timer.reset();
-        finished = false;
+//        timer.reset();
+//        finished = false;
 
     }
 
     // This method is called periodically while command is active
     @Override
     public void execute() {
-        if (timer.seconds()>2.5){ //May need to adjust timeout
-            finished = true;
-            //RobotContainer.intake.intakeStop();
-        }else {
-            //RobotContainer.intake.intakeRun();
-        }
+
+        RobotContainer.intake.intakeReverse();
+
     }
 
     // This method to return true only when command is to finish. Otherwise return false
     @Override
     public boolean isFinished() {
-        return finished;
+
+        return true;
+
     }
 
     // This method is called once when command is finished.
     @Override
     public void end(boolean interrupted) {
 
-        //RobotContainer.intake.intakeStop();
+        RobotContainer.intake.intakeStop();
+
     }
 
 }

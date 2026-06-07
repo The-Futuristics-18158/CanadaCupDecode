@@ -1,44 +1,56 @@
 package org.firstinspires.ftc.teamcode.Commands.Intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
-// This command runs the intake.  This command does not end (runs forever).
-// Command intended to be used in a racegroup with other commands.
-public class IntakeRunEndless extends CommandBase {
+// command template
+public class VaccuumMode extends CommandBase {
 
     // constructor
-    public IntakeRunEndless() {
+    public VaccuumMode() {
 
         // add subsystem requirements (if any) - for example:
-        //addRequirements(RobotContainer.intake);
+        //addRequirements(RobotContainer.drivesystem);
     }
 
     // This method is called once when command is started
     @Override
     public void initialize() {
 
-        //RobotContainer.intake.intakeRun();
     }
 
     // This method is called periodically while command is active
     @Override
     public void execute() {
+        // Calls the shotblock getter function then sets the opposite when called.
+        if (RobotContainer.shotblock.ShotBlocked()){
+            RobotContainer.shotblock.Block();
+        }else {
+            RobotContainer.shotblock.Unblock();
+        }
 
+        // Calls the Ramp getter function then sets the opposite when called.
+        if (RobotContainer.ramplift.RampIsUp()){
+            RobotContainer.ramplift.Lower();
+        }else {
+            RobotContainer.ramplift.Raise();
+        }
     }
 
     // This method to return true only when command is to finish. Otherwise return false
     @Override
     public boolean isFinished() {
-        return false;
+
+        return true;
+
     }
 
     // This method is called once when command is finished.
     @Override
     public void end(boolean interrupted) {
 
-        //RobotContainer.intake.intakeStop();
     }
 
 }

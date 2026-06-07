@@ -49,4 +49,12 @@ public class ShotBlock extends SubsystemBase {
      */
     public void Unblock(){shotBlockServo.setPosition(0.35);}
 
+    public boolean ShotBlocked(){
+        if (shotBlockServo.getPosition() >= 0.0 && shotBlockServo.getPosition() < 0.35){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 }

@@ -49,4 +49,12 @@ public class RampLift extends SubsystemBase {
      */
     public void Lower(){RampServo.setPosition(LoweredPosition);}
 
+    public boolean RampIsUp(){
+        if (RampServo.getPosition() >= 1.0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 }

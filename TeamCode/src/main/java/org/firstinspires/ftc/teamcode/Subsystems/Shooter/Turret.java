@@ -161,4 +161,14 @@ public class Turret extends SubsystemBase {
         return turret.getCurrentPosition();
     }
 
+    public boolean IsTracking(){
+        if (turret.getTargetPosition() != 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
+
 }

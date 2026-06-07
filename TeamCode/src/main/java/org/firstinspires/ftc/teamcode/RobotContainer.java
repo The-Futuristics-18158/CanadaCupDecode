@@ -11,13 +11,14 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.IntakeSequence;
-import org.firstinspires.ftc.teamcode.CommandGroups.Shoot.ShotSequence;
+import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.IntakeSequence;
+import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
-import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
+import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.Intake.VaccuumMode;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Flywheel;
@@ -26,7 +27,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Shooter.RampLift;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.ShotBlock;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Turret;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.Odometry.DriveTrain;
+import org.firstinspires.ftc.teamcode.Subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Gyro;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Odometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.PinpointOdometry;
@@ -87,12 +88,11 @@ public class RobotContainer {
     public static Intake intake;
     public static Flywheel shooter;
     public static Turret turret;
-    public static RampCamera rampCamera;
-    public static LimeLight limeLight;
-    public static GoalTargeting targeting;
 
-
+    //public static LimeLight limeLight;
+    //public static RampCamera rampCamera;
     //public static DistanceSensor distance;
+    public static GoalTargeting targeting;
     //public static Turret turret;
     //public static ClimbSubsystem climb;
     //public static Blinkin blinkin;
@@ -162,12 +162,12 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new Flywheel();
         turret = new Turret();
-        rampCamera = new RampCamera("RampCam");
-        limeLight = new LimeLight();
-        targeting = new GoalTargeting();
 
 
+        //limeLight = new LimeLight();
+        //rampCamera = new RampCamera("RampCam");
         //distance = new DistanceSensor();
+        targeting = new GoalTargeting();
         //climb = new ClimbSubsystem();
         //blinkin = new Blinkin();
         //artifactCamera = new ArtifactCamera("CookieCam");
@@ -187,20 +187,33 @@ public class RobotContainer {
         // set drivetrain default command to manual driving mode
         drivesystem.setDefaultCommand(new ManualDrive());
 
-        // set default shooter speed control
-        //shooter.setDefaultCommand(new DefaultShooterSpeed());
+//              -------------------------- (Driver) Odometry Reset --------------------------
 
-        //      -------------------------- Driver Controls --------------------------
-
-        // Reset odometry
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> odometry.setCurrentPos
                 (AutoFunctions.redVsBlue(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(-90.0)))))));
 
-        // Climb in three seconds
-        //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ClimbCommand());
+//              -------------------------- (Driver) Turret System --------------------------
+
+        // (Turret Reset) does not exist yet but when it does it gose on start.
+        //driverOp.getGamepadButton(GamepadKeys.Button.START).whenPressed(new TurretReset);
+
+//              -------------------------- (Driver) Shooting Controls  --------------------------
+
+        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new ShotSequence());
+
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new VaccuumMode());
 
 
-        //      -------------------------- (Driver) Shooting Controls  --------------------------
+//              -------------------------- (Driver) Intake Systems --------------------------
+
+        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new IntakeCommand());
+
+        Trigger mytrigger = new Trigger(()-> (RobotContainer.ActiveOpMode.gamepad1.left_trigger > 0.5));
+        mytrigger.whenActive(new ReverseIntakeCommand());
+
+        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
+
+//             -------------------------- Test Buttions/Manual Controls --------------------------
 
         // Block/Unblock
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->shotblock.Unblock()));
@@ -210,34 +223,30 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()-0.01)));
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->hoodtilt.SetHoodPosition(hoodtilt.GetHoodPosition()+0.01)));
 
-        // Raise/Lower Ramp
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> ramplift.Raise()));
-        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> ramplift.Lower()));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new ShotSequence());
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new IntakeSequence());
+        //      -------------------------- Previusly Used --------------------------
 
-        // shooter
-        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->shooter.SetFlywheelSpeed(720.0)));
-        //driverOp.getGamepadButton(GamepadKeys.Button.A).whenReleased(new InstantCommand(()->shooter.SetFlywheelSpeed(0.0)));
+        // set default shooter speed control
+        //shooter.setDefaultCommand(new DefaultShooterSpeed());
 
 
-        //      -------------------------- (Driver) Intake Systems --------------------------
+//        //Raise/Lower Ramp
+//        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()-> ramplift.Raise()));
+//        driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()-> ramplift.Lower()));
+//
+//        //shooter
+//        driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->shooter.SetFlywheelSpeed(720.0)));
+//        driverOp.getGamepadButton(GamepadKeys.Button.A).whenReleased(new InstantCommand(()->shooter.SetFlywheelSpeed(0.0)));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeRun()));
-        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
+//        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeRun()));
+//        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
+//
+//        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeReverse()));
+//        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new InstantCommand(()-> intake.intakeReverse()));
-        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(new InstantCommand(()-> intake.intakeStop()));
-
-
-        //      -------------------------- (Driver) Turret System --------------------------
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
-        //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(-90.0)));
-
-
-
+//
+//        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(90.0)));
+//        driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(new InstantCommand(()-> turret.moveTurret(-90.0)));
 
 
         // ***********************************************
@@ -291,7 +300,7 @@ public class RobotContainer {
         //      -------------------------- Examples --------------------------
         // bind commands to buttons
         // bind gyro reset to back button.
-        // Note: since reset is very simple command, we can just use 'InstantCommand'
+        // Note: since reset is very simple command, we can just use 'InstandCommand'
         // instead of creating a full command, just to run one line of java code.
 
         // example turn to command
@@ -313,7 +322,7 @@ public class RobotContainer {
         // togglewhenPressed - turns command on and off at each button press
 
         // set limelight to apriltag pipeline
-        limeLight.SetPipelineMode(0);
+        //limeLight.SetPipelineMode(0);
     }
 
     /**Robot initialization for auto - This runs once at initialization of auto*/
@@ -322,9 +331,13 @@ public class RobotContainer {
         // robot is in auto init mode
         CurrentRobotMode = Modes.AutoInit;
 
-        // set limelight pipeline
-        limeLight.SetPipelineMode(0);
-
+        // perform any autonomous-specific initialization here
+        // set limelight to obelisk pipeline
+        //if (RobotContainer.isRedAlliance == false){
+        //    limeLight.SetPipelineMode(1);
+        //}else{
+        //    limeLight.SetPipelineMode(2);
+        //}
     }
 
     /**Robot starting code for auto - This runs once at start of auto*/
@@ -334,7 +347,7 @@ public class RobotContainer {
         CurrentRobotMode = Modes.Auto;
 
         // set limelight to apriltag pipeline
-        limeLight.SetPipelineMode(0);
+        //limeLight.SetPipelineMode(0);
 
         // set default shooter speed control
         //shooter.setDefaultCommand(new DefaultShooterSpeed());

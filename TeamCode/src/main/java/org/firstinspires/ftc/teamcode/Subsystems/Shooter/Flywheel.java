@@ -36,10 +36,12 @@ public class Flywheel extends SubsystemBase {
     public final double PGain = 6.0*0.00016667;
     public final double IGain = 0.0002;
 
+
     // integrated error
     private double IError;
     private ElapsedTime timer;
 
+    //private boolean FlywheelTrackingOn = true;
 
     /** Place code here to initialize subsystem */
     public Flywheel() {
@@ -67,6 +69,8 @@ public class Flywheel extends SubsystemBase {
 
         // reset target speed (rpm)
         TargetSpeed=0.0;
+
+
     }
 
     /** Method called periodically by the scheduler
@@ -74,49 +78,55 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // our current speed
-        CurrentSpeed = flywheelMotorRight.getVelocity() * TICKSPStoRPM;
+        //if (FlywheelTrackingOn){
 
-        // our current speed error (in RPM)
-        double SpeedError = TargetSpeed - CurrentSpeed;
+            // our current speed
+            CurrentSpeed = flywheelMotorRight.getVelocity() * TICKSPStoRPM;
 
-        // integrated error
-        // determine time since last iteration
-        double dt = timer.seconds();
-        timer.reset();
-        // integrate speed error
-        IError += IGain * SpeedError * 0.02;
-        // anti-windup to prevent overshoots
-        if (SpeedError < -50.0 && IError > 0.0)
-            IError *=0.90;
-        if (SpeedError > 50.0 && IError < 0.0)
-            IError *=0.90;
-        // integrated error limiter
-        if (IError > 0.15) IError=0.15;
-        if (IError < -0.1) IError=-0.1;
+            // our current speed error (in RPM)
+            double SpeedError = TargetSpeed - CurrentSpeed;
 
-        // PIF controller
-        double NewPower = FsGain +                    // static feedforward
-                FvGain * TargetSpeed +      // speed feedforward
-                PGain * SpeedError +        // proportional gain
-                IError;                     // integrated error
+            // integrated error
+            // determine time since last iteration
+            double dt = timer.seconds();
+            timer.reset();
+            // integrate speed error
+            IError += IGain * SpeedError * 0.02;
+            // anti-windup to prevent overshoots
+            if (SpeedError < -50.0 && IError > 0.0)
+                IError *=0.90;
+            if (SpeedError > 50.0 && IError < 0.0)
+                IError *=0.90;
+            // integrated error limiter
+            if (IError > 0.15) IError=0.15;
+            if (IError < -0.1) IError=-0.1;
+
+            // PIF controller
+            double NewPower = FsGain +          // static feedforward
+                    FvGain * TargetSpeed +      // speed feedforward
+                    PGain * SpeedError +        // proportional gain
+                    IError;                     // integrated error
 
 
-        // only drive motor in positive direction, otherwise let it coast
-        if (SpeedError<-50.0)
-            NewPower = 0.0;
+            // only drive motor in positive direction, otherwise let it coast
+            if (SpeedError<-50.0)
+                NewPower = 0.0;
 
-        // limit power for now
-        //if (NewPower>0.7)  NewPower = 0.7;
-        //if (NewPower<-0.7) NewPower = -0.7;
+            // limit power for now
+            //if (NewPower>0.7)  NewPower = 0.7;
+            //if (NewPower<-0.7) NewPower = -0.7;
 
-        flywheelMotorRight.setPower(NewPower);
-        flywheelMotorLeft.setPower(NewPower);
+            flywheelMotorRight.setPower(NewPower);
+            flywheelMotorLeft.setPower(NewPower);
 
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelSpeed", CurrentSpeed);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelTarget", TargetSpeed);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelPower", NewPower);
-        //PanelsTelemetry.INSTANCE.getTelemetry().update();
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelSpeed", CurrentSpeed);
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelTarget", TargetSpeed);
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelPower", NewPower);
+
+//        }else{
+//            TargetSpeed = 0.0;
+//        }
+
     }
 
     // Place special subsystem methods here
@@ -143,5 +153,15 @@ public class Flywheel extends SubsystemBase {
     public double GetFlyWheelTargetSpeed() {
         return TargetSpeed;
     }
+
+//    public boolean GetSpeedTrackingOn(){
+//
+//        return FlywheelTrackingOn;
+//    }
+
+//    public void ToggleTrackng(){
+//        // same as an if staitment
+//        FlywheelTrackingOn = !FlywheelTrackingOn;
+//    }
 
 }
