@@ -64,27 +64,41 @@ public class Turret extends SubsystemBase {
         if (TurretTargetDegrees<MIN_ANGLE_DEG)  TurretTargetDegrees=MIN_ANGLE_DEG;
         if (TurretTargetDegrees>MAX_ANGLE_DEG)  TurretTargetDegrees=MAX_ANGLE_DEG;
 
-        // determine target position in ticks
-        int targetPosition = (int)(TurretTargetDegrees * DEGREES_TO_TICKS);
+        // if robot is not in auto or teleop, then force turret to be unpowered
+        if (RobotContainer.GetCurrentMode() != RobotContainer.Modes.Auto &&
+                RobotContainer.GetCurrentMode() != RobotContainer.Modes.TeleOp)
+        {
+            turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            turret.setPower(0.0);
+        }
+        else
+        {
+            turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            turret.setPower(1.0);
 
-        // determine current position error (in degrees)
-        double turretRemainingError  = TurretTargetDegrees- getTurretDegrees();;
 
-        // create variable PI control for remaining error and smooth operation
-        double variableP = -0.47 * turretRemainingError + 99.37; // -0.71 * x + 107.86 was a bit too aggressive
-        double variableI = -0.047 * turretRemainingError + 9.937; // -0.071 * x + 10.786 was a bit too aggressive
+            // determine target position in ticks
+            int targetPosition = (int) (TurretTargetDegrees * DEGREES_TO_TICKS);
 
-        // enable mins
-        variableP = Math.max(15.0, variableP);
-        variableI = Math.max(1.5, variableI);
+            // determine current position error (in degrees)
+            double turretRemainingError = TurretTargetDegrees - getTurretDegrees();
+            ;
 
-        // enable maxes
-        variableP = Math.min(90.0, variableP);
-        variableI = Math.min(15.0, variableI);
-        //variableI = Math.min(0.0, variableI);
+            // create variable PI control for remaining error and smooth operation
+            double variableP = -0.47 * turretRemainingError + 99.37; // -0.71 * x + 107.86 was a bit too aggressive
+            double variableI = -0.047 * turretRemainingError + 9.937; // -0.071 * x + 10.786 was a bit too aggressive
 
-        // set variable PI
-        turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
+            // enable mins
+            variableP = Math.max(15.0, variableP);
+            variableI = Math.max(1.5, variableI);
+
+            // enable maxes
+            variableP = Math.min(90.0, variableP);
+            variableI = Math.min(15.0, variableI);
+            //variableI = Math.min(0.0, variableI);
+
+            // set variable PI
+            turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
 
 //      // earlier non-continuous PIDF tuning for the turret
 //        // adjust PIDF for large moves and small for speed and stability
@@ -96,28 +110,29 @@ public class Turret extends SubsystemBase {
 //            turret.setVelocityPIDFCoefficients(90.0, 9.0, 0.0, 0.0);// Short distance settings are (p:90.0, i:9.0.0, d:0.0)
 //        }
 
-        // move the turret motor
-        turret.setTargetPosition(targetPosition);
+            // move the turret motor
+            turret.setTargetPosition(targetPosition);
 
-        // default positional control PID values
-        // Jun 6/2026 KN
-        // p=10.0;
-        // i=0.05
-        // d=0.0
+            // default positional control PID values
+            // Jun 6/2026 KN
+            // p=10.0;
+            // i=0.05
+            // d=0.0
 
-        turret.setPositionPIDFCoefficients(15.0);
+            turret.setPositionPIDFCoefficients(15.0);
 
-        // temporary
-        //double p = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).p;
-        //double i = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).i;
-        //double d = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).d;
-        //RobotContainer.telemetrySubsystem.addData("default P",p, true);
-        //RobotContainer.telemetrySubsystem.addData("default I",i, true);
-        //RobotContainer.telemetrySubsystem.addData("default D",d, true);
+            // temporary
+            //double p = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).p;
+            //double i = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).i;
+            //double d = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).d;
+            //RobotContainer.telemetrySubsystem.addData("default P",p, true);
+            //RobotContainer.telemetrySubsystem.addData("default I",i, true);
+            //RobotContainer.telemetrySubsystem.addData("default D",d, true);
 
-        // temporary - display turret position and target on panels for graphing
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
+            // temporary - display turret position and target on panels for graphing
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
+        }
     }
 
     /** Switches off Turret */
