@@ -37,7 +37,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.98, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new HuntModeAuto(1.5),
+                new HuntModeAuto(1.75),
 
                 // Move to shoot
                 new MoveToPose(
@@ -55,7 +55,7 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.38, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
 
-                new HuntModeAuto(1.5),
+                new HuntModeAuto(1.75),
 
                 // Move to shoot
                 new MoveToPose(

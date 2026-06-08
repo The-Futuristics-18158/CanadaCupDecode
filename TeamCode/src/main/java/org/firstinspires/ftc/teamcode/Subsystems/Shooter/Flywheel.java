@@ -78,7 +78,18 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void periodic() {
 
-        //if (FlywheelTrackingOn){
+        // if robot is not in auto or teleop, then force flywheel to be unpowered
+        if (RobotContainer.GetCurrentMode()!= RobotContainer.Modes.Auto &&
+            RobotContainer.GetCurrentMode()!= RobotContainer.Modes.TeleOp)
+        {
+            flywheelMotorRight.setPower(0.0);
+            flywheelMotorLeft.setPower(0.0);
+        }
+        else {
+
+            // only perform flywheel motor control if in teleop or auto
+
+            //if (FlywheelTrackingOn){
 
             // our current speed
             CurrentSpeed = flywheelMotorRight.getVelocity() * TICKSPStoRPM;
@@ -94,12 +105,12 @@ public class Flywheel extends SubsystemBase {
             IError += IGain * SpeedError * 0.02;
             // anti-windup to prevent overshoots
             if (SpeedError < -50.0 && IError > 0.0)
-                IError *=0.90;
+                IError *= 0.90;
             if (SpeedError > 50.0 && IError < 0.0)
-                IError *=0.90;
+                IError *= 0.90;
             // integrated error limiter
-            if (IError > 0.15) IError=0.15;
-            if (IError < -0.1) IError=-0.1;
+            if (IError > 0.15) IError = 0.15;
+            if (IError < -0.1) IError = -0.1;
 
             // PIF controller
             double NewPower = FsGain +          // static feedforward
@@ -109,12 +120,8 @@ public class Flywheel extends SubsystemBase {
 
 
             // only drive motor in positive direction, otherwise let it coast
-            if (SpeedError<-50.0)
+            if (SpeedError < -50.0)
                 NewPower = 0.0;
-
-            // limit power for now
-            //if (NewPower>0.7)  NewPower = 0.7;
-            //if (NewPower<-0.7) NewPower = -0.7;
 
             flywheelMotorRight.setPower(NewPower);
             flywheelMotorLeft.setPower(NewPower);
@@ -122,10 +129,7 @@ public class Flywheel extends SubsystemBase {
             PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelSpeed", CurrentSpeed);
             PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelTarget", TargetSpeed);
             PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelPower", NewPower);
-
-//        }else{
-//            TargetSpeed = 0.0;
-//        }
+        }
 
     }
 

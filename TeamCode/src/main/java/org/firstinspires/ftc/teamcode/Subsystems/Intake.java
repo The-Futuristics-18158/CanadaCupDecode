@@ -43,7 +43,9 @@ public class Intake extends SubsystemBase {
     // motor controller state values
     private double ierror;
 
-
+    // agitator
+    private boolean AgitateMode;
+    private int AgitatorCount;
 
     /** Place code here to initialize subsystem */
     public Intake() {
@@ -59,6 +61,10 @@ public class Intake extends SubsystemBase {
         TargetSpeed = 0.0;
         // reset PIF controller
         ierror = 0.0;
+
+        AgitatorCount = 0;
+        AgitateMode = false;
+
     }
 
     /** Method called periodically by the scheduler
@@ -66,49 +72,88 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // sets motor speed in rps (=28xticks/s)
-        CurrentSpeed = intakeMotor.getVelocity() * INV_TICKS_PER_ROTATION;
-        double error = TargetSpeed - CurrentSpeed;
+        // counter used to generate on/off duty cycle of agitator
+        AgitatorCount++;
+        if (AgitatorCount > 10)
+            AgitatorCount = 0;
 
-        // limit P and I action for large errors
-        // to reduce stress on gears
-        if (error > 20) error = 20;
-        if (error < -20) error = -20;
 
-        // integrated error
-        ierror += igain * error;
+        // if robot is not in auto or teleop, then force flywheel to be unpowered
+        if (RobotContainer.GetCurrentMode()!= RobotContainer.Modes.Auto &&
+                RobotContainer.GetCurrentMode()!= RobotContainer.Modes.TeleOp)
+            intakeMotor.setPower(0.0);
 
-        // anti-windup limiter
-        if (ierror > 0.2) ierror=0.2;
-        if (ierror < -0.2) ierror=-0.2;
+        else {
 
-        // set intake motor power (PIF controller)
-        CurrentPower = fgain * TargetSpeed + pgain * error + ierror;
-        intakeMotor.setPower(CurrentPower);
+            // do we revise target (Agitate) or leave as-is?
+            double revisedtarget;
+            if (AgitateMode && AgitatorCount < 2)
+                revisedtarget = 0;
+            else
+                revisedtarget = TargetSpeed;
 
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", TargetSpeed);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
-        PanelsTelemetry.INSTANCE.getTelemetry().update();
+            // sets motor speed in rps (=28xticks/s)
+            CurrentSpeed = intakeMotor.getVelocity() * INV_TICKS_PER_ROTATION;
+            double error = revisedtarget - CurrentSpeed;//TargetSpeed - CurrentSpeed;
+
+            // limit P and I action for large errors
+            // to reduce stress on gears
+            //if (error > 20) error = 20;
+            //if (error < -20) error = -20;
+
+            // integrated error
+            ierror += igain * error;
+
+            // anti-windup limiter
+            if (ierror > 0.2) ierror = 0.2;
+            if (ierror < -0.2) ierror = -0.2;
+
+            // set intake motor power (PIF controller)
+            CurrentPower = fgain * revisedtarget + pgain * error + ierror;
+            intakeMotor.setPower(CurrentPower);
+
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", revisedtarget);
+            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
+            PanelsTelemetry.INSTANCE.getTelemetry().update();
+        }
     }
 
     // Place special subsystem methods here
 
     /** Sets speed of intake in motor rps */
-    public void intakeSetSpeed(double speed) { TargetSpeed = speed;}
+    public void intakeSetSpeed(double speed) { intakeSetSpeed(speed, false);}
+    public void intakeSetSpeed(double speed, boolean Agitate) {
+        AgitateMode = Agitate;
+        TargetSpeed = speed;
+    }
+
 
     /**Run the intake at set speed (rps)*/
-    public void intakeRun(){ TargetSpeed = 90.0;}
+    public void intakeRun(){ intakeRun(false);}
+    public void intakeRun(boolean Agitate){
+        AgitateMode = Agitate;
+        TargetSpeed = 90.0;
+    }
 
     /**Run the intake at set speed (rps)*/
-    public void intakeRunReducedSpeed() { TargetSpeed = 45.0;}
+    public void intakeRunReducedSpeed() { intakeRunReducedSpeed(false);}
+    public void intakeRunReducedSpeed(boolean Agitate) {
+        AgitateMode = Agitate;
+        TargetSpeed = 35.0;
+    }
 
     /**Run the intake at set speed (rps)*/
-    public void intakeReverse(){TargetSpeed = -45.0;}
+    public void intakeReverse(){intakeReverse(false);}
+    public void intakeReverse(boolean Agitate) {
+        AgitateMode = Agitate;
+        TargetSpeed = -45.0;
+    }
 
     /**Stop intake*/
     public void intakeStop(){
         ResetController();
+        AgitateMode = false;
         TargetSpeed = 0.0;
     }
 
