@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -17,13 +18,16 @@ import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 //import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
+import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.VaccuumMode;
+import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Sensors.GoalTargeting;
+import org.firstinspires.ftc.teamcode.Subsystems.Sensors.UptakeSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Flywheel;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTilt;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.RampLift;
@@ -94,7 +98,7 @@ public class RobotContainer {
 
     public static LimeLight limeLight;
     public static RampCamera rampCamera;
-    //public static DistanceSensor distance;
+    public static UptakeSensor uptakeSensor;
     public static GoalTargeting targeting;
     //public static ClimbSubsystem climb;
     //public static Blinkin blinkin;
@@ -167,7 +171,7 @@ public class RobotContainer {
 
         limeLight = new LimeLight();
         rampCamera = new RampCamera("RampCam");
-        //distance = new DistanceSensor();
+        uptakeSensor = new UptakeSensor();
         targeting = new GoalTargeting();
         //climb = new ClimbSubsystem();
         //blinkin = new Blinkin();
@@ -202,19 +206,19 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new ShotSequence());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new VaccuumMode());
+        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new VaccuumMode());
 
 
 //              -------------------------- (Driver) Intake Systems --------------------------
 
-        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new IntakeCommand());
+        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new ParallelCommandGroup(new IntakeCommand(), new UptakeRampControle()));
 
         Trigger mytrigger = new Trigger(()-> (RobotContainer.ActiveOpMode.gamepad1.left_trigger > 0.5));
         mytrigger.whileActiveOnce(new ReverseIntakeCommand());
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new HuntModeAuto());
+        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new HuntModeCommand());
 
 //             -------------------------- Test Buttions/Manual Controls --------------------------
 

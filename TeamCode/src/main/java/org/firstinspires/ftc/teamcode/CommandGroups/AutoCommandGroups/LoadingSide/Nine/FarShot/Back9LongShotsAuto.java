@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
+import org.firstinspires.ftc.teamcode.CommandGroups.AutoCommandGroups.AutoIntakeSequence;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
@@ -37,7 +38,8 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.98, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new HuntModeAuto(1.75),
+                //new HuntModeAuto(1.75),
+                new AutoIntakeSequence(),
 
                 // Move to shoot
                 new MoveToPose(
@@ -55,7 +57,9 @@ public class Back9LongShotsAuto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.38, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
 
-                new HuntModeAuto(1.75),
+                //new HuntModeAuto(1.75),
+                new AutoIntakeSequence(),
+
 
                 // Move to shoot
                 new MoveToPose(

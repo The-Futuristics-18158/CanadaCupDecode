@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 import org.firstinspires.ftc.teamcode.Commands.Utility.Pause;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
@@ -16,27 +19,23 @@ public class IntakeSequence extends SequentialCommandGroup {
 
     // constructor
     public IntakeSequence() {
-        //addRequirements(RobotContainer.drivesystem);
-        addRequirements(RobotContainer.ramplift);
+        addRequirements(RobotContainer.drivesystem);
         addRequirements(RobotContainer.intake);
 
         addCommands (
-                new InstantCommand(()-> RobotContainer.ramplift.Lower()),
-
-                new Pause(0.25),
-
-                new InstantCommand(()-> RobotContainer.intake.intakeRun()),
-
-                new InstantCommand(()-> RobotContainer.drivesystem.RobotDrive(1.0, 0.0, 0.0)),
-
-                new Pause(3.0)
-
+                // Drive, intake and listen to your sensor all at the same time
+                new ParallelCommandGroup(
+                        new IntakeCommand(),
+                        new UptakeRampControle(),
+                        new InstantCommand(()-> RobotContainer.drivesystem.RobotDrive(1.0, 0.0, 0.0))
+                )
         );
     }
     @Override
     public void end(boolean interrupted){
         RobotContainer.ramplift.Lower();
         RobotContainer.intake.intakeStop();
+        RobotContainer.drivesystem.RobotDrive(0.0, 0.0, 0.0);
     }
 
 }

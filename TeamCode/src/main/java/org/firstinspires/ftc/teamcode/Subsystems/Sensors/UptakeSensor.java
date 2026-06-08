@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Subsystems.Sensors;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotContainer;
@@ -15,12 +16,12 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 public class UptakeSensor extends SubsystemBase {
 
     // Local objects and variables here
-    private Rev2mDistanceSensor uptakeSensor;
+    private RevColorSensorV3 uptakeSensor;
 
     /** Place code here to initialize subsystem */
     public UptakeSensor() {
 
-    uptakeSensor = RobotContainer.ActiveOpMode.hardwareMap.get(Rev2mDistanceSensor.class, "uptakeSensor");
+    uptakeSensor = RobotContainer.ActiveOpMode.hardwareMap.get(RevColorSensorV3.class, "uptakeSensor");
     uptakeSensor.initialize();
 
     }
@@ -39,10 +40,10 @@ public class UptakeSensor extends SubsystemBase {
     /**Uses the distance sensor to determine if an artifact is present on the ramp.
      * @return true if an artifact is detected, false otherwise
      */
-    public boolean isRampArtifactPresent(){
+    public boolean isUpakeArtifactPresent(){
         try {
-            double distance = uptakeSensor.getDistance(DistanceUnit.MM);
-            return (distance >= 55.0 && distance <= 130.0);
+            double distance = uptakeSensor.getDistance(DistanceUnit.CM);
+            return (distance < 5.0);
         } catch (Exception e) {
             // Log the error (if you can), and handle recovery
             RobotContainer.telemetrySubsystem.addData("uptake sensor Error", e.getMessage());
@@ -53,7 +54,7 @@ public class UptakeSensor extends SubsystemBase {
                 isUptakeSensorInitialized = false;
                 try {
                     // Re-fetch and re-initialize sensor
-                    uptakeSensor = RobotContainer.ActiveOpMode.hardwareMap.get(Rev2mDistanceSensor.class, "uptakeSensor");
+                    uptakeSensor = RobotContainer.ActiveOpMode.hardwareMap.get(RevColorSensorV3.class, "uptakeSensor");
                     uptakeSensor.initialize();
                     isUptakeSensorInitialized = true;
                 } catch (Exception ex) {

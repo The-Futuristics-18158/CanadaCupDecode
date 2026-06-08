@@ -32,11 +32,11 @@ public class VaccuumMode extends CommandBase {
         }
 
         // Calls the Ramp getter function then sets the opposite when called.
-        if (RobotContainer.ramplift.RampIsUp()){
-            RobotContainer.ramplift.Lower();
-        }else {
-            RobotContainer.ramplift.Raise();
-        }
+//        if (RobotContainer.ramplift.RampIsUp()){
+//            RobotContainer.ramplift.Lower();
+//        }else {
+//            RobotContainer.ramplift.Raise();
+//        }
     }
 
     // This method to return true only when command is to finish. Otherwise return false
