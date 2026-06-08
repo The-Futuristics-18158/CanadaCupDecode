@@ -33,7 +33,7 @@ public class UptakeSensor extends SubsystemBase {
 
     }
 
-    private boolean isRampSensorInitialized = true;
+    private boolean isUptakeSensorInitialized = true;
 
 
     /**Uses the distance sensor to determine if an artifact is present on the ramp.
@@ -48,14 +48,14 @@ public class UptakeSensor extends SubsystemBase {
             RobotContainer.telemetrySubsystem.addData("uptake sensor Error", e.getMessage());
             RobotContainer.telemetrySubsystem.update();
             // Try to recover the sensor
-            if (isRampSensorInitialized) {
+            if (isUptakeSensorInitialized) {
                 // First error: attempt to re-initialize
-                isRampSensorInitialized = false;
+                isUptakeSensorInitialized = false;
                 try {
                     // Re-fetch and re-initialize sensor
                     uptakeSensor = RobotContainer.ActiveOpMode.hardwareMap.get(Rev2mDistanceSensor.class, "uptakeSensor");
                     uptakeSensor.initialize();
-                    isRampSensorInitialized = true;
+                    isUptakeSensorInitialized = true;
                 } catch (Exception ex) {
                     // failed to recover
                     RobotContainer.telemetrySubsystem.addData("uptake sensor recovery failed", ex.getMessage());
