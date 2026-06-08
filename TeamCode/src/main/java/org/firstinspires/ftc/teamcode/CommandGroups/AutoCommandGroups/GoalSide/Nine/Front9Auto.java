@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.CommandGroups.AutoCommandGroups.GoalSide.Nine;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
 import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
+import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
@@ -32,7 +34,10 @@ public class Front9Auto extends SequentialCommandGroup {
                 new ShotSequence(),
 
                 // Hunt
-                new AutoIntakeSequence(),
+                new ParallelCommandGroup(
+                        new HuntModeAuto(2.0),
+                        new UptakeRampControle(2.0)
+                ),
 
                 // Move to shot #2
                 new MoveToPose(
@@ -55,7 +60,13 @@ public class Front9Auto extends SequentialCommandGroup {
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue(new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(-90.0))))
+                        AutoFunctions.redVsBlue(new Pose2d(0.3, -1.2, new Rotation2d(Math.toRadians(-90.0))))
+                ),
+
+                new MoveToPose(
+                        1.5,
+                        1.5,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(-45.0))))
                 ),
 
 //      -------------------------- Artifact Cycle #3 --------------------------

@@ -24,8 +24,8 @@ public class ShotBlock extends SubsystemBase {
         shotBlockServo.setDirection(Servo.Direction.FORWARD);
 
         // set default blocker position
-        //Block();
-        Unblock();
+        Block();
+
     }
 
     /** Method called periodically by the scheduler
