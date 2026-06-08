@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
+import org.firstinspires.ftc.teamcode.CommandGroups.AutoCommandGroups.AutoIntakeSequence;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
@@ -19,28 +20,25 @@ public class Front9Auto extends SequentialCommandGroup {
 
         addCommands (
 
-                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(-1.29, -1.29, new Rotation2d(Math.toRadians(-45.0)))))), // was x = -1.2, y = -1.35
+                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(-1.29, -1.29, new Rotation2d(Math.toRadians(-135.0)))))), // was x = -1.29, y = -1.29
 
                 // Move to a shot #1
                 new MoveToPose(
                         1.5,
                         1.5,// was 0.8
-                        AutoFunctions.redVsBlue((new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(45.0)))))),// + or - 20 degrees // was -0.6, -0.6
+                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -0.3, new Rotation2d(Math.toRadians(-90.0)))))),// + or - 20 degrees // was -0.6, -0.6
 
 //      -------------------------- Artifact Cycle #1 --------------------------
                 new ShotSequence(),
 
-                // Turn to Hunt
-                new TurnTo(AutoFunctions.redVsBlue(-90.0),false,1.5),
-
                 // Hunt
-                new HuntModeAuto(2.0),
+                new AutoIntakeSequence(),
 
                 // Move to shot #2
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(-0.6, -0.6, new Rotation2d(Math.toRadians(45.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -0.3, new Rotation2d(Math.toRadians(-45.0)))))),
 
 //      -------------------------- Artifact Cycle #2 --------------------------
                 new ShotSequence(),
@@ -52,12 +50,12 @@ public class Front9Auto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.3, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new HuntModeAuto(2.25),
+                new AutoIntakeSequence(),
 
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue(new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(45))))
+                        AutoFunctions.redVsBlue(new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(-90.0))))
                 ),
 
 //      -------------------------- Artifact Cycle #3 --------------------------
