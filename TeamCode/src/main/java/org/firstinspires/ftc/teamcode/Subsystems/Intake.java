@@ -97,9 +97,10 @@ public class Intake extends SubsystemBase {
             double error = revisedtarget - CurrentSpeed;//TargetSpeed - CurrentSpeed;
 
             // limit P and I action for large errors
-            // to reduce stress on gears
-            //if (error > 20) error = 20;
-            //if (error < -20) error = -20;
+            // to reduce control transients
+            // only apply when not agitation)
+            if (!AgitateMode && error > 20) error = 20;
+            if (!AgitateMode && error < -20) error = -20;
 
             // integrated error
             ierror += igain * error;
