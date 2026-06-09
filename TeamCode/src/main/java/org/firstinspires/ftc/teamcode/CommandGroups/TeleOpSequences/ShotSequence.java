@@ -35,6 +35,27 @@ public class ShotSequence extends SequentialCommandGroup {
         );
 
     }
+    public ShotSequence(double shotDelay) {
+
+        addRequirements(RobotContainer.shotblock);
+        addRequirements(RobotContainer.intake);
+        addRequirements(RobotContainer.ramplift);
+
+        addCommands (
+                new Pause(shotDelay),
+
+                new InstantCommand(()->RobotContainer.shotblock.Unblock()),
+
+                new InstantCommand(()-> RobotContainer.ramplift.Raise()),
+
+                new Pause(0.25),
+
+                new InstantCommand(()-> RobotContainer.intake.intakeRunReducedSpeed(true)),
+
+                new Pause(2.0)
+        );
+
+    }
     @Override
     public void end(boolean interrupted){
         RobotContainer.shotblock.Block();

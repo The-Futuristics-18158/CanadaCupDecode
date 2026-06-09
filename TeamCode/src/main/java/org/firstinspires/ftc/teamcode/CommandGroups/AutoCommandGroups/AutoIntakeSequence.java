@@ -14,14 +14,24 @@ import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 // ParallelDeadlineGroup
 
 public class AutoIntakeSequence extends SequentialCommandGroup {
-
+    double default_timeout;
     // constructor
     public AutoIntakeSequence() {
+        default_timeout = 1.75;
+        addCommands (
+                new ParallelCommandGroup(
+                        new HuntModeAuto(default_timeout),
+                        new UptakeRampControle(default_timeout)
+                )
+        );
+    }
+
+    public AutoIntakeSequence(double timeout) {
 
         addCommands (
              new ParallelCommandGroup(
-                     new HuntModeAuto(1.75),
-                     new UptakeRampControle(1.75)
+                     new HuntModeAuto(timeout),
+                     new UptakeRampControle(timeout)
              )
         );
     }

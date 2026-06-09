@@ -34,10 +34,7 @@ public class Front9Auto extends SequentialCommandGroup {
                 new ShotSequence(),
 
                 // Hunt
-                new ParallelCommandGroup(
-                        new HuntModeAuto(2.0),
-                        new UptakeRampControle(2.0)
-                ),
+                new AutoIntakeSequence(2.0),
 
                 // Move to shot #2
                 new MoveToPose(
@@ -55,7 +52,7 @@ public class Front9Auto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(0.3, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new AutoIntakeSequence(),
+                new AutoIntakeSequence(2.0),
 
                 new MoveToPose(
                         1.5,
@@ -66,7 +63,7 @@ public class Front9Auto extends SequentialCommandGroup {
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue(new Pose2d(-0.33, -0.47, new Rotation2d(Math.toRadians(-45.0))))
+                        AutoFunctions.redVsBlue(new Pose2d(-0.3, -0.4, new Rotation2d(Math.toRadians(-45.0))))
                 ),
 
 //      -------------------------- Artifact Cycle #3 --------------------------

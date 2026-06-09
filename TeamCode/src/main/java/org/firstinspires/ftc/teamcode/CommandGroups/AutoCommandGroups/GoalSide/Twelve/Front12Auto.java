@@ -1,99 +1,82 @@
 package org.firstinspires.ftc.teamcode.CommandGroups.AutoCommandGroups.GoalSide.Twelve;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
+import org.firstinspires.ftc.teamcode.CommandGroups.AutoCommandGroups.AutoIntakeSequence;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
-import org.firstinspires.ftc.teamcode.Commands.Drive.TurnTo;
-import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
-public class Front12DumpAuto extends SequentialCommandGroup {
+public class Front12Auto extends SequentialCommandGroup {
 
     // Constructor
-    public Front12DumpAuto() {
+    public Front12Auto() {
 
         addCommands (
-                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(-1.29, -1.29, new Rotation2d(Math.toRadians(-45.0)))))), // was x = -1.2, y = -1.35
-//      -------------------------- Artifact Cycle #1  --------------------------
+                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(-1.29, -1.29, new Rotation2d(Math.toRadians(-135.0)))))), // was x = -1.29, y = -1.29
+
                 // Move to a shot #1
                 new MoveToPose(
                         1.5,
-                        4.0,
-                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -0.3, new Rotation2d(Math.toRadians(45.0)))))),// + or - 20 degrees // was -0.6, -0.6
+                        1.5,// was 0.8
+                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -0.3, new Rotation2d(Math.toRadians(-90.0)))))),// + or - 20 degrees // was -0.6, -0.6
 
-                // Shot #1
+//      -------------------------- Artifact Cycle #1 --------------------------
                 new ShotSequence(),
 
-//      -------------------------- Start of Artifact Cycle #2 --------------------------
-                // Turn to Hunt
-                new TurnTo(AutoFunctions.redVsBlue(-90.0),false,1.5),
-
                 // Hunt
-                new HuntModeAuto(3.0),
-
-//    -------------------------- Start Of Dump --------------------------
-
-                // Line up to dump gate
-                new MoveToPose(
-                        1.2,
-                        4.0,
-                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -1.2, new Rotation2d(Math.toRadians(0.0)))))),
-
-                // Dump Gate
-                new MoveToPose(
-                        1.0,
-                        1.2,
-                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -1.4, new Rotation2d(Math.toRadians(0.0)))))),
-
-//    -------------------------- End Of Dump --------------------------
+                new AutoIntakeSequence(2.15),
 
                 // Move to shot #2
                 new MoveToPose(
                         1.5,
-                        4.0,
-                        AutoFunctions.redVsBlue((new Pose2d(-0.6, -0.6, new Rotation2d(Math.toRadians(45.0)))))),
+                        1.5,
+                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -0.3, new Rotation2d(Math.toRadians(-45.0)))))),
 
-                // Shot #2
+//      -------------------------- Artifact Cycle #2 --------------------------
                 new ShotSequence(),
 
-//    -------------------------- Start of Artifact Cycle #3 --------------------------
                 // Move to pickup
                 new MoveToPose(
                         1.5,
-                        3.5,
+                        1.5,
                         AutoFunctions.redVsBlue((new Pose2d(0.3, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Hunt
-                new HuntModeAuto(3.0),
+                new AutoIntakeSequence(2.0),
 
-                // Move to Shot #3
                 new MoveToPose(
                         1.5,
-                        4.0,
-                        AutoFunctions.redVsBlue(new Pose2d(-0.6, -0.6, new Rotation2d(Math.toRadians(45))))
+                        1.5,
+                        AutoFunctions.redVsBlue(new Pose2d(0.3, -1.2, new Rotation2d(Math.toRadians(-90.0))))
                 ),
 
-                // Shot #3
+                new MoveToPose(
+                        1.5,
+                        1.5,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.3, -0.4, new Rotation2d(Math.toRadians(-45.0))))
+                ),
+
+//      -------------------------- Artifact Cycle #3 --------------------------
                 new ShotSequence(),
 
-//              // Move to intake point
                 new MoveToPose(
                         1.5,
-                        4.0,
-                        AutoFunctions.redVsBlue((new Pose2d(0.98, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
+                        1.5,
+                        AutoFunctions.redVsBlue((new Pose2d(0.9, -0.6, new Rotation2d(Math.toRadians(-90.0)))))),
 
-                new HuntModeAuto(3.0),
+                new AutoIntakeSequence(),
 
-                // Move to shot #4
                 new MoveToPose(
                         1.5,
-                        4.0,
-                        AutoFunctions.redVsBlue(new Pose2d(-0.6, -0.6, new Rotation2d(Math.toRadians(45))))),
+                        1.5,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.3, -0.4, new Rotation2d(Math.toRadians(-45.0))))
+                ),
 
 //      -------------------------- Artifact Cycle #4 --------------------------
                 new ShotSequence(),
@@ -101,7 +84,7 @@ public class Front12DumpAuto extends SequentialCommandGroup {
                 // Move off the line
                 new MoveToPose(
                         1.5,
-                        4.0,
+                        1.5,
                         AutoFunctions.redVsBlue((new Pose2d(0.0, -0.9, new Rotation2d(Math.toRadians(180.0))))))
         );
     }
