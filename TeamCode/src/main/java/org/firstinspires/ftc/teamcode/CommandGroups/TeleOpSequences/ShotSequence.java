@@ -31,7 +31,7 @@ public class ShotSequence extends SequentialCommandGroup {
 
                 new InstantCommand(()-> RobotContainer.intake.intakeRunReducedSpeed(true)),
 
-                new Pause(2.0)
+                new Pause(2.1)
         );
 
     }
