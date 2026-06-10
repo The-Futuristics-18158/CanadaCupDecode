@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.GhostMoves;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Intake.EndWhenFull.EndAfterTimeElapsed;
+import org.firstinspires.ftc.teamcode.Commands.IntakeRunEndless;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
@@ -31,7 +32,7 @@ public class GhostAuto extends SequentialCommandGroup {
                 new ShotSequence(),
 
                 new ParallelRaceGroup(
-                        //new IntakeRunEndless(),
+                        new IntakeRunEndless(),
                         new GhostMoves(),
                         new EndAfterTimeElapsed()
                 ),
@@ -45,7 +46,7 @@ public class GhostAuto extends SequentialCommandGroup {
                 new ShotSequence(),
 
                 new ParallelRaceGroup(
-                        //new IntakeRunEndless(),
+                        new IntakeRunEndless(),
                         new GhostMoves(),
                         new EndAfterTimeElapsed()
                 ),
