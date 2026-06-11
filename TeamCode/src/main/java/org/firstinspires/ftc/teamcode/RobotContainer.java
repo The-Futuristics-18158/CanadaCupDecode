@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.Intake.VacuumModeOff;
+import org.firstinspires.ftc.teamcode.Commands.Intake.VacuumModeOn;
 import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
@@ -210,7 +212,7 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
 
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new HuntModeCommand());
+        driverOp.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(new VacuumModeOn(), new VacuumModeOff());
 
 //             -------------------------- Test Buttions/Manual Controls --------------------------
 
