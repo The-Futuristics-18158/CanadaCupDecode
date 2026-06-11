@@ -46,8 +46,12 @@ public class HoodTilt extends SubsystemBase {
         if (hoodPosition<minAngle)
             hoodPosition = minAngle;
 
-        // set hood position
-        TiltServo.setPosition(hoodPosition);
+        // only change hood position if robot in auto or teleop modes
+        if (RobotContainer.GetCurrentMode() == RobotContainer.Modes.Auto ||
+                RobotContainer.GetCurrentMode() == RobotContainer.Modes.TeleOp)
+
+            // set hood position
+            TiltServo.setPosition(hoodPosition);
     }
 
 

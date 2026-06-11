@@ -29,6 +29,9 @@ public class Turret extends SubsystemBase {
     // turret current target (in degrees from center position)
     private double TurretTargetDegrees;
 
+    // encoder offset used to 'zero' the turret
+    private static int EncoderOffset = 0;
+
 
     /**
      * Place code here to initialize subsystem
@@ -38,7 +41,7 @@ public class Turret extends SubsystemBase {
         turret = RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
 
         // Resets the encoder for motor
-        turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Motor direction
         turret.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -64,6 +67,11 @@ public class Turret extends SubsystemBase {
         if (TurretTargetDegrees<MIN_ANGLE_DEG)  TurretTargetDegrees=MIN_ANGLE_DEG;
         if (TurretTargetDegrees>MAX_ANGLE_DEG)  TurretTargetDegrees=MAX_ANGLE_DEG;
 
+
+        RobotContainer.telemetrySubsystem.addData("encoder",turret.getCurrentPosition(), true);
+        RobotContainer.telemetrySubsystem.addData("offset",EncoderOffset, true);
+        RobotContainer.telemetrySubsystem.addData("position",getTurretTicks(), true);
+
         // if robot is not in auto or teleop, then force turret to be unpowered
         if (RobotContainer.GetCurrentMode() != RobotContainer.Modes.Auto &&
                 RobotContainer.GetCurrentMode() != RobotContainer.Modes.TeleOp)
@@ -82,7 +90,7 @@ public class Turret extends SubsystemBase {
 
             // determine current position error (in degrees)
             double turretRemainingError = TurretTargetDegrees - getTurretDegrees();
-            ;
+
 
             // create variable PI control for remaining error and smooth operation
             double variableP = -0.47 * turretRemainingError + 99.37; // -0.71 * x + 107.86 was a bit too aggressive
@@ -100,18 +108,8 @@ public class Turret extends SubsystemBase {
             // set variable PI
             turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
 
-//      // earlier non-continuous PIDF tuning for the turret
-//        // adjust PIDF for large moves and small for speed and stability
-//        if (Math.abs(turretRemainingError) > 25){
-//            // Sets the motor to PID values for large distances
-//            turret.setVelocityPIDFCoefficients(15.0, 1.5, 0.0, 0.0);// Long distance settings are (p:15.0 , i:1.5 , d:0.0)
-//        } else {
-//            // Sets the motor to PID values for short distances
-//            turret.setVelocityPIDFCoefficients(90.0, 9.0, 0.0, 0.0);// Short distance settings are (p:90.0, i:9.0.0, d:0.0)
-//        }
-
             // move the turret motor
-            turret.setTargetPosition(targetPosition);
+            turret.setTargetPosition(targetPosition+EncoderOffset);
 
             // default positional control PID values
             // Jun 6/2026 KN
@@ -119,7 +117,7 @@ public class Turret extends SubsystemBase {
             // i=0.05
             // d=0.0
 
-            turret.setPositionPIDFCoefficients(15.0);
+            turret.setPositionPIDFCoefficients(14.0);
 
             // temporary
             //double p = turret.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).p;
@@ -134,6 +132,20 @@ public class Turret extends SubsystemBase {
             PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
         }
     }
+
+    // reset turret position to zero when facing forward
+    public void ResetTurretPositionStraight()
+    {
+        // set new encoder offset to new overall position is zeroed
+        EncoderOffset = -turret.getCurrentPosition();
+    }
+
+    public void ResetTurretPositionAtResetSwitch()
+    {
+        EncoderOffset = 60-turret.getCurrentPosition();
+    }
+
+
 
     /** Switches off Turret */
     public void turretStop(){
@@ -154,38 +166,29 @@ public class Turret extends SubsystemBase {
      * @return turret position in degrees
      */
     public double getTurretTargetDegrees(){
-        return turret.getTargetPosition() * TICKS_TO_DEGREES;
+        return getTurretTargetTicks() * TICKS_TO_DEGREES;
     }
 
     /** returns current turret position
      * @return turret position in degrees
      */
     public double getTurretDegrees(){
-        return turret.getCurrentPosition() * TICKS_TO_DEGREES;
+        return getTurretTicks() * TICKS_TO_DEGREES;
     }
 
     /** returns current turret target position
      * @return turret position in encoder ticks
      */
     public int getTurretTargetTicks(){
-        return turret.getTargetPosition();
+        return turret.getTargetPosition()+EncoderOffset;
     }
 
     /** returns current turret position
      * @return turret position in encoder ticks
      */
     public double getTurretTicks(){
-        return turret.getCurrentPosition();
+        return turret.getCurrentPosition()+EncoderOffset;
     }
-
-    public boolean IsTracking(){
-        if (turret.getTargetPosition() != 0){
-            return true;
-        }else {
-            return false;
-        }
-    }
-
 
 
 }

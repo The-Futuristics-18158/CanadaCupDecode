@@ -11,17 +11,11 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
-//import org.firstinspires.ftc.teamcode.Commands.ClimbCommand;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.IntakeSequence;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
-//import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
-//import org.firstinspires.ftc.teamcode.Subsystems.Climb.ClimbSubsystem;
-import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeAuto;
-import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
-import org.firstinspires.ftc.teamcode.Commands.Intake.VaccuumMode;
 import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
@@ -33,6 +27,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.Shooter.HoodTilt;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.RampLift;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.ShotBlock;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter.Turret;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter.TurretResetButton;
+import org.firstinspires.ftc.teamcode.Subsystems.Utils.Blinkin;
 import org.firstinspires.ftc.teamcode.Subsystems.Utils.OperatorControlsSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Odometry.Gyro;
@@ -89,19 +85,18 @@ public class RobotContainer {
     public static PinpointOdometry odometryPod;
     public static DriveTrain drivesystem;
     public static Odometry odometry;
+    public static TurretResetButton turretresetbutton;
     public static HoodTilt hoodtilt;
     public static ShotBlock shotblock;
     public static RampLift ramplift;
     public static Intake intake;
     public static Flywheel shooter;
     public static Turret turret;
-
     public static LimeLight limeLight;
     public static RampCamera rampCamera;
     public static UptakeSensor uptakeSensor;
     public static GoalTargeting targeting;
-    //public static ClimbSubsystem climb;
-    //public static Blinkin blinkin;
+    public static Blinkin ledsubsystem;
 
 
     // Angle of the robot at the start of auto
@@ -162,25 +157,19 @@ public class RobotContainer {
         odometryPod = new PinpointOdometry();
         drivesystem = new DriveTrain();
         odometry = new Odometry();
+        turretresetbutton = new TurretResetButton();
         hoodtilt = new HoodTilt();
         shotblock = new ShotBlock();
         ramplift = new RampLift();
         intake = new Intake();
         shooter = new Flywheel();
         turret = new Turret();
-
         limeLight = new LimeLight();
         rampCamera = new RampCamera("RampCam");
         uptakeSensor = new UptakeSensor();
         targeting = new GoalTargeting();
-        //climb = new ClimbSubsystem();
-        //blinkin = new Blinkin();
-        //artifactCamera = new ArtifactCamera("CookieCam");
+        ledsubsystem = new Blinkin();
 
-        // depending on red or blue team, set which camera gets displayed
-        // on driver's station in preview mode
-        //if (isRedAlliance())
-        //    rampCamera.enableCameraStream();
     }
 
     /**Init teleop runs when you hit play*/
@@ -199,8 +188,11 @@ public class RobotContainer {
 
 //              -------------------------- (Driver) Turret System --------------------------
 
+        // Jun 10/2026: KN - Code was for testing - DO NOT USE
         // (Turret Reset) does not exist yet but when it does it gose on start.
-        //driverOp.getGamepadButton(GamepadKeys.Button.START).whenPressed(new TurretReset);
+        //Trigger turretreset = new Trigger(()->(RobotContainer.ActiveOpMode.gamepad1.start &&
+        //        RobotContainer.turretresetbutton.hasTouched()));
+        //turretreset.whileActiveOnce(new InstantCommand(()->turret.ResetTurretPositionAtResetSwitch()));
 
 //              -------------------------- (Driver) Shooting Controls  --------------------------
 
@@ -242,6 +234,22 @@ public class RobotContainer {
 //
 //        // Turn To 270 degrees
 //        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new TurnTo(AutoFunctions.redVsBlue(90.0), false, 5.0));
+
+
+        //             -------------------------- Operator Controls --------------------------
+
+        // enable/disable auto targeting
+        toolOp.getGamepadButton(GamepadKeys.Button.START).whenPressed(new InstantCommand(()->targeting.EnableAutoTargeting(!targeting.isAutoTargetingEnabled())));
+
+
+        // OLD - not used - to be deleted
+        // manual rotate turret
+//        toolOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new SequentialCommandGroup(
+//                new InstantCommand(()-> targeting.EnableAutoTargeting(false)),
+//                new ManualRotateTurret(true)));
+//        toolOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SequentialCommandGroup(
+//                new InstantCommand(()-> targeting.EnableAutoTargeting(false)),
+//                new ManualRotateTurret(false)));
 
 
         //      -------------------------- Examples --------------------------
@@ -288,6 +296,9 @@ public class RobotContainer {
 
         // set limelight to apriltag pipeline
         limeLight.SetPipelineMode(0);
+
+        // reset turret to straight position;
+        turret.ResetTurretPositionStraight();
     }
 
     /**Robot starting code for auto - This runs once at start of auto*/
