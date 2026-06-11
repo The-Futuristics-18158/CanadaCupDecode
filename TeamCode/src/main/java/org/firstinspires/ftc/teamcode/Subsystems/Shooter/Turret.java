@@ -32,6 +32,9 @@ public class Turret extends SubsystemBase {
     // encoder offset used to 'zero' the turret
     private static int EncoderOffset = 0;
 
+    // turret manual reset mode
+    private boolean ManualResetMode;
+
 
     /**
      * Place code here to initialize subsystem
@@ -73,8 +76,9 @@ public class Turret extends SubsystemBase {
         RobotContainer.telemetrySubsystem.addData("position",getTurretTicks(), true);
 
         // if robot is not in auto or teleop, then force turret to be unpowered
-        if (RobotContainer.GetCurrentMode() != RobotContainer.Modes.Auto &&
-                RobotContainer.GetCurrentMode() != RobotContainer.Modes.TeleOp)
+        if ((RobotContainer.GetCurrentMode() != RobotContainer.Modes.Auto &&
+                RobotContainer.GetCurrentMode() != RobotContainer.Modes.TeleOp) ||
+                ManualResetMode)
         {
             turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             turret.setPower(0.0);
@@ -140,11 +144,22 @@ public class Turret extends SubsystemBase {
         EncoderOffset = -turret.getCurrentPosition();
     }
 
-    public void ResetTurretPositionAtResetSwitch()
+    // puts turret in manual operating mode for purposes of resetting position
+    public void SetManualMode(boolean enable)
     {
-        EncoderOffset = 60-turret.getCurrentPosition();
+        ManualResetMode = enable;
     }
 
+    // used to manuall cotrol turret
+    public void SetManualSpeed(double pwr)
+    {
+        if (ManualResetMode)
+        {
+            if (pwr>0.5) pwr=0.5;
+            if (pwr<-0.5) pwr=-0.5;
+            turret.setPower(pwr);
+        }
+    }
 
 
     /** Switches off Turret */

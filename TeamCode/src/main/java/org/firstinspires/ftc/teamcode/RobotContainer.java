@@ -14,8 +14,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.IntakeSequence;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
+import org.firstinspires.ftc.teamcode.Commands.Intake.HuntMode.HuntModeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.ReverseIntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.Intake.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.ManualTurretMoveForResetting;
 import org.firstinspires.ftc.teamcode.Commands.UptakeRampControle;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.LimeLight;
 import org.firstinspires.ftc.teamcode.Subsystems.Cameras.RampCamera;
@@ -186,13 +188,10 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> odometry.setCurrentPos
                 (AutoFunctions.redVsBlue(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(-90.0)))))));
 
+
 //              -------------------------- (Driver) Turret System --------------------------
 
-        // Jun 10/2026: KN - Code was for testing - DO NOT USE
-        // (Turret Reset) does not exist yet but when it does it gose on start.
-        //Trigger turretreset = new Trigger(()->(RobotContainer.ActiveOpMode.gamepad1.start &&
-        //        RobotContainer.turretresetbutton.hasTouched()));
-        //turretreset.whileActiveOnce(new InstantCommand(()->turret.ResetTurretPositionAtResetSwitch()));
+        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ManualTurretMoveForResetting());
 
 //              -------------------------- (Driver) Shooting Controls  --------------------------
 
