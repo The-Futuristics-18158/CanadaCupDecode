@@ -190,6 +190,7 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> odometry.setCurrentPos
                 (AutoFunctions.redVsBlue(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(-90.0)))))));
 
+
 //              -------------------------- (Driver) Turret System --------------------------
 
         driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ManualTurretMoveForResetting());
@@ -210,7 +211,9 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(new VacuumModeOn(), new VacuumModeOff());
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(new VacuumModeOn(), new VacuumModeOff());
+
+        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new HuntModeCommand());
 
 //             -------------------------- Test Buttions/Manual Controls --------------------------
 

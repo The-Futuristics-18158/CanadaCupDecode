@@ -17,91 +17,91 @@ public class GhostMoves extends SequentialCommandGroup {
 //      -------------------------- Movement Cycle One  --------------------------
 
                 // Move closer to intake box
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Move straight into pile
                 new MoveToPose(
                         1.5,
                         1.0,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.5, new Rotation2d(Math.toRadians(-90.0))))))
 
                 // Move straight back
 
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
-
-//      -------------------------- End of Movement Cycle One --------------------------
-
-                // Shift
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
-
-//      -------------------------- Start of Movement Cycle Two --------------------------
-                // Move straight into pile
-                new MoveToPose(
-                        1.5,
-                        1.0,
-                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
-
-                // Move straight back
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
-
-//      -------------------------- End of Movement Cycle Two --------------------------
-
-//      -------------------------- Movement Cycle Three  --------------------------
-
-                // Move closer to intake box
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
-
-                // Move straight into pile
-                new MoveToPose(
-                        1.5,
-                        1.0,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
-
-                // Move straight back
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
-
-//      -------------------------- End of Movement Cycle Three --------------------------
-
-                // Shift
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
-
-//      -------------------------- Start of Movement Cycle Four --------------------------
-                // Move straight into pile
-                new MoveToPose(
-                        1.5,
-                        1.0,
-                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
-
-                // Move straight back
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0))))))
-
-//      -------------------------- End of Movement Cycle Four --------------------------
-
-
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+////      -------------------------- End of Movement Cycle One --------------------------
+//
+//                // Shift
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+////      -------------------------- Start of Movement Cycle Two --------------------------
+//                // Move straight into pile
+//                new MoveToPose(
+//                        1.5,
+//                        1.0,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+//                // Move straight back
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+////      -------------------------- End of Movement Cycle Two --------------------------
+//
+////      -------------------------- Movement Cycle Three  --------------------------
+//
+//                // Move closer to intake box
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+//                // Move straight into pile
+//                new MoveToPose(
+//                        1.5,
+//                        1.0,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+//                // Move straight back
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+////      -------------------------- End of Movement Cycle Three --------------------------
+//
+//                // Shift
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+////      -------------------------- Start of Movement Cycle Four --------------------------
+//                // Move straight into pile
+//                new MoveToPose(
+//                        1.5,
+//                        1.0,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
+//
+//                // Move straight back
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.4, -1.0, new Rotation2d(Math.toRadians(-90.0))))))
+//
+////      -------------------------- End of Movement Cycle Four --------------------------
+//
+//
 
         );
     }

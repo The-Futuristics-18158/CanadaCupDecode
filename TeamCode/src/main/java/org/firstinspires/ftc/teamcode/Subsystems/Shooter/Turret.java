@@ -113,7 +113,7 @@ public class Turret extends SubsystemBase {
             turret.setVelocityPIDFCoefficients(variableP, variableI, 0.0, 0.0);
 
             // move the turret motor
-            turret.setTargetPosition(targetPosition+EncoderOffset);
+            turret.setTargetPosition(targetPosition-EncoderOffset);
 
             // default positional control PID values
             // Jun 6/2026 KN

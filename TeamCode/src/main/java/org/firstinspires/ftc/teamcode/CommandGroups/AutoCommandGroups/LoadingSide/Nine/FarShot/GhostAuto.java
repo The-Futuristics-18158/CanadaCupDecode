@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Intake.EndWhenFull.EndAfterTimeElapsed;
 import org.firstinspires.ftc.teamcode.Commands.IntakeRunEndless;
+import org.firstinspires.ftc.teamcode.Commands.Utility.Pause;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.Utility.AutoFunctions;
 
@@ -20,44 +21,79 @@ public class GhostAuto extends SequentialCommandGroup {
     public GhostAuto() {
 
         addCommands (
-                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(1.60, -0.37, new Rotation2d(Math.toRadians(0.0)))))),
+                new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(1.60, -0.37, new Rotation2d(Math.toRadians(-90)))))),
 
+                new Pause(2.0),
                 // Move to shoot
-                new MoveToPose(
-                        1.5,
-                        1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))),
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.37, new Rotation2d(Math.toRadians(-90.0)))))),
 
 //      -------------------------- Artifact Cycle #1 --------------------------
                 new ShotSequence(),
 
                 new ParallelRaceGroup(
                         new IntakeRunEndless(),
-                        new GhostMoves(),
-                        new EndAfterTimeElapsed()
+                        new GhostMoves()
+                        //new EndAfterTimeElapsed()
                 ),
 
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-90.0)))))),
 
 //      -------------------------- Artifact Cycle #2 --------------------------
                 new ShotSequence(),
 
                 new ParallelRaceGroup(
                         new IntakeRunEndless(),
-                        new GhostMoves(),
-                        new EndAfterTimeElapsed()
+                        new GhostMoves()
+                        //new EndAfterTimeElapsed()
                 ),
 
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(23.0)))))
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-90.0)))))),new ShotSequence(),
+
+                new ParallelRaceGroup(
+                        new IntakeRunEndless(),
+                        new GhostMoves()
+                        //new EndAfterTimeElapsed()
                 ),
-//      -------------------------- Artifact Cycle #3 --------------------------
-                new ShotSequence()
+
+                new MoveToPose(
+                        1.5,
+                        1.5,
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-90.0)))))),
+
+                new ShotSequence(),
+
+                new ParallelRaceGroup(
+                        new IntakeRunEndless(),
+                        new GhostMoves()
+                        //new EndAfterTimeElapsed()
+                ),
+
+                new MoveToPose(
+                        1.5,
+                        1.5,
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-90.0))))))
+//                new ParallelRaceGroup(
+//                        new IntakeRunEndless(),
+//                        new GhostMoves(),
+//                        new EndAfterTimeElapsed()
+//                ),
+//
+//                new MoveToPose(
+//                        1.5,
+//                        1.5,
+//                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))
+//                ),
+////      -------------------------- Artifact Cycle #3 --------------------------
+//                new ShotSequence()
         );
     }
 }

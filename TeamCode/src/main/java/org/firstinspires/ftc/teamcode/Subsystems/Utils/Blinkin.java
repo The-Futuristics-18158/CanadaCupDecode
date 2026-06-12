@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Subsystems.Utils;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 /**
@@ -12,12 +14,18 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 public class Blinkin extends SubsystemBase {
     private RevBlinkinLedDriver blinkin;
 
+    private int artifactsInRamp;
+    private boolean artifactWait;
+    private ElapsedTime timer;
+
     // Local objects and variables here
 
     /** Place code here to initialize subsystem */
     public Blinkin() {
         blinkin = RobotContainer.ActiveOpMode.hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-
+        artifactsInRamp=0;
+        artifactWait=false;
+        timer=new ElapsedTime();
     }
 
     /** Method called periodically by the scheduler
@@ -30,6 +38,14 @@ public class Blinkin extends SubsystemBase {
         } else {
             blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         }
+        if(RobotContainer.uptakeSensor.isUpakeArtifactPresent()==true) {
+//            if(artifactWait==false) {
+//                artifactsInRamp++;
+                  blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//            }
+        }
 
+
+        artifactWait=RobotContainer.uptakeSensor.isUpakeArtifactPresent();
     }
 }
