@@ -28,6 +28,7 @@ public class Turret extends SubsystemBase {
 
     // turret current target (in degrees from center position)
     private double TurretTargetDegrees;
+    private double lastTurretTargetDegrees;
 
     // encoder offset used to 'zero' the turret
     private static int EncoderOffset = 0;
@@ -53,9 +54,10 @@ public class Turret extends SubsystemBase {
         turret.setTargetPosition(0);
         TurretTargetDegrees = 0.0;
 
-        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        turret.setPower(1.0);
+        //turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //turret.setPower(1.0);
+        turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        turret.setPower(0.0);
 
     }
 
@@ -142,6 +144,7 @@ public class Turret extends SubsystemBase {
     {
         // set new encoder offset to new overall position is zeroed
         EncoderOffset = -turret.getCurrentPosition();
+        turret.setTargetPosition(-EncoderOffset);
     }
 
     // puts turret in manual operating mode for purposes of resetting position
@@ -171,10 +174,28 @@ public class Turret extends SubsystemBase {
      * Moves turret to specified angle
      * Angle bounded by MIN_ANGLE_DEG and MAX_ANGLE_DEG
      * 0deg is pointed forwarded (in robot space)
-     * @param TargetDegrees target angles in degrees
+     * @param angle angles in degrees
      */
-    public void moveTurret(double TargetDegrees) {
-        TurretTargetDegrees = TargetDegrees;
+    public void moveTurret(double angle) {
+
+        final double HYSTERESIS = 35.0; // degrees
+
+        if (lastTurretTargetDegrees >= 180.0 && angle < (180.0-HYSTERESIS)) {
+            TurretTargetDegrees = angle;
+        }
+        else if (lastTurretTargetDegrees <= -180.0 && angle > (-180.0 + HYSTERESIS)) {
+            TurretTargetDegrees = angle;
+        }
+        else if (angle > -180.0 && angle < 180.0)
+            TurretTargetDegrees = angle;
+
+        // bound the angle to within allowable operating range
+        if (TurretTargetDegrees<MIN_ANGLE_DEG)  TurretTargetDegrees=MIN_ANGLE_DEG;
+        if (TurretTargetDegrees>MAX_ANGLE_DEG)  TurretTargetDegrees=MAX_ANGLE_DEG;
+
+        // update previous value
+        lastTurretTargetDegrees = TurretTargetDegrees;
+
     }
 
     /** returns current turret target position

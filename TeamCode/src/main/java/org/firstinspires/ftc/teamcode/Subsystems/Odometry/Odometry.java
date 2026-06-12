@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
 import com.qualcomm.hardware.limelightvision.LLResult;
-
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
@@ -85,8 +84,8 @@ public class Odometry extends SubsystemBase {
                 Rotation2d gyro = new Rotation2d(Math.toRadians(RobotContainer.gyro.getYawAngle()));
 
                 // determine new pose - apply low pass filter for blending
-                double newpose_x = 0.96*CurrentPose.getX() + 0.04*LLpose_x;
-                double newpose_y = 0.96*CurrentPose.getY() + 0.04*LLpose_y;
+                double newpose_x = 0.99*CurrentPose.getX() + 0.01*LLpose_x;
+                double newpose_y = 0.99*CurrentPose.getY() + 0.01*LLpose_y;
 
                 // construct new pose2d
                 CurrentPose = new Pose2d(newpose_x, newpose_y, gyro);
