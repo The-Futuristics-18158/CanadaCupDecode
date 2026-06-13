@@ -13,6 +13,9 @@ public class VacuumModeOff extends CommandBase {
 
         // add subsystem requirements (if any) - for example:
         //addRequirements(RobotContainer.drivesystem);
+        addRequirements(RobotContainer.intake);
+        addRequirements(RobotContainer.shotblock);
+        addRequirements(RobotContainer.ramplift);
     }
 
     // This method is called once when command is started
@@ -21,6 +24,7 @@ public class VacuumModeOff extends CommandBase {
         RobotContainer.intake.intakeStop();
         RobotContainer.ramplift.Lower();
         RobotContainer.shotblock.Block();
+        RobotContainer.isVacuuming = false;
     }
 
     // This method is called periodically while command is active

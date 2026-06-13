@@ -24,10 +24,14 @@ public class GoalTargeting extends SubsystemBase {
     // enable/disable auto target mode
     private boolean AutoTargetingEnable;
 
+    // counter keeps track of how many times camera does not detect target
+    int MissedCameraTargetCount;
+
     public GoalTargeting()
     {
         // by default, enable auto targeting
         AutoTargetingEnable = true;
+        MissedCameraTargetCount = 0;
     }
 
 
@@ -46,6 +50,10 @@ public class GoalTargeting extends SubsystemBase {
             boolean CameraHasValidTarget = false;
             double CameraTargetXAngle = 0.0;
             double TargetDistance = 0.0;
+            // assume camera has missed target unless proven otherwise
+            MissedCameraTargetCount++;
+
+            // determine if camera has a valid target
             if (results != null && results.isValid() && results.getFiducialResults() != null &&
                     !results.getFiducialResults().isEmpty() && results.getStaleness() < 100)
                 for (int i = 0; i < results.getFiducialResults().size(); ++i)
@@ -53,6 +61,7 @@ public class GoalTargeting extends SubsystemBase {
                             (!RobotContainer.isRedAlliance() && results.getFiducialResults().get(i).getFiducialId() == 20)) {
                         // we have a hit. Record xangle and distance to the valid target
                         CameraHasValidTarget = true;
+                        MissedCameraTargetCount = 0;
                         CameraTargetXAngle = results.getFiducialResults().get(i).getTargetXDegrees();
                         Position vector = results.getFiducialResults().get(i).getTargetPoseRobotSpace().getPosition();
                         TargetDistance = Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
@@ -76,11 +85,14 @@ public class GoalTargeting extends SubsystemBase {
             // ---------- Turret Angle ----------
 
             // aiming of turret depends on if we have valid target in camera sight or not
-            //if (CameraHasValidTarget) {
-            //    // we have target in camera sight - adjust turret by angle to target
-            //    double currentturretangle = RobotContainer.turret.getTurretDegrees();
-            //    RobotContainer.turret.moveTurret(0.5*(currentturretangle - CameraTargetXAngle));
-            //} else {
+            if (CameraHasValidTarget) {
+                // we have target in camera sight - adjust turret by angle to target
+                double currentturretangle = RobotContainer.turret.getTurretDegrees();
+                RobotContainer.turret.moveTurret(currentturretangle - CameraTargetXAngle);
+            }
+            else if (!CameraHasValidTarget && MissedCameraTargetCount < 5){ // do nothing}
+//
+            } else {
                 // use odometry to set turret angle
                 Pose2d pose = RobotContainer.odometry.getCurrentPos();
                 Translation2d targetPose = GetShotTaget();
@@ -98,14 +110,10 @@ public class GoalTargeting extends SubsystemBase {
                     turretTargetAngle -= 360.0;
                 //turretTargetAngle -= normalizeAngle(RobotContainer.gyro.getYawAngle());
 
-
-
                 RobotContainer.telemetrySubsystem.addData("turret_target_angle", turretTargetAngle, true);
                 RobotContainer.turret.moveTurret(turretTargetAngle);
 
-
-
-           // }
+           }
         }
 
     }
@@ -203,27 +211,44 @@ public class GoalTargeting extends SubsystemBase {
         }
     }
 
+    /** Function returns true if robot is in an allowable shooting zone
+     * @return true if in zone, false if not
+     */
+    public boolean IsRobotInAllowableShotZone()
+    {
+        // get current robot position from odometry
+        Pose2d pos = RobotContainer.odometry.getCurrentPos();
+        double x = pos.getX();
+        double y = pos.getY();
 
-
-//    /**add description here
-//     * @author kaitlyn
-//     *
-//     * @return what does this return?
-//     */
-//    public double IdleSpeed(){
-//        double shootSpeed = this.CalculateSpeed();
-//        double distance = this.GetDistanceToGoal();
-////        if (RobotContainer.odometry.getCurrentPos().getX() > (boxPos.getX() - error) &&
-////            RobotContainer.odometry.getCurrentPos().getX() < (boxPos.getX() + error) &&
-////            RobotContainer.odometry.getCurrentPos().getY() > (boxPos.getY() - error) &&
-////            RobotContainer.odometry.getCurrentPos().getY() < (boxPos.getY() + error)) {
-////            return 0.0;
-//        if(distance >= 2.8) {
-//            return (0.7 * shootSpeed);
-//        }else {
-//            return 0.0;
-//        }
+        // 15cm margin around shooting zone - robot only has to be 'over the line'
+        double margin = 0.15;
+//        if (x<(0.0 + margin) &&
 //
-//    }
+//                // AND robot in front triangle (evaluated on per-side basis)
+//                ((y>=0.0&& x<(-y + margin)) || (y<0.0 &&x<(y+margin))) &&
+//
+//                // AND not too close to target
+//                //(Math.abs(x) <1.05 && Math.abs(y) < 1.05))
+//            return true;
+//        else if (x >= (1.1-margin) && (x-1.1)> (Math.abs(y)-margin))
+//            return true;
+//        else
+//            return false;
+
+        // is robot in triangular region near goals, but further than ~80cm from corner
+        if ((x < (0.0+margin) &&
+                Math.abs(x) > Math.abs(y)-margin &&
+
+                // AND not too close to target
+                 Math.abs(y) < 1.0) ||
+
+                // OR robot is in rear triangular region
+                (x >= (1.1-margin) &&
+                (x-1.1)> Math.abs(y)-margin))
+            return true;
+        else
+            return false;
+    }
 
 }

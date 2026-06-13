@@ -108,6 +108,8 @@ public class RobotContainer {
     // Angle of the robot at the start of auto
     public static double RedStartAngle = 90;
     public static double BlueStartAngle = -90;
+    public static boolean isVacuuming = false;
+    public static boolean safeZone;
 
     // List of robot control and expansion hubs - used for caching of I/O
     static List<LynxModule> allHubs;
@@ -330,12 +332,19 @@ public class RobotContainer {
 
         // execute robot periodic function 50 times per second (=50Hz)
         if (intervaltime>=20.0) {
+            safeZone = RobotContainer.targeting.IsRobotInAllowableShotZone();
 
             // reset timer
             timer.reset();
 
             // start execution timer
             exectimer.reset();
+
+            if (isVacuuming){
+                if (!safeZone){
+                    new VacuumModeOff().schedule();
+                }
+            }
 
             // run scheduler
             CommandScheduler.getInstance().run();
@@ -345,10 +354,14 @@ public class RobotContainer {
 
             // report time interval on robot controller
             telemetrySubsystem.timerOdometry();
+
             //telemetrySubsystem.addData("Turret Target (degrees): ", turret.getTurretTargetDegrees());
             //telemetrySubsystem.addData("Turret Current (degrees): ", turret.getTurretDegrees());
             //telemetrySubsystem.addData("Intake Power: ", intake.readIntakeSetPower());
             //telemetrySubsystem.addData("Intake Motor Speed (rps): ", intake.intakeMotorCurrentSpeed());
+
+            telemetrySubsystem.addData("in shot zone", safeZone);
+            telemetrySubsystem.addData("isVacuuming", isVacuuming);
 
             telemetrySubsystem.update();
         }
