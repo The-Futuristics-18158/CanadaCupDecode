@@ -25,14 +25,14 @@ public class GhostTeleOp extends SequentialCommandGroup {
                         new MoveToPose(
                                 1.5,
                                 1.0,
-                                AutoFunctions.redVsBlue((new Pose2d(1.52, -1.5, new Rotation2d(Math.toRadians(-90.0)))))),
+                                AutoFunctions.redVsBlue((new Pose2d(1.34, 1.4, new Rotation2d(Math.toRadians(90.0)))))),
                         new IntakeRunEndless()
                 ),
 
                 new MoveToPose(
                         1.5,
                         1.5,
-                        AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-90.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(1.34, 0.3, new Rotation2d(Math.toRadians(90.0)))))),
 
                 new ShotSequence()
         );
