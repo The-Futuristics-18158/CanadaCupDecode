@@ -11,6 +11,8 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.GhostTeleOp;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.IntakeSequence;
 import org.firstinspires.ftc.teamcode.CommandGroups.TeleOpSequences.ShotSequence;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
@@ -173,7 +175,6 @@ public class RobotContainer {
         uptakeSensor = new UptakeSensor();
         targeting = new GoalTargeting();
         ledsubsystem = new Blinkin();
-
     }
 
     /**Init teleop runs when you hit play*/
@@ -190,7 +191,6 @@ public class RobotContainer {
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> odometry.setCurrentPos
                 (AutoFunctions.redVsBlue(new Pose2d(0.0, 0.0, new Rotation2d(Math.toRadians(-90.0)))))));
 
-
 //              -------------------------- (Driver) Turret System --------------------------
 
         driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ManualTurretMoveForResetting());
@@ -199,8 +199,7 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new ShotSequence());
 
-        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new VaccuumMode());
-
+        driverOp.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(new VacuumModeOn(), new VacuumModeOff());
 
 //              -------------------------- (Driver) Intake Systems --------------------------
 
@@ -211,9 +210,9 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new IntakeSequence());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(new VacuumModeOn(), new VacuumModeOff());
-
         driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new HuntModeCommand());
+
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new GhostTeleOp());
 
 //             -------------------------- Test Buttions/Manual Controls --------------------------
 
