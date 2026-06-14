@@ -53,7 +53,7 @@ public class Front12DumpAuto extends SequentialCommandGroup {
                 new MoveToPose(
                         1.4,// was 1.5
                         3.0,// was 2.0
-                        AutoFunctions.redVsBlue((new Pose2d(-0.3, -0.3, new Rotation2d(Math.toRadians(-90.0)))))),
+                        AutoFunctions.redVsBlue((new Pose2d(-0.6, -0.3, new Rotation2d(Math.toRadians(-90.0)))))),
 
                 // Shot #2
                 new ShotSequence(),
@@ -78,7 +78,7 @@ public class Front12DumpAuto extends SequentialCommandGroup {
                 new MoveToPose(
                         1.4,// 1.5
                         3.0,// 2.5
-                        AutoFunctions.redVsBlue(new Pose2d(-0.3, -0.4, new Rotation2d(Math.toRadians(-45.0))))
+                        AutoFunctions.redVsBlue(new Pose2d(-0.6, -0.3, new Rotation2d(Math.toRadians(-45.0))))
                 ),
 
                 // Shot #3
@@ -93,19 +93,15 @@ public class Front12DumpAuto extends SequentialCommandGroup {
 
                 new AutoIntakeSequence(2.0),
 
-
-
                 new MoveToPose(
                         1.4,// 1.5
                         3.0,// 2.5
                         AutoFunctions.redVsBlue(new Pose2d(0.9, -1.35, new Rotation2d(Math.toRadians(-45.0))))),
 
-
-
                 new MoveToPose(
                         1.4,// 1.5
                         3.0,// 2.5
-                        AutoFunctions.redVsBlue(new Pose2d(-0.5, -0.4, new Rotation2d(Math.toRadians(-45.0))))),
+                        AutoFunctions.redVsBlue(new Pose2d(-0.6, -0.3, new Rotation2d(Math.toRadians(-45.0))))),
 
                 // Shot #4
                 new ShotSequence(),

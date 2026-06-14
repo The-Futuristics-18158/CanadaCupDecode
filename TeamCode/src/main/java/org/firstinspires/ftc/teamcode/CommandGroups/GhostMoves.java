@@ -26,7 +26,7 @@ public class GhostMoves extends SequentialCommandGroup {
                 new MoveToPose(
                         1.5,
                         1.0,
-                        AutoFunctions.redVsBlue((new Pose2d(1.52, -1.5, new Rotation2d(Math.toRadians(-90.0))))))
+                        AutoFunctions.redVsBlue((new Pose2d(1.57,-1.53, new Rotation2d(Math.toRadians(-90.0))))))
 
                 // Move straight back
 
