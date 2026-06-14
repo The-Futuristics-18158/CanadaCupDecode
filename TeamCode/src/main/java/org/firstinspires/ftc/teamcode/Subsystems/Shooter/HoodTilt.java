@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
@@ -11,7 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
  *
  * @author superzokabear
  */
-@Configurable
+//@Configurable
 public class HoodTilt extends SubsystemBase {
 
     // Local objects and variables here

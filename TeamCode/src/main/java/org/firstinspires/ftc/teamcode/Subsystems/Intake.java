@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -113,10 +112,10 @@ public class Intake extends SubsystemBase {
             CurrentPower = fgain * revisedtarget + pgain * error + ierror;
             intakeMotor.setPower(CurrentPower);
 
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", revisedtarget);
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
-            PanelsTelemetry.INSTANCE.getTelemetry().update();
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", revisedtarget);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
+            //PanelsTelemetry.INSTANCE.getTelemetry().update();
         }
     }
 
