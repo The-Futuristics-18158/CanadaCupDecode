@@ -31,7 +31,7 @@ public class ShotSequence extends SequentialCommandGroup {
 
                 new InstantCommand(()-> RobotContainer.intake.intakeRunReducedSpeed(true)),
 
-                new Pause(1.75)
+                new Pause(1.90)
         );
 
     }
@@ -52,7 +52,7 @@ public class ShotSequence extends SequentialCommandGroup {
 
                 new InstantCommand(()-> RobotContainer.intake.intakeRunReducedSpeed(true)),
 
-                new Pause(1.75)
+                new Pause(1.90)
         );
 
     }
