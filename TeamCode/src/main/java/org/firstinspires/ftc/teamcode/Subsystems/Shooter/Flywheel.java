@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,7 +12,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
  *
  * @author superzokabear
  */
-@Configurable
+//@Configurable
 public class Flywheel extends SubsystemBase {
 
     // Local objects and variables here
@@ -126,9 +124,9 @@ public class Flywheel extends SubsystemBase {
             flywheelMotorRight.setPower(NewPower);
             flywheelMotorLeft.setPower(NewPower);
 
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelSpeed", CurrentSpeed);
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelTarget", TargetSpeed);
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelPower", NewPower);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelSpeed", CurrentSpeed);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelTarget", TargetSpeed);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("FlywheelPower", NewPower);
         }
 
     }

@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.ChassisSpeeds;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -139,11 +138,10 @@ public class DriveTrain extends SubsystemBase {
         leftBackDrive.setPower(leftBackControl.calculate(RefLeftBackRPM,CurrentLeftBackRPM));
         rightBackDrive.setPower(rightBackControl.calculate(RefRightBackRPM, CurrentRightBackRPM));
 
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Front Drive Velocity(rpm)", CurrentLeftFrontRPM);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Front Referance Speeds(rpm)", RefLeftFrontRPM);
-
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Back Drive Velocity(rpm)", CurrentLeftBackRPM);
-        PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Back Referance Speeds(rpm)", RefLeftBackRPM);
+        //PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Front Drive Velocity(rpm)", CurrentLeftFrontRPM);
+        //PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Front Referance Speeds(rpm)", RefLeftFrontRPM);
+        //PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Back Drive Velocity(rpm)", CurrentLeftBackRPM);
+        //PanelsTelemetry.INSTANCE.getTelemetry().addData("Left Back Referance Speeds(rpm)", RefLeftBackRPM);
     }
 
 
