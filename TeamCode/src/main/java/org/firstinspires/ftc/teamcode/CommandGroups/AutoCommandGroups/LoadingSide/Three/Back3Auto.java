@@ -28,7 +28,7 @@ public class Back3Auto extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue((new Pose2d(1.34, -0.38, new Rotation2d(Math.toRadians(-157.0)))))), // + or - 20 degrees
 
                 // Waiting for spin up (we have the time)
-                new Pause(1.5),
+                new Pause(2.0),
 
 //      -------------------------- Artifact Cycle #1 --------------------------
                 new ShotSequence(),
