@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -134,8 +133,8 @@ public class Turret extends SubsystemBase {
             //RobotContainer.telemetrySubsystem.addData("default D",d, true);
 
             // temporary - display turret position and target on panels for graphing
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretTargetDeg", getTurretTargetDegrees());
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("TurretDeg", getTurretDegrees());
         }
     }
 

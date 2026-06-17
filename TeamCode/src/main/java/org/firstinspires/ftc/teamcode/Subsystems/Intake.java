@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -113,10 +112,10 @@ public class Intake extends SubsystemBase {
             CurrentPower = fgain * revisedtarget + pgain * error + ierror;
             intakeMotor.setPower(CurrentPower);
 
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", revisedtarget);
-            PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
-            PanelsTelemetry.INSTANCE.getTelemetry().update();
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeSpeed", CurrentSpeed);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakeTarget", revisedtarget);
+            //PanelsTelemetry.INSTANCE.getTelemetry().addData("IntakePower", CurrentPower);
+            //PanelsTelemetry.INSTANCE.getTelemetry().update();
         }
     }
 
@@ -141,14 +140,14 @@ public class Intake extends SubsystemBase {
     public void intakeRunReducedSpeed() { intakeRunReducedSpeed(false);}
     public void intakeRunReducedSpeed(boolean Agitate) {
         AgitateMode = Agitate;
-        TargetSpeed = 60.0;
+        TargetSpeed = 75.0; // was 60.0
     }
 
     /**Run the intake at set speed (rps)*/
     public void intakeReverse(){intakeReverse(false);}
     public void intakeReverse(boolean Agitate) {
         AgitateMode = Agitate;
-        TargetSpeed = -45.0;
+        TargetSpeed = -30.0;
     }
 
     /**Stop intake*/

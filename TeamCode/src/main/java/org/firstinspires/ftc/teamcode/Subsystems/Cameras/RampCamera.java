@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.util.Size;
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.util.SortOrder;
 
@@ -288,10 +287,10 @@ public class RampCamera extends SubsystemBase {
      * @param enable true to enable live view, false to disable live view
      */
     public void enableDashBoardView(boolean enable) {
-        if (enable)
-            FtcDashboard.getInstance().startCameraStream(visionPortal,4);
-        else
-            FtcDashboard.getInstance().stopCameraStream();
+        //if (enable)
+        //    FtcDashboard.getInstance().startCameraStream(visionPortal,4);
+        //else
+        //    FtcDashboard.getInstance().stopCameraStream();
     }
 
     /**displays camera view in driver station*/
